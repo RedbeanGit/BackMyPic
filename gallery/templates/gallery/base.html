@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>{{ title }}</title>
+
+		{% load static %}
+
+		<link rel="stylesheet" type="text/css" href="{% static 'gallery/css/main.css' %}">
+	</head>
+	<body>
+		<header>
+			<div>
+				<img src="{% static 'gallery/img/icon.svg' %}" alt="Logo">
+				<a href="{% url 'gallery:gallery' %}">
+					<h1>BackMyPic</h1>
+				</a>
+				<!--<img src="{% static 'gallery/img/title.svg' %}" alt="Titre">-->
+			</div>
+			<nav>
+				{% if search %}
+				<input type="search" name="search" class="search-bar disabled">
+				<button class="icon-button" onclick="activeSearch();">
+					<img src="{% static 'gallery/img/search.svg' %}" alt="Rechercher">
+				</button>
+				{% endif %}
+				<a href="{% url 'gallery:settings' %}" class="icon-button">
+					<img src="{% static 'gallery/img/settings.svg' %}" alt="Paramètres">
+				</a>
+			</nav>
+		</header>
+		<section>
+			{% block content %}{% endblock %}
+		</section>
+		<script type="text/javascript" src="{% static 'gallery/js/base.js' %}"></script>
+		{% block script %}{% endblock %}
+	</body>
+</html>

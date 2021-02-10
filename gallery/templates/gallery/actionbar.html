@@ -1,0 +1,23 @@
+{% load static %}
+
+<nav id="actionbar">
+	<a href="#" id="select-button" onclick="switchSelectMode();">
+		<img src="{% static 'gallery/img/select.svg' %}" alt="Sélectionner">
+	</a>
+	<a href="#" class="sel-action disabled" onclick="switchHideMode();">
+		<img src="{% static 'gallery/img/hide.svg' %}" alt="Cacher">
+	</a>
+	<a href="#" class="sel-action disabled" onclick="deletePictures();">
+		<img src="{% static 'gallery/img/delete.svg' %}" alt="Supprimer">
+	</a>
+	<a href="#" class="sel-action disabled" onclick="sharePictures();">
+		<img src="{% static 'gallery/img/share.svg' %}" alt="Partager">
+	</a>
+	<a href="" class="sel-action disabled" onclick="downloadPictures();">
+		<img src="{% static 'gallery/img/download.svg' %}" alt="Télécharger">
+	</a>
+	<a href="#" onclick="document.getElementById('input-upload').click();">
+		<input type="file" name="file" id="input-upload" style="display: none;" accept="image/png, image/jpeg, image/svg, image/jpg" multiple>
+		<img src="{% static 'gallery/img/upload.svg' %}" alt="Envoyer">
+	</a>
+</nav>

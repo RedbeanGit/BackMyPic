@@ -1,0 +1,17 @@
+<div id="picturelist">
+	{% for picture in pictures %}
+		{% if forloop.counter0|divisibleby:col_len %}
+			<div class="">
+		{% endif %}
+		<div class="picture-box" id="picture-{{ picture.id }}" onclick="activePicture({{ picture.id }});">
+			<img src="{{ picture.url }}">
+		</div>
+		{% if forloop.counter|divisibleby:col_len %}
+			</div>
+		{% endif %}
+	{% endfor %}
+	{% if not pic_count|divisibleby:col_len %}
+		</div>
+	{% endif %}
+</div>
+{% include 'gallery/actionbar.html' %}
