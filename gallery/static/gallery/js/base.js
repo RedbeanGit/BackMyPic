@@ -23,8 +23,10 @@ function disableSearchBar() {
 	document.addEventListener('click', e => {
 		let searchBar = document.querySelector('input.search-bar');
 
-		if (!searchBar.contains(e.target) && searchMode) {
-			disableSearchBar();
+		if (searchBar) {
+			if (!searchBar.contains(e.target) && searchMode) {
+				disableSearchBar();
+			}
 		}
 	}, true);
 })();

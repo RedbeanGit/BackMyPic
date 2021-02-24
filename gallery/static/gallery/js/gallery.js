@@ -51,10 +51,12 @@ function disableSelActions() {
 
 // Hide mode
 function switchHideMode() {
-	if (hideMode)
-		stopHideMode();
-	else
-		startHideMode();
+	if (selectMode) {
+		if (hideMode)
+			stopHideMode();
+		else
+			startHideMode();
+	}
 }
 
 function startHideMode() {
@@ -64,6 +66,7 @@ function startHideMode() {
 		picture = document.getElementById('picture-' + pictureId);
 		picture.classList.add('hidden');
 	}
+	alert('Cette fonctionnalité n\'est pas encore disponible!');
 }
 
 function stopHideMode() {
@@ -77,28 +80,36 @@ function stopHideMode() {
 
 // Delete
 function deletePictures() {
-	for (let pictureId of selectedPictures) {
-		picture = document.getElementById('picture-' + pictureId);
-		picture.remove()
+	if (selectMode) {
+		for (let pictureId of selectedPictures) {
+			picture = document.getElementById('picture-' + pictureId);
+			picture.remove();
+		}
+
+		let input = document.getElementById('delete-input');
+
+		if (input) {
+			input.value = Array.from(selectedPictures).join();
+			let form = document.getElementById('delete-form');
+
+			if (form)
+				form.submit();
+		}
+		stopSelectMode();
 	}
-	document.location.reload();
 }
 
 // Share
 function sharePictures() {
-
+	if (selectMode) {
+		alert('Cette fonctionnalité n\'est pas encore disponible!');
+	}
 }
 
 // Uploading and downloading
 function downloadPictures() {
-	for (let pictureId of selectedPictures) {
-		console.log(pictureId);
-	}
-}
-
-function uploadPictures() {
-	for (let file of inputUpload.files) {
-		console.log(file);
+	if (selectMode) {
+		alert('Cette fonctionnalité n\'est pas encore disponible!');
 	}
 }
 

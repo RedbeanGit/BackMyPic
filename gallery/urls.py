@@ -20,9 +20,9 @@ from gallery import views
 app_name = 'gallery'
 
 urlpatterns = [
-	url(r'^$', views.index, name='gallery'),
-	url(r'^search/$', views.search, name='search'),
-	url(r'^settings/$', views.settings, name='settings'),
-	url(r'^login/$', views.login, name='login'),
-	url(r'^signin/$', views.signin, name='signin')
+	url(r'^$', views.GalleryView.as_view(), name='gallery'),
+	url(r'^picture/(?P<picture_id>[0-9]+)/$', views.PictureView.as_view(), name='picture'),
+	url(r'^search/$', views.SearchView.as_view(), name='search'),
+	url(r'^settings/$', views.SettingView.as_view(), name='settings'),
+	url(r'^register/$', views.RegisterView.as_view(), name='register')
 ]

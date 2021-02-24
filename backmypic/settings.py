@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,9 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '#&8w#2xqoqt3x1xn&)s%w5mh$n=^+@*$qhyj3m23eg&37t+25('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if os.environ.get('ENV') == 'PRODUCTION':
+    DEBUG = False
+else:
+    DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "0.0.0.0"]
+ALLOWED_HOSTS = ['localhost', 'backmypic.herokuapp.com']
 
 
 # Application definition
@@ -48,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 ]
 
 ROOT_URLCONF = 'backmypic.urls'
@@ -109,13 +114,17 @@ LANGUAGE_CODE = 'fr-fr'
 TIME_ZONE = 'Etc/GMT-1'
 
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.1/howto/static-files/
-
+if os.environ.get('ENV') == 'PRODUCTION':
+    PROJECT_ROOT = Path(__file__).resolve().parent
+    STATIC_ROOT = PROJECT_ROOT / 'staticfiles'
+    STATICFILES_DIRS = (PROJECT_ROOT / 'static',)
 STATIC_URL = '/static/'
+
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
+
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/login'

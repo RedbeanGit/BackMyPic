@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import User
+from .models import Picture
 
 
 class ErrorList(forms.utils.ErrorList):
@@ -15,50 +15,13 @@ class ErrorList(forms.utils.ErrorList):
 		)
 
 
-class UserLoginForm(forms.ModelForm):
+class PictureForm(forms.ModelForm):
 	class Meta:
-		model = User
-		fields = ['email', 'password']
+		model = Picture
+		fields = ('image',)
 		widgets = {
-			'email': forms.EmailInput(attrs={'required': True}),
-			'password': forms.PasswordInput(attrs={'required': True})
+			'image': forms.ClearableFileInput(attrs={
+				'onchange': 'document.getElementById("upload-form").submit();',
+				'multiple': True
+			})
 		}
-
-	def clean(self):
-		cleaned_data = super(forms.ModelForm, self).clean()
-
-		email = cleaned_data['email']
-		password = cleaned_data['password']
-
-		users = User.objects.filter(email=email.lower())
-
-		if users.count():
-			if users[0].password != password:
-				self.add_error('password', 'Mot de passe incorrect !')
-		else:
-			self.add_error('email', 'Ce compte n\'existe pas !')
-
-		return cleaned_data
-
-
-class UserSigninForm(UserLoginForm):
-	confirm_password = forms.CharField( \
-		widget=forms.PasswordInput(attrs={'required': True})
-	)
-
-	def clean(self):
-		cleaned_data = super(forms.ModelForm, self).clean()
-
-		email = cleaned_data['email']
-		password = cleaned_data['password']
-		confirm_password = cleaned_data['confirm_password']
-
-		users = User.objects.filter(email=email.lower())
-
-		if users.count():
-			self.add_error('email', 'Ce compte existe déjà !')
-
-		if password != confirm_password:
-			self.add_error('confirm_password', 'Les mots de passe ne correspondent pas !')
-
-		return cleaned_data

@@ -113,36 +113,26 @@ html {
 			border-radius: 10px;
 			box-shadow: 1px 2px 5px var(--color-gray);
 		}
-			nav#actionbar > a {
-				display: flex;
-				align-items: center;
+			nav#actionbar > img {
+				width: 0.7cm;
+				height: 0.7cm;
+				padding: 10px 20px;
 				transition-duration: var(--trans-time);
 			}
-				nav#actionbar > a.disabled:hover {
+				nav#actionbar > img.disabled:hover {
 					cursor: not-allowed;
 				}
-				nav#actionbar > a.disabled {
+				nav#actionbar > img.disabled {
 					filter: invert(50%);
 				}
-
-				nav#actionbar > a > img {
-					width: 0.7cm;
-					margin: 10px 20px;
-					transition-duration: var(--trans-time);
-				}
 				
-				nav#actionbar > a:not(:hover):not(.selected) > img {
+				nav#actionbar > img:not(:hover):not(.disabled) {
 					filter: invert(100%);
 				}
-				nav#actionbar > a:hover > img,
-				nav#actionbar > a.selected > img {
+				nav#actionbar > img:hover:not(.disabled) {
+					cursor: pointer;
 					filter: invert(83%) sepia(51%) saturate(503%) hue-rotate(341deg) brightness(100%);
 				}
-			nav#actionbar > input {
-				width: 0;
-				padding: 1px 0;
-				border: none;
-			}
 		section {
 			display: flex;
 			justify-content: center;
