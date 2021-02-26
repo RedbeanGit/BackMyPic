@@ -126,5 +126,7 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
 
+TMP_ROOT = BASE_DIR / 'tmp'
+
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login'

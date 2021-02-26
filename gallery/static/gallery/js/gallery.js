@@ -1,4 +1,4 @@
-var selectMode = false, hideMode = false,
+var selectMode = false,
 	selectedPictures = new Set(),
 	picturelist, inputUpload;
 
@@ -12,69 +12,37 @@ function switchSelectMode() {
 
 function startSelectMode() {
 	selectMode = true;
-	enableSelActions();
+	let selActions = document.querySelectorAll('.sel-action');
+	let pictures = document.querySelectorAll('.picture-box');
 
-	pictures = document.querySelectorAll('.picture-box');
-
-	for (let picture of pictures) {
+	for (let selAction of selActions)
+		selAction.classList.remove('disabled');
+	for (let picture of pictures)
 		picture.classList.add('selectable');
-	}
 }
 
 function stopSelectMode() {
 	selectMode = false;
-	disableSelActions();
-
-	pictures = document.querySelectorAll('.picture-box');
-
-	for (let picture of pictures) {
-		picture.classList.remove('selectable');
-	}
-
-	unselectPictures();
-	hideMode = false;
-}
-
-function enableSelActions() {
-	var selActions = document.querySelectorAll('.sel-action');
-
-	for (let selAction of selActions)
-		selAction.classList.remove('disabled');
-}
-
-function disableSelActions() {
-	var selActions = document.querySelectorAll('.sel-action');
+	let selActions = document.querySelectorAll('.sel-action');
+	let pictures = document.querySelectorAll('.picture-box');
 
 	for (let selAction of selActions)
 		selAction.classList.add('disabled');
-}
-
-// Hide mode
-function switchHideMode() {
-	if (selectMode) {
-		if (hideMode)
-			stopHideMode();
-		else
-			startHideMode();
-	}
-}
-
-function startHideMode() {
-	hideMode = true;
-
-	for (let pictureId of selectedPictures) {
-		picture = document.getElementById('picture-' + pictureId);
-		picture.classList.add('hidden');
-	}
-	alert('Cette fonctionnalité n\'est pas encore disponible!');
-}
-
-function stopHideMode() {
+	for (let pictureId of selectedPictures)
+		selectPicture(pictureId);
+	for (let picture of pictures)
+		picture.classList.remove('selectable');
 	hideMode = false;
+}
 
-	for (let pictureId of selectedPictures) {
-		picture = document.getElementById('picture-' + pictureId);
-		picture.classList.remove('hidden');
+// Hide
+function hidePictures() {
+	if (selectMode) {
+		for (let pictureId of selectedPictures) {
+			picture = document.getElementById('picture-' + pictureId);
+			picture.remove();
+		}
+		sendAction('hide');
 	}
 }
 
@@ -85,31 +53,22 @@ function deletePictures() {
 			picture = document.getElementById('picture-' + pictureId);
 			picture.remove();
 		}
-
-		let input = document.getElementById('delete-input');
-
-		if (input) {
-			input.value = Array.from(selectedPictures).join();
-			let form = document.getElementById('delete-form');
-
-			if (form)
-				form.submit();
-		}
-		stopSelectMode();
+		sendAction('delete');
 	}
 }
 
 // Share
 function sharePictures() {
 	if (selectMode) {
-		alert('Cette fonctionnalité n\'est pas encore disponible!');
+		sendAction('share');
+		alert('Cette fonctionnalité n\'est pas encore disponible !')
 	}
 }
 
-// Uploading and downloading
+// Download
 function downloadPictures() {
 	if (selectMode) {
-		alert('Cette fonctionnalité n\'est pas encore disponible!');
+		sendAction('download');
 	}
 }
 
@@ -139,22 +98,29 @@ function selectPicture(pictureId) {
 	}
 }
 
-function unselectPictures() {
-	for (let pictureId of selectedPictures) {
-		selectPicture(pictureId);
-	}
-}
-
 function showPicture(pictureId) {
 	let picture = document.getElementById('picture-' + pictureId);
 }
 
+// send action to the server
+function sendAction(actionName) {
+	let inputType = document.getElementById('actiontype-input');
+	let inputContent = document.getElementById('actioncontent-input');
+
+	if (inputType && inputContent) {
+		inputType.value = actionName;
+		inputContent.value = Array.from(selectedPictures).join();
+		let form = document.getElementById('action-form');
+
+		if (form)
+			form.submit();
+	}
+	stopSelectMode();
+}
+
 (function() {
 	pictureList = document.getElementById('picturelist');
-	inputUpload = document.getElementById('input-upload');
 
 	if (pictureList)
 		pictureList.addEventListener('wheel', horizontalScroll);
-	if (inputUpload)
-		inputUpload.addEventListener('change', e => {uploadPictures();});
 })();

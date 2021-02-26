@@ -1,14 +1,20 @@
+import os
+import zipfile
+
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from django.http import HttpResponseForbidden
+from django.conf import settings
+from django.core.files.base import ContentFile
+from django.http import HttpResponseForbidden, FileResponse
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.views.generic.base import View
 
 from .forms import ErrorList, PictureForm
 from .models import Picture
+from .utils import get_illegible_name
 
 
 class GalleryView(LoginRequiredMixin, View):
@@ -17,7 +23,7 @@ class GalleryView(LoginRequiredMixin, View):
 	form = PictureForm
 
 	def render(self, request, form):
-		pictures = self.model.objects.filter(user__username=request.user.username)		
+		pictures = self.model.objects.filter(user__username=request.user.username, hidden=False)		
 		context = {
 			'title': 'BackMyPic',
 			'col_len': 5,
@@ -33,15 +39,66 @@ class GalleryView(LoginRequiredMixin, View):
 		return self.render(request, self.form())
 
 	def post(self, request, *args, **kwargs):
-		if 'delete' in request.POST:
-			for pk in request.POST['delete'].split(','):
-				if pk.isdigit():
-					picture = get_object_or_404(Picture, pk=int(float(pk)))
+		actions = {
+			'hide': self.hide_pictures,
+			'delete': self.delete_pictures,
+			'share': self.share_pictures,
+			'download': self.download_pictures,
+			'upload': self.upload_pictures
+		}
+		
+		default_fct = lambda r, *a, **k: redirect('gallery:gallery')
+		action = actions.get(request.POST['action'], default_fct)
+		return action(request, *args, **kwargs)
 
-					if picture.user == request.user:
-						picture.delete()
-			return redirect('gallery:gallery')
+	def loop_pictures_from_request(self, request):
+		for pk in request.POST['ids'].split(','):
+			if pk.isdigit():
+				pk = int(float(pk))
+				picture = get_object_or_404(Picture, pk=pk)
 
+				if picture.user == request.user:
+					yield picture
+
+	def hide_pictures(self, request, *args, **kwargs):
+		for picture in self.loop_pictures_from_request(request):
+			picture.hidden = True
+			picture.save()
+		return redirect('gallery:gallery')
+
+	def delete_pictures(self, request, *args, **kwargs):
+		for picture in self.loop_pictures_from_request(request):
+			picture.delete()
+		return redirect('gallery:gallery')
+
+	def share_pictures(self, request, *args, **kwargs):
+		for picture in self.loop_pictures_from_request(request):
+			pass
+			# TODO: find a way to share pictures
+		return redirect('gallery:gallery')
+
+	def download_pictures(self, request, *args, **kwargs):
+		zippath = settings.TMP_ROOT / 'zipfiles' / (get_illegible_name() + '.zip')
+		filenames = set()
+
+		with zipfile.ZipFile(zippath, 'w', compression=zipfile.ZIP_DEFLATED) as file:
+			for picture in self.loop_pictures_from_request(request):
+				filename = picture.filename
+				
+				if filename in filenames:
+					name, ext = os.path.splitext(filename)
+					filename = name + ' ({})' + ext
+					index = 2
+
+					while filename.format(index) in filenames:
+						index += 1
+					filename = filename.format(index)
+				filenames.add(filename)
+				file.write(picture.image.path, arcname=filename)
+		
+		return FileResponse(open(zippath, 'rb'), as_attachment=True, filename='Photos.zip')
+
+	def upload_pictures(self, request, *args, **kwargs):
 		form = self.form(request.POST, request.FILES)
 
 		if form.is_valid():

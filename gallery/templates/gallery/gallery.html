@@ -19,20 +19,22 @@
 </div>
 <nav id="actionbar">
 	<img src="{% static 'gallery/img/select.svg' %}" alt="Sélectionner" onclick="switchSelectMode();">
-	<img src="{% static 'gallery/img/hide.svg' %}" class="sel-action disabled" alt="Cacher" onclick="switchHideMode();">
+	<img src="{% static 'gallery/img/hide.svg' %}" class="sel-action disabled" alt="Cacher" onclick="hidePictures();">
 	<img src="{% static 'gallery/img/delete.svg' %}" class="sel-action disabled" alt="Supprimer" onclick="deletePictures();">
 	<img src="{% static 'gallery/img/share.svg' %}" class="sel-action disabled" alt="Partager" onclick="sharePictures();">
 	<img src="{% static 'gallery/img/download.svg' %}" class="sel-action disabled" alt="Télécharger" onclick="downloadPictures();">
 	<img src="{% static 'gallery/img/upload.svg' %}" alt="Envoyer" onclick="document.getElementById('{{ form.image.id_for_label }}').click();">
 </nav>
 
+<form style="display: none;" method="post" action="{% url 'gallery:gallery' %}" id="action-form">
+	{% csrf_token %}
+	<input type="hidden" name="action" value="" id="actiontype-input">
+	<input type="hidden" name="ids" value="" id="actioncontent-input">
+</form>
 <form style="display: none;" method="post" action="{% url 'gallery:gallery' %}" enctype="multipart/form-data" id="upload-form">
 	{% csrf_token %}
+	<input type="hidden" name="action" value="upload">
 	{{ form.image }}
-</form>
-<form style="display: none;" method="post" action="{% url 'gallery:gallery' %}" id="delete-form">
-	{% csrf_token %}
-	<input type="hidden" name="delete" value="" id="delete-input">
 </form>
 {% endblock %}
 
