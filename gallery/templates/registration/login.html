@@ -1,15 +1,14 @@
 {% extends 'gallery/base.html' %}
-{% block content %}
-<form action="{% url 'login' %}" method="post">
-	{% csrf_token %}
-	<div>
-		<label for="{{ form.username.id_for_label }}">Nom d'utilisateur</label>
-		{{ form.username }}
-	</div>
-	<div>
-		<label for="{{ form.password.id_for_label }}">Mot de passe</label>
-		{{ form.password }}
-	</div>
-	<input type="submit" name="submit" value="Se connecter">
-</form>
-{% endblock %}
+			{% block section %}<form action="{% url 'login' %}" method="post">
+				{% csrf_token %}
+				<div>
+					<label for="{{ form.username.id_for_label }}">Nom d'utilisateur</label>
+					{{ form.username }}
+				</div>
+				<div>
+					<label for="{{ form.password.id_for_label }}">Mot de passe</label>
+					{{ form.password }}
+				</div>
+				<input type="submit" name="submit" value="Se connecter">
+			</form>
+			{% endblock %}

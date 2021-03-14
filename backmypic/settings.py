@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'compressor',
+    'sass_processor'
 ]
 
 MIDDLEWARE = [
@@ -117,11 +119,20 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-if os.environ.get('ENV') == 'PRODUCTION':
-    PROJECT_ROOT = Path(__file__).resolve().parent
-    STATIC_ROOT = PROJECT_ROOT / 'staticfiles'
-    STATICFILES_DIRS = (PROJECT_ROOT / 'static',)
+PROJECT_ROOT = Path(__file__).resolve().parent
+STATIC_ROOT = PROJECT_ROOT / 'staticfiles'
+
 STATIC_URL = '/static/'
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder'
+]
+
+if os.environ.get('ENV') == 'PRODUCTION':
+    STATICFILES_DIRS = [
+        PROJECT_ROOT / 'static'
+    ]
 
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
@@ -130,3 +141,7 @@ TMP_ROOT = BASE_DIR / 'tmp'
 
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login'
+
+COMPRESS_PRECOMPILERS = (
+    ('text/x-scss', 'django_libsass.SassCompiler'),
+)

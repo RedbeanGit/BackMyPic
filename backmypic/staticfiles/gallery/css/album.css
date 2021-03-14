@@ -1,0 +1,106 @@
+.album {
+  width: 1000px;
+  height: 550px;
+  display: flex;
+  position: relative;
+  background-color: var(--color-blue);
+  background-image: url("../img/book_texture.png");
+  border-radius: 5px;
+  border: 2px outset var(--color-blue);
+  box-shadow: 0 0 100px var(--color-shadow3);
+  padding: 10px;
+  user-select: none; }
+  .album__picture {
+    max-width: 180px;
+    max-height: 180px;
+    transition-duration: 0.2s;
+    border: 5px solid transparent;
+    transition-property: border, box-shadow, max-width, max-height, filter; }
+    .album__picture--selectable {
+      border-color: var(--color-white);
+      box-shadow: 0 0 10px var(--color-shadow3);
+      animation: shake 0.5s; }
+    .album__picture--selected {
+      filter: grayscale(100%);
+      max-height: 100px;
+      max-width: 100px; }
+  .album__sheet {
+    position: absolute;
+    left: 50%;
+    top: 2%;
+    width: 48%;
+    height: 96%;
+    transform-origin: left;
+    transition: all 0.6s cubic-bezier(0.645, 0.045, 0.355, 1);
+    transition-property: transform, z-index;
+    transform-style: preserve-3d;
+    z-index: 0;
+    box-shadow: 0 0 10px var(--color-shadow3); }
+    .album__sheet--visible {
+      z-index: 1; }
+    .album__sheet--rotated {
+      transform: rotateY(-180deg); }
+  .album__page {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 50% 50%;
+    overflow: hidden;
+    background-color: var(--color-white);
+    backface-visibility: hidden; }
+    .album__page--front {
+      background-image: linear-gradient(90deg, #e3e3e3 0%, rgba(247, 247, 247, 0) 18%); }
+    .album__page--back {
+      transform: rotateY(180deg);
+      background-image: linear-gradient(-90deg, #e3e3e3 0%, rgba(247, 247, 247, 0) 18%); }
+    .album__page--title {
+      font-family: "Valentime";
+      font-size: 3em;
+      color: var(--color-blue);
+      display: flex;
+      justify-content: center;
+      align-items: center; }
+    .album__page > * {
+      align-self: center;
+      justify-self: center; }
+  .album__bgline {
+    position: absolute;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background-color: var(--color-black1);
+    z-index: 0; }
+    .album__bgline--left {
+      left: 48%; }
+    .album__bgline--right {
+      right: 48%; }
+
+@keyframes shake {
+  0% {
+    transform: translate(1px, 1px) rotate(0deg); }
+  10% {
+    transform: translate(-1px, -2px) rotate(-1deg); }
+  20% {
+    transform: translate(-3px, 0px) rotate(1deg); }
+  30% {
+    transform: translate(3px, 2px) rotate(0deg); }
+  40% {
+    transform: translate(1px, -1px) rotate(1deg); }
+  50% {
+    transform: translate(-1px, 2px) rotate(-1deg); }
+  60% {
+    transform: translate(-3px, 1px) rotate(0deg); }
+  70% {
+    transform: translate(3px, 1px) rotate(-1deg); }
+  80% {
+    transform: translate(-1px, -1px) rotate(1deg); }
+  90% {
+    transform: translate(1px, 2px) rotate(0deg); }
+  100% {
+    transform: translate(1px, -2px) rotate(-1deg); } }
+
+/*# sourceMappingURL=album.css.map */

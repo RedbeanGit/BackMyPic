@@ -1,0 +1,136 @@
+@font-face {
+	font-family: "Arial Rounded Bold";
+	src: url("../fonts/arlrdbd.ttf");
+}
+
+@font-face {
+	font-family: "Valentime";
+	src: url("../fonts/valentime.otf");
+}
+
+html {
+	--color-hg: rgb(225, 149, 192);
+
+	--color-black1: rgba(0, 0, 0, 0.1);
+	--color-black5: rgba(0, 0, 0, 0.5);
+
+	--color-white: rgb(255, 255, 255);
+	--color-white5: rgba(255, 255, 255, 0.5);
+	--color-white8: rgba(255, 255, 255, 0.8);
+
+	/*--color-blue: rgb(255, 179, 222);*/
+	--color-blue: rgb(102, 181, 255);
+	--color-blue5: rgba(102, 181, 255, 0.5);
+
+	--color-shadow2: rgba(0, 0, 0, 0.2);
+	--color-shadow3: rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar {
+	width: 13px;
+	height: 13px;
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--color-blue);
+	/*border-radius: 10px;*/
+}
+
+::-webkit-scrollbar-thumb:hover{
+	background: var(--color-blue5);
+}
+
+::-webkit-scrollbar-track{
+	background: var(--color-white);
+	/*border-radius: 10px;*/
+	box-shadow: inset 7px 10px 12px #f0f0f0;
+}
+
+body {
+	margin: 0;
+	font-family: "Arial";
+}
+
+header {
+	background-color: var(--color-blue);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0 30px;
+	height: 100px;
+}
+
+footer {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 20px;
+}
+
+.title {
+	display: flex;
+	text-decoration: none;
+	color: var(--color-white);
+	align-items: center;
+}
+
+.title:visited {
+	color: var(--color-white);
+}
+
+.title__icon {
+	width: 1cm;
+}
+
+.title__text {
+	margin: 0 20px;
+	font-family: "Valentime";
+	font-size: 2.4em;
+}
+
+.nav {
+	display: flex;
+}
+
+.nav__element {
+	border: none;
+	background: transparent;
+	font-family: inherit;
+	text-decoration: none;
+	color: var(--color-white);
+	font-size: 1em;
+	display: flex;
+	align-items: center;
+	padding: 30px 20px;
+	margin: 0;
+}
+
+.nav__element p {
+	font-family: "Valentime";
+	font-size: 1.9em;
+	margin: 0;
+}
+
+.nav__element--selected {
+	border-bottom: 4px solid var(--color-white);
+	filter: color;
+	transition-duration: 0.2s;
+}
+
+.nav__element:hover {
+	cursor: pointer;
+	background-color: var(--color-black1);
+	transition-duration: 0.2s;
+}
+
+.footer {
+	display: flex;
+	align-items: center;
+}
+
+.footer__element {
+	margin: 0 50px;
+	text-decoration: none;
+	color: var(--color-black5);
+	font-size: 0.9em;
+}

@@ -1,19 +1,18 @@
 {% extends 'gallery/base.html' %}
-{% block content %}
-<form action="{% url 'gallery:register' %}" method="post">
-	{% csrf_token %}
-	<div>
-		<label for="{{ form.username.id_for_label }}">Nom d'utilisateur</label>
-		{{ form.username }}
-	</div>
-	<div>
-		<label for="{{ form.password1.id_for_label }}">Mot de passe</label>
-		{{ form.password1 }}
-	</div>
-	<div>
-		<label for="{{ form.password2.id_for_label }}">Confirmer le mot de passe</label>
-		{{ form.password2 }}
-	</div>
-	<input type="submit" name="submit" value="Créer un compte">
-</form>
-{% endblock %}
+			{% block section %}<form action="{% url 'gallery:register' %}" method="post">
+				{% csrf_token %}
+				<div>
+					<label for="{{ form.username.id_for_label }}">Nom d'utilisateur</label>
+					{{ form.username }}
+				</div>
+				<div>
+					<label for="{{ form.password1.id_for_label }}">Mot de passe</label>
+					{{ form.password1 }}
+				</div>
+				<div>
+					<label for="{{ form.password2.id_for_label }}">Confirmer le mot de passe</label>
+					{{ form.password2 }}
+				</div>
+				<input type="submit" name="submit" value="Créer un compte">
+			</form>
+			{% endblock %}

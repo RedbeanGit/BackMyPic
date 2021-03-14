@@ -1,6 +1,5 @@
 var selectMode = false,
-	selectedPictures = new Set(),
-	picturelist, inputUpload;
+	selectedPictures = new Set();
 
 // Selection Mode
 function switchSelectMode() {
@@ -12,26 +11,26 @@ function switchSelectMode() {
 
 function startSelectMode() {
 	selectMode = true;
-	let selActions = document.querySelectorAll('.sel-action');
-	let pictures = document.querySelectorAll('.picture-box');
+	let selActions = document.querySelectorAll('.actionnav__element--selectable');
+	let pictures = document.querySelectorAll('.album__picture');
 
 	for (let selAction of selActions)
-		selAction.classList.remove('disabled');
+		selAction.classList.remove('actionnav__element--disabled');
 	for (let picture of pictures)
-		picture.classList.add('selectable');
+		picture.classList.add('album__picture--selectable');
 }
 
 function stopSelectMode() {
 	selectMode = false;
-	let selActions = document.querySelectorAll('.sel-action');
-	let pictures = document.querySelectorAll('.picture-box');
+	let selActions = document.querySelectorAll('.actionnav__element--selectable');
+	let pictures = document.querySelectorAll('.album__picture');
 
 	for (let selAction of selActions)
-		selAction.classList.add('disabled');
+		selAction.classList.add('actionnav__element--disabled');
 	for (let pictureId of selectedPictures)
 		selectPicture(pictureId);
 	for (let picture of pictures)
-		picture.classList.remove('selectable');
+		picture.classList.remove('album__picture--selectable');
 	hideMode = false;
 }
 
@@ -61,7 +60,7 @@ function deletePictures() {
 function sharePictures() {
 	if (selectMode) {
 		sendAction('share');
-		alert('Cette fonctionnalité n\'est pas encore disponible !')
+		alert('Cette fonctionnalité n\'est pas encore disponible !');
 	}
 }
 
@@ -72,12 +71,6 @@ function downloadPictures() {
 	}
 }
 
-// Scroll
-function horizontalScroll(e) {
-	e.preventDefault();
-	pictureList.scrollBy(e.deltaY * 0.8, 0); 
-}
-
 // when a picture is clicked
 function activePicture(pictureId) {
 	if (selectMode)
@@ -86,15 +79,18 @@ function activePicture(pictureId) {
 		showPicture(pictureId);
 }
 
-function selectPicture(pictureId) {
-	let picture = document.getElementById('picture-' + pictureId);
+function selectPicture(event, pictureId) {
+	if (selectMode) {
+		event.stopPropagation();
+		let picture = document.getElementById('picture-' + pictureId);
 
-	if (selectedPictures.has(pictureId)) {
-		selectedPictures.delete(pictureId);
-		picture.classList.remove('selected');
-	} else {
-		selectedPictures.add(pictureId);
-		picture.classList.add('selected');
+		if (selectedPictures.has(pictureId)) {
+			selectedPictures.delete(pictureId);
+			picture.classList.remove('album__picture--selected');
+		} else {
+			selectedPictures.add(pictureId);
+			picture.classList.add('album__picture--selected');
+		}
 	}
 }
 
@@ -106,7 +102,7 @@ function showPicture(pictureId) {
 function sendAction(actionName) {
 	let inputType = document.getElementById('actiontype-input');
 	let inputContent = document.getElementById('actioncontent-input');
-
+	
 	if (inputType && inputContent) {
 		inputType.value = actionName;
 		inputContent.value = Array.from(selectedPictures).join();
@@ -117,10 +113,3 @@ function sendAction(actionName) {
 	}
 	stopSelectMode();
 }
-
-(function() {
-	pictureList = document.getElementById('picturelist');
-
-	if (pictureList)
-		pictureList.addEventListener('wheel', horizontalScroll);
-})();

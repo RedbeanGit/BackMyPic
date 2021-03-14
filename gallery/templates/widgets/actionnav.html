@@ -1,0 +1,39 @@
+{% load static %}			<div class="actionnav">
+				<nav class="actionnav__inside">
+					<button class="actionnav__element actionnav__button" onclick="switchSelectMode();" title="Sélectionner">
+						<img src="{% static 'gallery/img/select.svg' %}">
+					</button>
+					<button class="actionnav__element actionnav__button actionnav__element--disabled actionnav__element--selectable" onclick="hidePictures();" title="Cacher">
+						<img src="{% static 'gallery/img/hide.svg' %}">
+					</button>
+					<button class="actionnav__element actionnav__button actionnav__element--disabled actionnav__element--selectable" onclick="deletePictures();" title="Supprimer">
+						<img src="{% static 'gallery/img/delete.svg' %}">
+					</button>
+					<button class="actionnav__element actionnav__button actionnav__element--disabled actionnav__element--selectable" onclick="sharePictures();" title="Partager">
+						<img src="{% static 'gallery/img/share.svg' %}">
+					</button>
+					<button class="actionnav__element actionnav__button actionnav__element--disabled actionnav__element--selectable" onclick="downloadPictures();" title="Télécharger">
+						<img src="{% static 'gallery/img/download.svg' %}">
+					</button>
+					<button class="actionnav__element actionnav__button" onclick="document.getElementById('{{ form.image.id_for_label }}').click();" title="Envoyer">
+						<img src="{% static 'gallery/img/upload.svg' %}">
+					</button>
+				</nav>
+				<form class="actionnav__inside" method="post" action="{% url 'gallery:search' %}" id="search-form">
+					{% csrf_token %}
+					<label for="search-input" class="actionnav__element actionnav__label">
+						<input type="search" name="search" id="search-input">
+						<img src="{% static 'gallery/img/search.svg' %}" title="Rechercher" onclick="document.getElementById('search-form').submit();">
+					</label>
+				</form>
+				<form style="display: none;" method="post" action="{% url 'gallery:gallery' %}" id="action-form">
+					{% csrf_token %}
+					<input type="hidden" name="action" value="" id="actiontype-input">
+					<input type="hidden" name="ids" value="" id="actioncontent-input">
+				</form>
+				<form style="display: none;" method="post" enctype="multipart/form-data" action="{% url 'gallery:gallery' %}" id="upload-form">
+					{% csrf_token %}
+					<input type="hidden" name="action" value="upload">
+					{{ form.image }}
+				</form>
+			</div>

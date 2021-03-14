@@ -1,3 +1,5 @@
+import math
+import re
 import os
 import zipfile
 
@@ -14,7 +16,7 @@ from django.views.generic.base import View
 
 from .forms import ErrorList, PictureForm
 from .models import Picture
-from .utils import get_illegible_name
+from .utils import get_illegible_name, get_picture_date
 
 
 class GalleryView(LoginRequiredMixin, View):
@@ -23,14 +25,24 @@ class GalleryView(LoginRequiredMixin, View):
 	form = PictureForm
 
 	def render(self, request, form):
-		pictures = self.model.objects.filter(user__username=request.user.username, hidden=False)		
+		pictures = self.model.objects.filter(user__username=request.user.username, hidden=False)
+		sheets = []
+
+		for i in range(math.ceil(pictures.count() / 8)):
+			sheet = {
+				'left': pictures[i*8:i*8+4],
+				'right': pictures[i*8+4:i*8+8],
+				'name': 'Album'
+			}
+			sheets.append(sheet)
+
 		context = {
 			'title': 'BackMyPic',
-			'col_len': 5,
-			'search': True,
+			'version': '0.3.1',
+			'logged': True,
+			'selected': 'gallery',
 			'form': form,
-			'pictures': pictures,
-			'pic_count': pictures.count()
+			'sheets': sheets
 		}
 
 		return render(request, self.template_name, context)
@@ -107,12 +119,15 @@ class GalleryView(LoginRequiredMixin, View):
 			for image in images:
 				picture = self.model(image=image, user=request.user, filename=image.name)
 				picture.save()
+				picture.date = get_picture_date(picture)
+				picture.save()
+
 			return redirect('gallery:gallery')
 		return self.render(request, form)
 
 
-class PictureView(LoginRequiredMixin, View):
-	template_name = 'gallery/picture.html'
+class DetailsView(LoginRequiredMixin, View):
+	template_name = 'gallery/details.html'
 	model = Picture
 
 	def get(self, request, *args, **kwargs):
@@ -124,7 +139,7 @@ class PictureView(LoginRequiredMixin, View):
 
 		context = {
 			'title': 'Photo - BackMyPic',
-			'search': False,
+			'logged': True,
 			'picture': picture
 		}
 
@@ -145,23 +160,37 @@ class SearchView(LoginRequiredMixin, View):
 				pictures += list(Picture.objects.filter(user=request.user, tags__icontains=word))
 
 		context = {
-			'pictures': pictures,
-			'title': 'BackMyPic',
-			'pic_count': len(pictures),
-			'col_len': 5,
-			'search': True
+			'title': 'Recherche - BackMyPic',
+			'logged': True
 		}
 
 		return render(request, self.template_name, context)
 
+	def post(self, request, *args, **kwargs):
+		return self.get(request, *args, **kwargs)
 
-class SettingView(LoginRequiredMixin, View):
+
+class SettingsView(LoginRequiredMixin, View):
 	template_name = 'gallery/settings.html'
 
 	def get(self, request, *args, **kwargs):
 		context = {
 			'title': 'Paramètres - BackMyPic',
-			'search': False
+			'logged': True,
+			'selected': 'settings'
+		}
+
+		return render(request, self.template_name, context)
+
+
+class AlbumsView(LoginRequiredMixin, View):
+	template_name = 'gallery/albums.html'
+
+	def get(self, request, *args, **kwargs):
+		context = {
+			'title': 'Albums - BackMyPic',
+			'logged': True,
+			'selected': 'albums'
 		}
 
 		return render(request, self.template_name, context)

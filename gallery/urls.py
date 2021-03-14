@@ -21,8 +21,9 @@ app_name = 'gallery'
 
 urlpatterns = [
 	url(r'^$', views.GalleryView.as_view(), name='gallery'),
-	url(r'^picture/(?P<picture_id>[0-9]+)/$', views.PictureView.as_view(), name='picture'),
+	url(r'^details/(?P<picture_id>[0-9]+)/$', views.DetailsView.as_view(), name='picture'),
 	url(r'^search/$', views.SearchView.as_view(), name='search'),
-	url(r'^settings/$', views.SettingView.as_view(), name='settings'),
-	url(r'^register/$', views.RegisterView.as_view(), name='register')
+	url(r'^settings/$', views.SettingsView.as_view(), name='settings'),
+	url(r'^register/$', views.RegisterView.as_view(), name='register'),
+	url(r'^albums/$', views.AlbumsView.as_view(), name='albums')
 ]

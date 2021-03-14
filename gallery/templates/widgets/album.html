@@ -1,0 +1,13 @@
+				{% load index %}<div class="album">{% for sheet in sheets %}
+					<div class="album__sheet{% if forloop.counter == 1 %} album__sheet--visible{% endif %}">
+						<div class="album__page album__page--front{% if forloop.counter == 1 %} album__page--title{% endif %}" onclick="next();">{% if forloop.counter == 1 %}
+							<h1>{{ sheet.name }}</h1>{% else %}{% for picture in sheet.left %}
+							<img src="{{ picture.image.url }}" class="album__picture" id="picture-{{ picture.id }}" onclick="selectPicture(event, {{ picture.id }});">
+						{% endfor %}{% endif %}</div>
+						<div class="album__page album__page--back" onclick="previous();">{% for picture in sheet.right %}
+							<img src="{{ picture.image.url }}" class="album__picture" id="picture-{{ picture.id }}" onclick="selectPicture(event, {{ picture.id }});">
+						{% endfor %}</div>
+					</div>
+					{% endfor %}<div class="album__bgline album__bgline--left"></div>
+					<div class="album__bgline album__bgline--right"></div>
+				</div>

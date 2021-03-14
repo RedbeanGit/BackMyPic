@@ -1,38 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html>{% load static %}{% load compress %}{% load sass_tags %}
 	<head>
 		<meta charset="utf-8">
 		<title>{{ title }}</title>
-
-		{% load static %}
-
-		<link rel="stylesheet" type="text/css" href="{% static 'gallery/css/main.css' %}">
+		{% compress css %}<link rel="stylesheet" type="text/css" href="{% sass_src 'gallery/css/base.scss' %}">{% block style %}{% endblock %}{% endcompress %}
 	</head>
 	<body>
-		<header>
-			<div>
-				<img src="{% static 'gallery/img/icon.svg' %}" alt="Logo">
-				<a href="{% url 'gallery:gallery' %}">
-					<h1>BackMyPic</h1>
+		<header{% if not logged %} style="box-shadow: 1px 0 4px gray;"{% endif %}>
+			<a href="{% url 'gallery:gallery' %}" class="title">
+				<img src="{% static 'gallery/img/icon.svg' %}" class="title__icon" alt="BackMyPic">
+				<h1 class="title__text">BackMyPic</h1>
+			</a>{% if logged %}
+			<div class="nav">
+				<a href="{% url 'gallery:gallery' %}" class="nav__element{% if selected == 'gallery' %} nav__element--selected{% endif %}">
+					<p>Galerie</p>
 				</a>
-				<!--<img src="{% static 'gallery/img/title.svg' %}" alt="Titre">-->
-			</div>
-			<nav>
-				{% if search %}
-				<input type="search" name="search" class="search-bar disabled">
-				<button class="icon-button" onclick="activeSearch();">
-					<img src="{% static 'gallery/img/search.svg' %}" alt="Rechercher">
-				</button>
-				{% endif %}
-				<a href="{% url 'gallery:settings' %}" class="icon-button">
-					<img src="{% static 'gallery/img/settings.svg' %}" alt="Paramètres">
+				<a href="{% url 'gallery:albums' %}" class="nav__element{% if selected == 'albums' %} nav__element--selected{% endif %}">
+					<p>Albums</p>
 				</a>
-			</nav>
+				<a href="{% url 'gallery:settings' %}" class="nav__element{% if selected == 'settings' %} nav__element--selected{% endif %}">
+					<p>Réglages</p>
+				</a>
+			</div>{% endif %}
 		</header>
 		<section>
-			{% block content %}{% endblock %}
+{% block section %}{% endblock %}
 		</section>
-		<script type="text/javascript" src="{% static 'gallery/js/base.js' %}"></script>
-		{% block script %}{% endblock %}
+		<footer>
+			<div class="footer">
+				<p class="footer__element">© 2021 - BackMyPic Team</p>
+				<p class="footer__element">v{{ version }}</p>
+				<a href="" class="footer__element">Contact</a>
+			</div>
+		</footer>
+{% block script %}{% endblock %}
 	</body>
 </html>
