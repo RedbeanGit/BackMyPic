@@ -18,7 +18,7 @@ from .forms import ErrorList, PictureForm
 from .models import Picture, Album
 from .utils import get_illegible_name
 
-VERSION = '0.3.1'
+VERSION = '0.5.1'
 
 
 def get_or_create_album(**filters):
