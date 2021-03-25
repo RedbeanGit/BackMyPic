@@ -8,7 +8,7 @@ from django.dispatch import receiver
 from django.conf import settings
 from django.contrib.auth.models import User
 
-from .utils import get_illegible_name
+from .utils import get_illegible_name, get_picture_date
 
 
 def get_picture_path(instance, filename):
@@ -29,7 +29,32 @@ class Picture(models.Model):
 		ordering = ['-date']
 
 	def __str__(self):
-		return str(self.user) + ' - ' + str(self.date)
+		return '(name=' + self.filename + ', user=' + str(self.user) + ', date=' + str(self.date) + ')'
+
+	def save(self, force_insert=False, force_update=False):
+		super(Picture, self).save(force_insert=force_insert, force_update=force_update)
+		self.date = get_picture_date(self)
+		super(Picture, self).save(force_insert=force_insert, force_update=force_update)
+
+
+class Album(models.Model):
+	CATEGORIES = (
+		('D', 'Dates'),
+		('U', 'User'),
+		('S', 'Special')
+	)
+
+	name = models.CharField('nom', max_length=200)
+	date = models.DateTimeField('date', auto_now_add=True)
+	category = models.CharField('categorie', max_length=1, choices=CATEGORIES, default='U')
+	user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+	pictures = models.ManyToManyField(Picture)
+
+	class Meta:
+		verbose_name = 'album'
+
+	def __str__(self):
+		return '(user=' + str(self.user) + ', name=' + str(self.name) + ')'
 
 
 @receiver(models.signals.post_delete, sender=Picture)

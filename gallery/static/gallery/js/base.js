@@ -18,6 +18,10 @@ function disableSearchBar() {
 	document.querySelector('input.search-bar').classList.add('disabled');
 }
 
+function alertExperimental() {
+	alert('Cette fonctionnalité n\'est pas encore disponible !');
+}
+
 
 (function() {
 	document.addEventListener('click', e => {

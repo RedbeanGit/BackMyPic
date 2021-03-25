@@ -25,3 +25,4 @@ class PictureForm(forms.ModelForm):
 				'multiple': True
 			})
 		}
+

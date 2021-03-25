@@ -1,0 +1,144 @@
+@import "mixins/geometry";
+@import "mixins/actionnav";
+
+$album-width: 20px;
+$album-height: 120px;
+$album_depth: 100px;
+
+$shelf-width: 1000px;
+$shelf-height: 20px;
+$shelf-depth: 180px;
+
+@include actionnav;
+
+section {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.library {
+	position: relative;
+	width: $shelf-width;
+	height: 510px;
+	perspective: 1400px;
+	margin-bottom: 60px;
+	transform-style: preserve-3d;
+	/*transform: rotate3d(-1, 0, 0, 20deg);*/
+
+	.album {
+		position: relative;
+		display: inline-block;
+		width: $album-width;
+		height: $album-height;
+		transform-style: preserve-3d;
+
+		$album-translates: translateX(5px) translateZ(30px);
+		$album-translates-selected: translateX(5px) translateZ(80px);
+
+		&--catD {
+			transform: $album-translates translateY(150px - $album-height);
+		}
+
+		&--catS {
+			transform: $album-translates translateY(320px - $album-height);
+		}
+
+		&--catU {
+			transform: $album-translates translateY(490px - $album-height);
+		}
+
+		&--selectable {
+			.album__part {
+				animation: clickme 1s;
+			}
+		}
+
+		&--selected {
+			.album__part {
+				transform: translateZ(50px);
+			}
+		}
+		
+		&__part {
+			position: absolute;
+			top: 0;
+			left: 0;
+			transition-property: transform;
+			transition-duration: 0.2s;
+		}
+
+		&__sheets {
+			@include slab($album-width - 4px, $album-height - 4px, $album-depth - 4px, 2px, 2px, 2px);
+
+			.face {
+				background-color: var(--color-white);
+			}
+		}
+
+		&__cover {
+			&--left {
+				@include slab(2px, $album-height, $album-depth - 2px);
+			}
+
+			&--front {
+				@include slab($album-width, $album-height, 2px, 0, 0, $album-depth - 2px);
+			}
+
+			&--right {
+				@include slab(2px, $album-height, $album-depth - 2px, $album-width - 2px);
+			}
+
+			.face {
+				background-image: url("../img/album_texture.png");
+			}
+		}
+
+		@for $i from 1 through 150 {
+			&:nth-child(#{$i}) .album__part {
+				animation-delay: ($i - 1) * 0.1s;
+			}
+
+			&:nth-child(#{$i}) .album__cover .face {
+				background-color: rgb(random(255), random(255), random(255));
+			}
+		}
+	}
+
+	.shelf {
+		position: absolute;
+		left: 50%;
+		width: $shelf-width;
+		transform: translateX(-50%);
+		@include slab($shelf-width, $shelf-height, $shelf-depth);
+
+		&--top {
+			top: 150px;
+		}
+
+		&--middle {
+			top: 320px;
+		}
+
+		&--bottom {
+			top: 490px;
+		}
+
+		&:before {
+			content: "";
+			display: block;
+			box-shadow: 0 30px 30px 20px rgba(0, 0, 0, 0.5);
+		}
+
+		.face {
+			background-color: var(--color-blue);
+			background-image: url("../img/shelf_texture.png");
+		}
+	}
+}
+
+@keyframes clickme {
+	from { transform: translateZ(0); }
+	50% { transform: translateZ(50px); }
+	to { transform: translateZ(0); }
+}

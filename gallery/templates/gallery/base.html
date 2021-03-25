@@ -3,28 +3,33 @@
 	<head>
 		<meta charset="utf-8">
 		<title>{{ title }}</title>
-		{% compress css %}<link rel="stylesheet" type="text/css" href="{% sass_src 'gallery/css/base.scss' %}">{% block style %}{% endblock %}{% endcompress %}
+		{% compress css %}
+			<link rel="stylesheet" type="text/css" href="{% sass_src 'gallery/css/base.scss' %}">
+			{% block style %}{% endblock %}
+		{% endcompress %}
 	</head>
 	<body>
 		<header{% if not logged %} style="box-shadow: 1px 0 4px gray;"{% endif %}>
 			<a href="{% url 'gallery:gallery' %}" class="title">
 				<img src="{% static 'gallery/img/icon.svg' %}" class="title__icon" alt="BackMyPic">
 				<h1 class="title__text">BackMyPic</h1>
-			</a>{% if logged %}
-			<div class="nav">
-				<a href="{% url 'gallery:gallery' %}" class="nav__element{% if selected == 'gallery' %} nav__element--selected{% endif %}">
-					<p>Galerie</p>
-				</a>
-				<a href="{% url 'gallery:albums' %}" class="nav__element{% if selected == 'albums' %} nav__element--selected{% endif %}">
-					<p>Albums</p>
-				</a>
-				<a href="{% url 'gallery:settings' %}" class="nav__element{% if selected == 'settings' %} nav__element--selected{% endif %}">
-					<p>Réglages</p>
-				</a>
-			</div>{% endif %}
+			</a>
+			{% if logged %}
+				<div class="nav">
+					<a href="{% url 'gallery:gallery' %}" class="nav__element{% if selected == 'gallery' %} nav__element--selected{% endif %}">
+						<p>Galerie</p>
+					</a>
+					<a href="{% url 'gallery:albums' %}" class="nav__element{% if selected == 'albums' %} nav__element--selected{% endif %}">
+						<p>Albums</p>
+					</a>
+					<a href="{% url 'gallery:settings' %}" class="nav__element{% if selected == 'settings' %} nav__element--selected{% endif %}">
+						<p>Réglages</p>
+					</a>
+				</div>
+			{% endif %}
 		</header>
 		<section>
-{% block section %}{% endblock %}
+			{% block section %}{% endblock %}
 		</section>
 		<footer>
 			<div class="footer">
@@ -33,6 +38,7 @@
 				<a href="" class="footer__element">Contact</a>
 			</div>
 		</footer>
-{% block script %}{% endblock %}
+		<script type="text/javascript" src="{% static 'gallery/js/base.js' %}"></script>
+		{% block script %}{% endblock %}
 	</body>
 </html>

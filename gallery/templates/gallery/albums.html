@@ -1,3 +1,35 @@
-{% extends 'gallery/base.html' %}{% block section %}
-<h2>Oups ! Il semblerait que cette page ne soit pas encore disponible !</h2>
+{% extends 'gallery/base.html' %}{% load static %}{% load sass_tags %}{% block style %}
+<link rel="stylesheet" type="text/css" href="{% sass_src 'gallery/css/albums.scss' %}">
+{% endblock %}{% block section %}
+			{% include 'mixins/actionnav.html' %}
+			<div class="library">{% for album in albums %}
+				<div class="album album--cat{{ album.category }}" id="album-{{ album.id }}" onclick="activeSelection(event, {{ album.id }});">
+					<div class="album__part album__sheets">
+						{% include 'mixins/slab.html' %}
+					</div>
+					<div class="album__part album__cover album__cover--left">
+						{% include 'mixins/slab.html' %}
+					</div>
+					<div class="album__part album__cover album__cover--front">
+						{% include 'mixins/slab.html' %}
+					</div>
+					<div class="album__part album__cover album__cover--right">
+						{% include 'mixins/slab.html' %}
+					</div>
+				</div>
+			{% endfor %}
+				<div class="shelf shelf--top">
+					{% include 'mixins/slab.html' %}
+				</div>
+				<div class="shelf shelf--middle">
+					{% include 'mixins/slab.html' %}
+				</div>
+				<div class="shelf shelf--bottom">
+					{% include 'mixins/slab.html' %}
+				</div>
+			</div>
+{% endblock %}
+{% block script %}
+	<script type="text/javascript" src="{% static 'gallery/js/actionnav.js' %}"></script>
+	<script type="text/javascript" src="{% static 'gallery/js/albums.js' %}"></script>
 {% endblock %}

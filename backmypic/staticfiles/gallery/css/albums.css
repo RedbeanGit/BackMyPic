@@ -1,0 +1,913 @@
+.actionnav {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--color-blue5);
+  box-shadow: 0px 1px 4px gray; }
+  .actionnav input:focus,
+  .actionnav textarea:focus,
+  .actionnav select:focus,
+  .actionnav button:focus {
+    outline: none; }
+  .actionnav__inside {
+    display: flex;
+    margin-left: 10px; }
+  .actionnav__element:hover {
+    cursor: pointer; }
+  .actionnav__element img {
+    width: 0.5cm;
+    filter: invert(50%);
+    transition-duration: 0.2s; }
+  .actionnav__element--disabled:hover {
+    cursor: not-allowed; }
+  .actionnav__element--disabled img {
+    filter: invert(75%);
+    transition-duration: 0.2s; }
+  .actionnav__button {
+    border: none;
+    background-color: transparent;
+    padding: 15px 20px; }
+    .actionnav__button:hover:not(.actionnav__element--disabled) {
+      background-color: var(--color-black1);
+      transition-duration: 0.2s; }
+      .actionnav__button:hover:not(.actionnav__element--disabled) img {
+        filter: invert(100%);
+        transition-duration: 0.2s; }
+  .actionnav__label {
+    /*border-bottom: 2px solid var(--color-white);*/
+    background-color: var(--color-white5);
+    margin: 10px 20px 10px 10px;
+    padding: 5px 10px 5px 5px;
+    border-radius: 5px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center; }
+    .actionnav__label:hover {
+      background-color: var(--color-white8);
+      cursor: text;
+      transition-duration: 0.2s; }
+    .actionnav__label input {
+      border: none;
+      width: 350px;
+      background-color: transparent;
+      color: var(--color-black5);
+      transition-duration: 0.2s;
+      font-size: 1em; }
+      .actionnav__label input:focus {
+        width: 700px;
+        transition-duration: 0.2s; }
+    .actionnav__label img:hover {
+      cursor: pointer; }
+
+section {
+  display: flex;
+  flex-direction: column;
+  align-items: center; }
+
+.library {
+  position: relative;
+  width: 1000px;
+  height: 510px;
+  perspective: 1400px;
+  margin-bottom: 60px;
+  transform-style: preserve-3d;
+  /*transform: rotate3d(-1, 0, 0, 20deg);*/ }
+  .library .album {
+    position: relative;
+    display: inline-block;
+    width: 20px;
+    height: 120px;
+    transform-style: preserve-3d; }
+    .library .album--catD {
+      transform: translateX(5px) translateZ(30px) translateY(30px); }
+    .library .album--catS {
+      transform: translateX(5px) translateZ(30px) translateY(200px); }
+    .library .album--catU {
+      transform: translateX(5px) translateZ(30px) translateY(370px); }
+    .library .album--selectable .album__part {
+      animation: clickme 1s; }
+    .library .album--selected .album__part {
+      transform: translateZ(50px); }
+    .library .album__part {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transition-property: transform;
+      transition-duration: 0.2s; }
+    .library .album__sheets {
+      transform-style: preserve-3d; }
+      .library .album__sheets .face {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform-style: preserve-3d;
+        backface-visibility: hidden;
+        box-shadow: inset 0 0 75px 1.5px rgba(0, 0, 0, 0.1); }
+        .library .album__sheets .face.top {
+          width: 16px;
+          height: 96px;
+          transform-origin: top;
+          transform: translateX(2px) translateY(2px) translateZ(2px) rotateX(90deg); }
+        .library .album__sheets .face.front {
+          width: 16px;
+          height: 116px;
+          transform: translateX(2px) translateY(2px) translateZ(98px); }
+        .library .album__sheets .face.bottom {
+          width: 16px;
+          height: 96px;
+          transform-origin: bottom;
+          transform: translateX(2px) translateZ(2px) translateY(22px) rotateX(-90deg); }
+        .library .album__sheets .face.back {
+          width: 16px;
+          height: 116px;
+          transform: translateX(2px) translateY(2px) translateZ(2px) rotateX(180deg); }
+        .library .album__sheets .face.left {
+          width: 96px;
+          height: 116px;
+          transform-origin: left;
+          transform: translateX(2px) translateY(2px) translateZ(2px) rotateY(-90deg); }
+        .library .album__sheets .face.right {
+          width: 96px;
+          height: 116px;
+          transform-origin: left;
+          transform: translateX(18px) translateY(2px) translateZ(98px) rotateY(90deg); }
+      .library .album__sheets .face {
+        background-color: var(--color-white); }
+    .library .album__cover--left {
+      transform-style: preserve-3d; }
+      .library .album__cover--left .face {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform-style: preserve-3d;
+        backface-visibility: hidden;
+        box-shadow: inset 0 0 75px 1.5px rgba(0, 0, 0, 0.1); }
+        .library .album__cover--left .face.top {
+          width: 2px;
+          height: 98px;
+          transform-origin: top;
+          transform: translateX(0) translateY(0) translateZ(0) rotateX(90deg); }
+        .library .album__cover--left .face.front {
+          width: 2px;
+          height: 120px;
+          transform: translateX(0) translateY(0) translateZ(98px); }
+        .library .album__cover--left .face.bottom {
+          width: 2px;
+          height: 98px;
+          transform-origin: bottom;
+          transform: translateX(0) translateZ(0) translateY(22px) rotateX(-90deg); }
+        .library .album__cover--left .face.back {
+          width: 2px;
+          height: 120px;
+          transform: translateX(0) translateY(0) translateZ(0) rotateX(180deg); }
+        .library .album__cover--left .face.left {
+          width: 98px;
+          height: 120px;
+          transform-origin: left;
+          transform: translateX(0) translateY(0) translateZ(0) rotateY(-90deg); }
+        .library .album__cover--left .face.right {
+          width: 98px;
+          height: 120px;
+          transform-origin: left;
+          transform: translateX(2px) translateY(0) translateZ(98px) rotateY(90deg); }
+    .library .album__cover--front {
+      transform-style: preserve-3d; }
+      .library .album__cover--front .face {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform-style: preserve-3d;
+        backface-visibility: hidden;
+        box-shadow: inset 0 0 75px 1.5px rgba(0, 0, 0, 0.1); }
+        .library .album__cover--front .face.top {
+          width: 20px;
+          height: 2px;
+          transform-origin: top;
+          transform: translateX(0) translateY(0) translateZ(98px) rotateX(90deg); }
+        .library .album__cover--front .face.front {
+          width: 20px;
+          height: 120px;
+          transform: translateX(0) translateY(0) translateZ(100px); }
+        .library .album__cover--front .face.bottom {
+          width: 20px;
+          height: 2px;
+          transform-origin: bottom;
+          transform: translateX(0) translateZ(98px) translateY(118px) rotateX(-90deg); }
+        .library .album__cover--front .face.back {
+          width: 20px;
+          height: 120px;
+          transform: translateX(0) translateY(0) translateZ(98px) rotateX(180deg); }
+        .library .album__cover--front .face.left {
+          width: 2px;
+          height: 120px;
+          transform-origin: left;
+          transform: translateX(0) translateY(0) translateZ(98px) rotateY(-90deg); }
+        .library .album__cover--front .face.right {
+          width: 2px;
+          height: 120px;
+          transform-origin: left;
+          transform: translateX(20px) translateY(0) translateZ(100px) rotateY(90deg); }
+    .library .album__cover--right {
+      transform-style: preserve-3d; }
+      .library .album__cover--right .face {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform-style: preserve-3d;
+        backface-visibility: hidden;
+        box-shadow: inset 0 0 75px 1.5px rgba(0, 0, 0, 0.1); }
+        .library .album__cover--right .face.top {
+          width: 2px;
+          height: 98px;
+          transform-origin: top;
+          transform: translateX(18px) translateY(0) translateZ(0) rotateX(90deg); }
+        .library .album__cover--right .face.front {
+          width: 2px;
+          height: 120px;
+          transform: translateX(18px) translateY(0) translateZ(98px); }
+        .library .album__cover--right .face.bottom {
+          width: 2px;
+          height: 98px;
+          transform-origin: bottom;
+          transform: translateX(18px) translateZ(0) translateY(22px) rotateX(-90deg); }
+        .library .album__cover--right .face.back {
+          width: 2px;
+          height: 120px;
+          transform: translateX(18px) translateY(0) translateZ(0) rotateX(180deg); }
+        .library .album__cover--right .face.left {
+          width: 98px;
+          height: 120px;
+          transform-origin: left;
+          transform: translateX(18px) translateY(0) translateZ(0) rotateY(-90deg); }
+        .library .album__cover--right .face.right {
+          width: 98px;
+          height: 120px;
+          transform-origin: left;
+          transform: translateX(20px) translateY(0) translateZ(98px) rotateY(90deg); }
+    .library .album__cover .face {
+      background-image: url("../img/album_texture.png"); }
+    .library .album:nth-child(1) .album__part {
+      animation-delay: 0s; }
+    .library .album:nth-child(1) .album__cover .face {
+      background-color: #20edb6; }
+    .library .album:nth-child(2) .album__part {
+      animation-delay: 0.1s; }
+    .library .album:nth-child(2) .album__cover .face {
+      background-color: #b345bf; }
+    .library .album:nth-child(3) .album__part {
+      animation-delay: 0.2s; }
+    .library .album:nth-child(3) .album__cover .face {
+      background-color: #d53c3b; }
+    .library .album:nth-child(4) .album__part {
+      animation-delay: 0.3s; }
+    .library .album:nth-child(4) .album__cover .face {
+      background-color: #641063; }
+    .library .album:nth-child(5) .album__part {
+      animation-delay: 0.4s; }
+    .library .album:nth-child(5) .album__cover .face {
+      background-color: #1d77b3; }
+    .library .album:nth-child(6) .album__part {
+      animation-delay: 0.5s; }
+    .library .album:nth-child(6) .album__cover .face {
+      background-color: #e0566d; }
+    .library .album:nth-child(7) .album__part {
+      animation-delay: 0.6s; }
+    .library .album:nth-child(7) .album__cover .face {
+      background-color: #9ee77b; }
+    .library .album:nth-child(8) .album__part {
+      animation-delay: 0.7s; }
+    .library .album:nth-child(8) .album__cover .face {
+      background-color: #9918ec; }
+    .library .album:nth-child(9) .album__part {
+      animation-delay: 0.8s; }
+    .library .album:nth-child(9) .album__cover .face {
+      background-color: #5eafa5; }
+    .library .album:nth-child(10) .album__part {
+      animation-delay: 0.9s; }
+    .library .album:nth-child(10) .album__cover .face {
+      background-color: #42e5a5; }
+    .library .album:nth-child(11) .album__part {
+      animation-delay: 1s; }
+    .library .album:nth-child(11) .album__cover .face {
+      background-color: #4b05f2; }
+    .library .album:nth-child(12) .album__part {
+      animation-delay: 1.1s; }
+    .library .album:nth-child(12) .album__cover .face {
+      background-color: #587823; }
+    .library .album:nth-child(13) .album__part {
+      animation-delay: 1.2s; }
+    .library .album:nth-child(13) .album__cover .face {
+      background-color: #9df633; }
+    .library .album:nth-child(14) .album__part {
+      animation-delay: 1.3s; }
+    .library .album:nth-child(14) .album__cover .face {
+      background-color: #9d6026; }
+    .library .album:nth-child(15) .album__part {
+      animation-delay: 1.4s; }
+    .library .album:nth-child(15) .album__cover .face {
+      background-color: #9f50f7; }
+    .library .album:nth-child(16) .album__part {
+      animation-delay: 1.5s; }
+    .library .album:nth-child(16) .album__cover .face {
+      background-color: #b56e90; }
+    .library .album:nth-child(17) .album__part {
+      animation-delay: 1.6s; }
+    .library .album:nth-child(17) .album__cover .face {
+      background-color: #f55f24; }
+    .library .album:nth-child(18) .album__part {
+      animation-delay: 1.7s; }
+    .library .album:nth-child(18) .album__cover .face {
+      background-color: #88cd98; }
+    .library .album:nth-child(19) .album__part {
+      animation-delay: 1.8s; }
+    .library .album:nth-child(19) .album__cover .face {
+      background-color: #154233; }
+    .library .album:nth-child(20) .album__part {
+      animation-delay: 1.9s; }
+    .library .album:nth-child(20) .album__cover .face {
+      background-color: #82e857; }
+    .library .album:nth-child(21) .album__part {
+      animation-delay: 2s; }
+    .library .album:nth-child(21) .album__cover .face {
+      background-color: #ba2d05; }
+    .library .album:nth-child(22) .album__part {
+      animation-delay: 2.1s; }
+    .library .album:nth-child(22) .album__cover .face {
+      background-color: #980f3d; }
+    .library .album:nth-child(23) .album__part {
+      animation-delay: 2.2s; }
+    .library .album:nth-child(23) .album__cover .face {
+      background-color: #1eb66b; }
+    .library .album:nth-child(24) .album__part {
+      animation-delay: 2.3s; }
+    .library .album:nth-child(24) .album__cover .face {
+      background-color: #0b03dc; }
+    .library .album:nth-child(25) .album__part {
+      animation-delay: 2.4s; }
+    .library .album:nth-child(25) .album__cover .face {
+      background-color: #110f14; }
+    .library .album:nth-child(26) .album__part {
+      animation-delay: 2.5s; }
+    .library .album:nth-child(26) .album__cover .face {
+      background-color: #9068d1; }
+    .library .album:nth-child(27) .album__part {
+      animation-delay: 2.6s; }
+    .library .album:nth-child(27) .album__cover .face {
+      background-color: #5e26a2; }
+    .library .album:nth-child(28) .album__part {
+      animation-delay: 2.7s; }
+    .library .album:nth-child(28) .album__cover .face {
+      background-color: #aae4c9; }
+    .library .album:nth-child(29) .album__part {
+      animation-delay: 2.8s; }
+    .library .album:nth-child(29) .album__cover .face {
+      background-color: #5c7399; }
+    .library .album:nth-child(30) .album__part {
+      animation-delay: 2.9s; }
+    .library .album:nth-child(30) .album__cover .face {
+      background-color: #064a94; }
+    .library .album:nth-child(31) .album__part {
+      animation-delay: 3s; }
+    .library .album:nth-child(31) .album__cover .face {
+      background-color: #67cf0d; }
+    .library .album:nth-child(32) .album__part {
+      animation-delay: 3.1s; }
+    .library .album:nth-child(32) .album__cover .face {
+      background-color: #65479d; }
+    .library .album:nth-child(33) .album__part {
+      animation-delay: 3.2s; }
+    .library .album:nth-child(33) .album__cover .face {
+      background-color: #325ec4; }
+    .library .album:nth-child(34) .album__part {
+      animation-delay: 3.3s; }
+    .library .album:nth-child(34) .album__cover .face {
+      background-color: #41abe9; }
+    .library .album:nth-child(35) .album__part {
+      animation-delay: 3.4s; }
+    .library .album:nth-child(35) .album__cover .face {
+      background-color: #633917; }
+    .library .album:nth-child(36) .album__part {
+      animation-delay: 3.5s; }
+    .library .album:nth-child(36) .album__cover .face {
+      background-color: #be429b; }
+    .library .album:nth-child(37) .album__part {
+      animation-delay: 3.6s; }
+    .library .album:nth-child(37) .album__cover .face {
+      background-color: #bd6978; }
+    .library .album:nth-child(38) .album__part {
+      animation-delay: 3.7s; }
+    .library .album:nth-child(38) .album__cover .face {
+      background-color: #4d1395; }
+    .library .album:nth-child(39) .album__part {
+      animation-delay: 3.8s; }
+    .library .album:nth-child(39) .album__cover .face {
+      background-color: #ff61ad; }
+    .library .album:nth-child(40) .album__part {
+      animation-delay: 3.9s; }
+    .library .album:nth-child(40) .album__cover .face {
+      background-color: #71eadd; }
+    .library .album:nth-child(41) .album__part {
+      animation-delay: 4s; }
+    .library .album:nth-child(41) .album__cover .face {
+      background-color: #75ebe6; }
+    .library .album:nth-child(42) .album__part {
+      animation-delay: 4.1s; }
+    .library .album:nth-child(42) .album__cover .face {
+      background-color: #b11718; }
+    .library .album:nth-child(43) .album__part {
+      animation-delay: 4.2s; }
+    .library .album:nth-child(43) .album__cover .face {
+      background-color: #7549ac; }
+    .library .album:nth-child(44) .album__part {
+      animation-delay: 4.3s; }
+    .library .album:nth-child(44) .album__cover .face {
+      background-color: #2548be; }
+    .library .album:nth-child(45) .album__part {
+      animation-delay: 4.4s; }
+    .library .album:nth-child(45) .album__cover .face {
+      background-color: #7fc4b7; }
+    .library .album:nth-child(46) .album__part {
+      animation-delay: 4.5s; }
+    .library .album:nth-child(46) .album__cover .face {
+      background-color: #d51337; }
+    .library .album:nth-child(47) .album__part {
+      animation-delay: 4.6s; }
+    .library .album:nth-child(47) .album__cover .face {
+      background-color: #ddb7d0; }
+    .library .album:nth-child(48) .album__part {
+      animation-delay: 4.7s; }
+    .library .album:nth-child(48) .album__cover .face {
+      background-color: #a6e027; }
+    .library .album:nth-child(49) .album__part {
+      animation-delay: 4.8s; }
+    .library .album:nth-child(49) .album__cover .face {
+      background-color: #7dd92e; }
+    .library .album:nth-child(50) .album__part {
+      animation-delay: 4.9s; }
+    .library .album:nth-child(50) .album__cover .face {
+      background-color: #9a6b73; }
+    .library .album:nth-child(51) .album__part {
+      animation-delay: 5s; }
+    .library .album:nth-child(51) .album__cover .face {
+      background-color: #b73306; }
+    .library .album:nth-child(52) .album__part {
+      animation-delay: 5.1s; }
+    .library .album:nth-child(52) .album__cover .face {
+      background-color: #97063d; }
+    .library .album:nth-child(53) .album__part {
+      animation-delay: 5.2s; }
+    .library .album:nth-child(53) .album__cover .face {
+      background-color: #328fd0; }
+    .library .album:nth-child(54) .album__part {
+      animation-delay: 5.3s; }
+    .library .album:nth-child(54) .album__cover .face {
+      background-color: #301b89; }
+    .library .album:nth-child(55) .album__part {
+      animation-delay: 5.4s; }
+    .library .album:nth-child(55) .album__cover .face {
+      background-color: #abe4d0; }
+    .library .album:nth-child(56) .album__part {
+      animation-delay: 5.5s; }
+    .library .album:nth-child(56) .album__cover .face {
+      background-color: #618471; }
+    .library .album:nth-child(57) .album__part {
+      animation-delay: 5.6s; }
+    .library .album:nth-child(57) .album__cover .face {
+      background-color: #6fcaec; }
+    .library .album:nth-child(58) .album__part {
+      animation-delay: 5.7s; }
+    .library .album:nth-child(58) .album__cover .face {
+      background-color: #608687; }
+    .library .album:nth-child(59) .album__part {
+      animation-delay: 5.8s; }
+    .library .album:nth-child(59) .album__cover .face {
+      background-color: #81ab25; }
+    .library .album:nth-child(60) .album__part {
+      animation-delay: 5.9s; }
+    .library .album:nth-child(60) .album__cover .face {
+      background-color: #ba5fe4; }
+    .library .album:nth-child(61) .album__part {
+      animation-delay: 6s; }
+    .library .album:nth-child(61) .album__cover .face {
+      background-color: #05c74f; }
+    .library .album:nth-child(62) .album__part {
+      animation-delay: 6.1s; }
+    .library .album:nth-child(62) .album__cover .face {
+      background-color: #ad66d6; }
+    .library .album:nth-child(63) .album__part {
+      animation-delay: 6.2s; }
+    .library .album:nth-child(63) .album__cover .face {
+      background-color: #07d705; }
+    .library .album:nth-child(64) .album__part {
+      animation-delay: 6.3s; }
+    .library .album:nth-child(64) .album__cover .face {
+      background-color: #80ecd9; }
+    .library .album:nth-child(65) .album__part {
+      animation-delay: 6.4s; }
+    .library .album:nth-child(65) .album__cover .face {
+      background-color: #39a176; }
+    .library .album:nth-child(66) .album__part {
+      animation-delay: 6.5s; }
+    .library .album:nth-child(66) .album__cover .face {
+      background-color: #dde73c; }
+    .library .album:nth-child(67) .album__part {
+      animation-delay: 6.6s; }
+    .library .album:nth-child(67) .album__cover .face {
+      background-color: #4bd648; }
+    .library .album:nth-child(68) .album__part {
+      animation-delay: 6.7s; }
+    .library .album:nth-child(68) .album__cover .face {
+      background-color: #09f835; }
+    .library .album:nth-child(69) .album__part {
+      animation-delay: 6.8s; }
+    .library .album:nth-child(69) .album__cover .face {
+      background-color: #1cf891; }
+    .library .album:nth-child(70) .album__part {
+      animation-delay: 6.9s; }
+    .library .album:nth-child(70) .album__cover .face {
+      background-color: #4a66f6; }
+    .library .album:nth-child(71) .album__part {
+      animation-delay: 7s; }
+    .library .album:nth-child(71) .album__cover .face {
+      background-color: #fadbe7; }
+    .library .album:nth-child(72) .album__part {
+      animation-delay: 7.1s; }
+    .library .album:nth-child(72) .album__cover .face {
+      background-color: #725860; }
+    .library .album:nth-child(73) .album__part {
+      animation-delay: 7.2s; }
+    .library .album:nth-child(73) .album__cover .face {
+      background-color: #7014a9; }
+    .library .album:nth-child(74) .album__part {
+      animation-delay: 7.3s; }
+    .library .album:nth-child(74) .album__cover .face {
+      background-color: #d9fcb9; }
+    .library .album:nth-child(75) .album__part {
+      animation-delay: 7.4s; }
+    .library .album:nth-child(75) .album__cover .face {
+      background-color: #de7a58; }
+    .library .album:nth-child(76) .album__part {
+      animation-delay: 7.5s; }
+    .library .album:nth-child(76) .album__cover .face {
+      background-color: #b5da22; }
+    .library .album:nth-child(77) .album__part {
+      animation-delay: 7.6s; }
+    .library .album:nth-child(77) .album__cover .face {
+      background-color: #84f185; }
+    .library .album:nth-child(78) .album__part {
+      animation-delay: 7.7s; }
+    .library .album:nth-child(78) .album__cover .face {
+      background-color: #8732f2; }
+    .library .album:nth-child(79) .album__part {
+      animation-delay: 7.8s; }
+    .library .album:nth-child(79) .album__cover .face {
+      background-color: #294b5a; }
+    .library .album:nth-child(80) .album__part {
+      animation-delay: 7.9s; }
+    .library .album:nth-child(80) .album__cover .face {
+      background-color: #b1b618; }
+    .library .album:nth-child(81) .album__part {
+      animation-delay: 8s; }
+    .library .album:nth-child(81) .album__cover .face {
+      background-color: #d60978; }
+    .library .album:nth-child(82) .album__part {
+      animation-delay: 8.1s; }
+    .library .album:nth-child(82) .album__cover .face {
+      background-color: #7a6f60; }
+    .library .album:nth-child(83) .album__part {
+      animation-delay: 8.2s; }
+    .library .album:nth-child(83) .album__cover .face {
+      background-color: #693018; }
+    .library .album:nth-child(84) .album__part {
+      animation-delay: 8.3s; }
+    .library .album:nth-child(84) .album__cover .face {
+      background-color: #b50628; }
+    .library .album:nth-child(85) .album__part {
+      animation-delay: 8.4s; }
+    .library .album:nth-child(85) .album__cover .face {
+      background-color: #180e9f; }
+    .library .album:nth-child(86) .album__part {
+      animation-delay: 8.5s; }
+    .library .album:nth-child(86) .album__cover .face {
+      background-color: #585e87; }
+    .library .album:nth-child(87) .album__part {
+      animation-delay: 8.6s; }
+    .library .album:nth-child(87) .album__cover .face {
+      background-color: #379d9f; }
+    .library .album:nth-child(88) .album__part {
+      animation-delay: 8.7s; }
+    .library .album:nth-child(88) .album__cover .face {
+      background-color: #88054d; }
+    .library .album:nth-child(89) .album__part {
+      animation-delay: 8.8s; }
+    .library .album:nth-child(89) .album__cover .face {
+      background-color: #a5e185; }
+    .library .album:nth-child(90) .album__part {
+      animation-delay: 8.9s; }
+    .library .album:nth-child(90) .album__cover .face {
+      background-color: #81499d; }
+    .library .album:nth-child(91) .album__part {
+      animation-delay: 9s; }
+    .library .album:nth-child(91) .album__cover .face {
+      background-color: #ec1cca; }
+    .library .album:nth-child(92) .album__part {
+      animation-delay: 9.1s; }
+    .library .album:nth-child(92) .album__cover .face {
+      background-color: #49ce62; }
+    .library .album:nth-child(93) .album__part {
+      animation-delay: 9.2s; }
+    .library .album:nth-child(93) .album__cover .face {
+      background-color: #9b962a; }
+    .library .album:nth-child(94) .album__part {
+      animation-delay: 9.3s; }
+    .library .album:nth-child(94) .album__cover .face {
+      background-color: #46c0e8; }
+    .library .album:nth-child(95) .album__part {
+      animation-delay: 9.4s; }
+    .library .album:nth-child(95) .album__cover .face {
+      background-color: #06085b; }
+    .library .album:nth-child(96) .album__part {
+      animation-delay: 9.5s; }
+    .library .album:nth-child(96) .album__cover .face {
+      background-color: #36c6f3; }
+    .library .album:nth-child(97) .album__part {
+      animation-delay: 9.6s; }
+    .library .album:nth-child(97) .album__cover .face {
+      background-color: #0ddb8f; }
+    .library .album:nth-child(98) .album__part {
+      animation-delay: 9.7s; }
+    .library .album:nth-child(98) .album__cover .face {
+      background-color: #b73e2b; }
+    .library .album:nth-child(99) .album__part {
+      animation-delay: 9.8s; }
+    .library .album:nth-child(99) .album__cover .face {
+      background-color: #ff34c1; }
+    .library .album:nth-child(100) .album__part {
+      animation-delay: 9.9s; }
+    .library .album:nth-child(100) .album__cover .face {
+      background-color: #16ce78; }
+    .library .album:nth-child(101) .album__part {
+      animation-delay: 10s; }
+    .library .album:nth-child(101) .album__cover .face {
+      background-color: #6474df; }
+    .library .album:nth-child(102) .album__part {
+      animation-delay: 10.1s; }
+    .library .album:nth-child(102) .album__cover .face {
+      background-color: #1968cd; }
+    .library .album:nth-child(103) .album__part {
+      animation-delay: 10.2s; }
+    .library .album:nth-child(103) .album__cover .face {
+      background-color: #b501c8; }
+    .library .album:nth-child(104) .album__part {
+      animation-delay: 10.3s; }
+    .library .album:nth-child(104) .album__cover .face {
+      background-color: #dd8719; }
+    .library .album:nth-child(105) .album__part {
+      animation-delay: 10.4s; }
+    .library .album:nth-child(105) .album__cover .face {
+      background-color: #2567ed; }
+    .library .album:nth-child(106) .album__part {
+      animation-delay: 10.5s; }
+    .library .album:nth-child(106) .album__cover .face {
+      background-color: #d68ee0; }
+    .library .album:nth-child(107) .album__part {
+      animation-delay: 10.6s; }
+    .library .album:nth-child(107) .album__cover .face {
+      background-color: #d07f06; }
+    .library .album:nth-child(108) .album__part {
+      animation-delay: 10.7s; }
+    .library .album:nth-child(108) .album__cover .face {
+      background-color: #5783c2; }
+    .library .album:nth-child(109) .album__part {
+      animation-delay: 10.8s; }
+    .library .album:nth-child(109) .album__cover .face {
+      background-color: #de187b; }
+    .library .album:nth-child(110) .album__part {
+      animation-delay: 10.9s; }
+    .library .album:nth-child(110) .album__cover .face {
+      background-color: #93c4be; }
+    .library .album:nth-child(111) .album__part {
+      animation-delay: 11s; }
+    .library .album:nth-child(111) .album__cover .face {
+      background-color: #3df3d5; }
+    .library .album:nth-child(112) .album__part {
+      animation-delay: 11.1s; }
+    .library .album:nth-child(112) .album__cover .face {
+      background-color: #9636bf; }
+    .library .album:nth-child(113) .album__part {
+      animation-delay: 11.2s; }
+    .library .album:nth-child(113) .album__cover .face {
+      background-color: #56c54b; }
+    .library .album:nth-child(114) .album__part {
+      animation-delay: 11.3s; }
+    .library .album:nth-child(114) .album__cover .face {
+      background-color: #a2bdd6; }
+    .library .album:nth-child(115) .album__part {
+      animation-delay: 11.4s; }
+    .library .album:nth-child(115) .album__cover .face {
+      background-color: #886195; }
+    .library .album:nth-child(116) .album__part {
+      animation-delay: 11.5s; }
+    .library .album:nth-child(116) .album__cover .face {
+      background-color: #f3a6fb; }
+    .library .album:nth-child(117) .album__part {
+      animation-delay: 11.6s; }
+    .library .album:nth-child(117) .album__cover .face {
+      background-color: #62ebc3; }
+    .library .album:nth-child(118) .album__part {
+      animation-delay: 11.7s; }
+    .library .album:nth-child(118) .album__cover .face {
+      background-color: #b2a8de; }
+    .library .album:nth-child(119) .album__part {
+      animation-delay: 11.8s; }
+    .library .album:nth-child(119) .album__cover .face {
+      background-color: #21e740; }
+    .library .album:nth-child(120) .album__part {
+      animation-delay: 11.9s; }
+    .library .album:nth-child(120) .album__cover .face {
+      background-color: #407005; }
+    .library .album:nth-child(121) .album__part {
+      animation-delay: 12s; }
+    .library .album:nth-child(121) .album__cover .face {
+      background-color: #3c40ec; }
+    .library .album:nth-child(122) .album__part {
+      animation-delay: 12.1s; }
+    .library .album:nth-child(122) .album__cover .face {
+      background-color: #9ef6d4; }
+    .library .album:nth-child(123) .album__part {
+      animation-delay: 12.2s; }
+    .library .album:nth-child(123) .album__cover .face {
+      background-color: #9974d0; }
+    .library .album:nth-child(124) .album__part {
+      animation-delay: 12.3s; }
+    .library .album:nth-child(124) .album__cover .face {
+      background-color: #f96c45; }
+    .library .album:nth-child(125) .album__part {
+      animation-delay: 12.4s; }
+    .library .album:nth-child(125) .album__cover .face {
+      background-color: #938771; }
+    .library .album:nth-child(126) .album__part {
+      animation-delay: 12.5s; }
+    .library .album:nth-child(126) .album__cover .face {
+      background-color: #2cf1f5; }
+    .library .album:nth-child(127) .album__part {
+      animation-delay: 12.6s; }
+    .library .album:nth-child(127) .album__cover .face {
+      background-color: #7a697a; }
+    .library .album:nth-child(128) .album__part {
+      animation-delay: 12.7s; }
+    .library .album:nth-child(128) .album__cover .face {
+      background-color: #8bfd9b; }
+    .library .album:nth-child(129) .album__part {
+      animation-delay: 12.8s; }
+    .library .album:nth-child(129) .album__cover .face {
+      background-color: #32a155; }
+    .library .album:nth-child(130) .album__part {
+      animation-delay: 12.9s; }
+    .library .album:nth-child(130) .album__cover .face {
+      background-color: #fbe678; }
+    .library .album:nth-child(131) .album__part {
+      animation-delay: 13s; }
+    .library .album:nth-child(131) .album__cover .face {
+      background-color: #44ed61; }
+    .library .album:nth-child(132) .album__part {
+      animation-delay: 13.1s; }
+    .library .album:nth-child(132) .album__cover .face {
+      background-color: #299b4f; }
+    .library .album:nth-child(133) .album__part {
+      animation-delay: 13.2s; }
+    .library .album:nth-child(133) .album__cover .face {
+      background-color: #6b4a27; }
+    .library .album:nth-child(134) .album__part {
+      animation-delay: 13.3s; }
+    .library .album:nth-child(134) .album__cover .face {
+      background-color: #4809b9; }
+    .library .album:nth-child(135) .album__part {
+      animation-delay: 13.4s; }
+    .library .album:nth-child(135) .album__cover .face {
+      background-color: #c80959; }
+    .library .album:nth-child(136) .album__part {
+      animation-delay: 13.5s; }
+    .library .album:nth-child(136) .album__cover .face {
+      background-color: #411886; }
+    .library .album:nth-child(137) .album__part {
+      animation-delay: 13.6s; }
+    .library .album:nth-child(137) .album__cover .face {
+      background-color: #6033ef; }
+    .library .album:nth-child(138) .album__part {
+      animation-delay: 13.7s; }
+    .library .album:nth-child(138) .album__cover .face {
+      background-color: #7aaacf; }
+    .library .album:nth-child(139) .album__part {
+      animation-delay: 13.8s; }
+    .library .album:nth-child(139) .album__cover .face {
+      background-color: #0ac524; }
+    .library .album:nth-child(140) .album__part {
+      animation-delay: 13.9s; }
+    .library .album:nth-child(140) .album__cover .face {
+      background-color: #ff6824; }
+    .library .album:nth-child(141) .album__part {
+      animation-delay: 14s; }
+    .library .album:nth-child(141) .album__cover .face {
+      background-color: #028658; }
+    .library .album:nth-child(142) .album__part {
+      animation-delay: 14.1s; }
+    .library .album:nth-child(142) .album__cover .face {
+      background-color: #279b88; }
+    .library .album:nth-child(143) .album__part {
+      animation-delay: 14.2s; }
+    .library .album:nth-child(143) .album__cover .face {
+      background-color: #0afe33; }
+    .library .album:nth-child(144) .album__part {
+      animation-delay: 14.3s; }
+    .library .album:nth-child(144) .album__cover .face {
+      background-color: #4530c7; }
+    .library .album:nth-child(145) .album__part {
+      animation-delay: 14.4s; }
+    .library .album:nth-child(145) .album__cover .face {
+      background-color: #e0e586; }
+    .library .album:nth-child(146) .album__part {
+      animation-delay: 14.5s; }
+    .library .album:nth-child(146) .album__cover .face {
+      background-color: #c893a1; }
+    .library .album:nth-child(147) .album__part {
+      animation-delay: 14.6s; }
+    .library .album:nth-child(147) .album__cover .face {
+      background-color: #e22018; }
+    .library .album:nth-child(148) .album__part {
+      animation-delay: 14.7s; }
+    .library .album:nth-child(148) .album__cover .face {
+      background-color: #442a73; }
+    .library .album:nth-child(149) .album__part {
+      animation-delay: 14.8s; }
+    .library .album:nth-child(149) .album__cover .face {
+      background-color: #fda8c5; }
+    .library .album:nth-child(150) .album__part {
+      animation-delay: 14.9s; }
+    .library .album:nth-child(150) .album__cover .face {
+      background-color: #f999bb; }
+  .library .shelf {
+    position: absolute;
+    left: 50%;
+    width: 1000px;
+    transform: translateX(-50%);
+    transform-style: preserve-3d; }
+    .library .shelf .face {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
+      box-shadow: inset 0 0 75px 1.5px rgba(0, 0, 0, 0.1); }
+      .library .shelf .face.top {
+        width: 1000px;
+        height: 180px;
+        transform-origin: top;
+        transform: translateX(0) translateY(0) translateZ(0) rotateX(90deg); }
+      .library .shelf .face.front {
+        width: 1000px;
+        height: 20px;
+        transform: translateX(0) translateY(0) translateZ(180px); }
+      .library .shelf .face.bottom {
+        width: 1000px;
+        height: 180px;
+        transform-origin: bottom;
+        transform: translateX(0) translateZ(0) translateY(-160px) rotateX(-90deg); }
+      .library .shelf .face.back {
+        width: 1000px;
+        height: 20px;
+        transform: translateX(0) translateY(0) translateZ(0) rotateX(180deg); }
+      .library .shelf .face.left {
+        width: 180px;
+        height: 20px;
+        transform-origin: left;
+        transform: translateX(0) translateY(0) translateZ(0) rotateY(-90deg); }
+      .library .shelf .face.right {
+        width: 180px;
+        height: 20px;
+        transform-origin: left;
+        transform: translateX(1000px) translateY(0) translateZ(180px) rotateY(90deg); }
+    .library .shelf--top {
+      top: 150px; }
+    .library .shelf--middle {
+      top: 320px; }
+    .library .shelf--bottom {
+      top: 490px; }
+    .library .shelf:before {
+      content: "";
+      display: block;
+      box-shadow: 0 30px 30px 20px rgba(0, 0, 0, 0.5); }
+    .library .shelf .face {
+      background-color: var(--color-blue);
+      background-image: url("../img/shelf_texture.png"); }
+
+@keyframes clickme {
+  from {
+    transform: translateZ(0); }
+  50% {
+    transform: translateZ(50px); }
+  to {
+    transform: translateZ(0); } }
+
+/*# sourceMappingURL=albums.css.map */

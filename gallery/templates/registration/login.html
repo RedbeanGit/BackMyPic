@@ -1,5 +1,4 @@
-{% extends 'gallery/base.html' %}
-			{% block section %}<form action="{% url 'login' %}" method="post">
+{% extends 'gallery/base.html' %}{% block section %}<form action="{% url 'login' %}" method="post">
 				{% csrf_token %}
 				<div>
 					<label for="{{ form.username.id_for_label }}">Nom d'utilisateur</label>
