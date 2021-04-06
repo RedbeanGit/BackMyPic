@@ -15,15 +15,18 @@ Including another URLconf
 """
 
 from django.conf.urls import url
+from django.views.generic.base import RedirectView
 from gallery import views
 
 app_name = 'gallery'
 
 urlpatterns = [
-	url(r'^$', views.GalleryView.as_view(), name='gallery'),
-	url(r'^details/(?P<picture_id>[0-9]+)/$', views.DetailsView.as_view(), name='details'),
+	url(r'^$', RedirectView.as_view(url='album/'), name='gallery'),
+	url(r'^picture/(?P<picture_id>[0-9]+)/$', views.PictureView.as_view(), name='picture'),
+	url(r'^album/$', views.AlbumView.as_view(), name='album'),
+	url(r'^album/(?P<album_id>[0-9]+)/$', views.AlbumView.as_view(), name='album'),
+	url(r'^library/$', views.LibraryView.as_view(), name='library'),
 	url(r'^search/$', views.SearchView.as_view(), name='search'),
 	url(r'^settings/$', views.SettingsView.as_view(), name='settings'),
-	url(r'^register/$', views.RegisterView.as_view(), name='register'),
-	url(r'^albums/$', views.AlbumsView.as_view(), name='albums')
+	url(r'^register/$', views.RegisterView.as_view(), name='register')
 ]

@@ -59,19 +59,19 @@ function downloadSelection() {
 }
 
 // when a picture is clicked
-function activeSelection(event, elementId) {
+function activeSelection(event, elementId, link) {
 	if (selectMode)
 		selectElement(event, elementId);
 	else
-		showElement(elementId);
+		showElement(elementId, link);
 }
 
 function selectElement(event, elementId) {
 	
 }
 
-function showElement(elementId) {
-	
+function showElement(elementId, link) {
+	window.location.href = link;
 }
 
 // send action to the server

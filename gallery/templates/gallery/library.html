@@ -1,0 +1,42 @@
+{% extends 'gallery/base.html' %}{% load static %}{% load sass_tags %}{% block style %}
+<link rel="stylesheet" type="text/css" href="{% sass_src 'gallery/css/library.scss' %}">
+{% endblock %}{% block section %}
+			{% include 'mixins/actionnav.html' %}
+			<div class="library">
+				{% for category in 'DSU' %}
+					<div class="storage storage--cat{{ category }}">
+						{% for album in albums %}
+							{% if album.category == category %}
+								<div class="album" id="album-{{ album.id }}" onclick="activeSelection(event, {{ album.id }}, '{% url 'gallery:album' album_id=album.id %}');" title="{{ album.name }}">
+									<div class="album__part album__sheets" title="{{ album.name }}">
+										{% include 'mixins/slab.html' %}
+									</div>
+									<div class="album__part album__cover album__cover--left">
+										{% include 'mixins/slab.html' %}
+									</div>
+									<div class="album__part album__cover album__cover--front">
+										{% include 'mixins/slab.html' %}
+									</div>
+									<div class="album__part album__cover album__cover--right">
+										{% include 'mixins/slab.html' %}
+									</div>
+								</div>
+							{% endif %}
+						{% endfor %}
+					</div>
+				{% endfor %}
+				<div class="shelf shelf--top">
+					{% include 'mixins/slab.html' %}
+				</div>
+				<div class="shelf shelf--middle">
+					{% include 'mixins/slab.html' %}
+				</div>
+				<div class="shelf shelf--bottom">
+					{% include 'mixins/slab.html' %}
+				</div>
+			</div>
+{% endblock %}
+{% block script %}
+	<script type="text/javascript" src="{% static 'gallery/js/actionnav.js' %}"></script>
+	<script type="text/javascript" src="{% static 'gallery/js/library.js' %}"></script>
+{% endblock %}

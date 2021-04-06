@@ -18,19 +18,26 @@ window.startSelectMode = function() {
 };
 
 window.stopSelectMode = function() {
-	oldStopSelectMode();
 	let albums = document.querySelectorAll('.album');
 
 	for (let albumId of selectedAlbums)
-		selectAlbum(albumId);
+		selectElement(document.createEvent('Events'), albumId);
 	for (let album of albums)
 		album.classList.remove('album--selectable');
+	oldStopSelectMode();
 };
 
 window.hideSelection = function() {};
 
 window.addElement = function() {
-	alertExperimental();
+	showUserInput('Nom de l\'album', function(value){
+		let inputContent = document.getElementById('actioncontent-input');
+	
+		if (inputContent) {
+			inputContent.value = value;
+		};
+		oldSendAction('add');
+	});
 };
 
 window.deleteSelection = function() {
@@ -60,9 +67,8 @@ window.selectElement = function(event, albumId) {
 	}
 };
 
-window.showElement = function(albumId) {
-	oldShowElement(albumId);
-	let album = document.getElementById('album-' + albumId);
+window.showElement = function(albumId, link) {
+	oldShowElement(albumId, link);
 };
 
 window.sendAction = function(actionName) {

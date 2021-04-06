@@ -57,6 +57,17 @@ class Album(models.Model):
 		return '(user=' + str(self.user) + ', name=' + str(self.name) + ')'
 
 
+class UserSettings(models.Model):
+	user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_settings')
+	current_album = models.OneToOneField(Album, on_delete=models.CASCADE)
+
+	class Meta:
+		verbose_name = 'réglage utilisateur'
+
+	def __str__(self):
+		return '(user=' + str(self.user) + ')'
+
+
 @receiver(models.signals.post_delete, sender=Picture)
 def auto_delete_file_on_delete(sender, instance, **kwargs):
 	"""

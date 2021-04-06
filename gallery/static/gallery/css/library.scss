@@ -26,38 +26,61 @@ section {
 	transform-style: preserve-3d;
 	/*transform: rotate3d(-1, 0, 0, 20deg);*/
 
+	.storage {
+		width: $shelf-width;
+		height: $album-height;
+		position: absolute;
+		left: 50%;
+		transform: translateX(-50%);
+		transform-style: preserve-3d;
+
+		&--catD {
+			top: 150px - $album-height;
+
+			@for $i from 1 through 50 {
+				.album:nth-child(#{$i}) .album__cover .face {
+					background-color: rgb(random(255), random(255), random(255));
+				}
+			}
+		}
+
+		&--catS {
+			top: 320px - $album-height;
+
+			@for $i from 1 through 50 {
+				.album:nth-child(#{$i}) .album__cover .face {
+					background-color: rgb(random(255), random(255), random(255));
+				}
+			}
+		}
+
+		&--catU {
+			top: 490px - $album-height;
+
+			@for $i from 1 through 50 {
+				.album:nth-child(#{$i}) .album__cover .face {
+					background-color: rgb(random(255), random(255), random(255));
+				}
+			}
+		}
+	}
+
 	.album {
 		position: relative;
 		display: inline-block;
 		width: $album-width;
 		height: $album-height;
+
+		transition-duration: 0.1s;
 		transform-style: preserve-3d;
-
-		$album-translates: translateX(5px) translateZ(30px);
-		$album-translates-selected: translateX(5px) translateZ(80px);
-
-		&--catD {
-			transform: $album-translates translateY(150px - $album-height);
-		}
-
-		&--catS {
-			transform: $album-translates translateY(320px - $album-height);
-		}
-
-		&--catU {
-			transform: $album-translates translateY(490px - $album-height);
-		}
+		transform: translateX(5px) translateZ(30px);
 
 		&--selectable {
-			.album__part {
-				animation: clickme 1s;
-			}
+			animation: clickme 0.8s;
 		}
 
 		&--selected {
-			.album__part {
-				transform: translateZ(50px);
-			}
+			transform: translateX(5px) translateZ(80px);
 		}
 		
 		&__part {
@@ -94,13 +117,9 @@ section {
 			}
 		}
 
-		@for $i from 1 through 150 {
-			&:nth-child(#{$i}) .album__part {
+		@for $i from 1 to 50 {
+			&:nth-child(#{$i}) {
 				animation-delay: ($i - 1) * 0.1s;
-			}
-
-			&:nth-child(#{$i}) .album__cover .face {
-				background-color: rgb(random(255), random(255), random(255));
 			}
 		}
 	}
@@ -138,7 +157,7 @@ section {
 }
 
 @keyframes clickme {
-	from { transform: translateZ(0); }
-	50% { transform: translateZ(50px); }
-	to { transform: translateZ(0); }
+	from { transform: translateX(5px) translateZ(30px); }
+	50% { transform: translateX(5px) translateZ(80px); }
+	to { transform: translateX(5px) translateZ(30px); }
 }

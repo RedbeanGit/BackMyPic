@@ -62,13 +62,13 @@ window.startSelectMode = function() {
 };
 
 window.stopSelectMode = function() {
-	oldStopSelectMode();
 	let pictures = document.querySelectorAll('.album__picture');
 
 	for (let pictureId of selectedPictures)
-		selectPicture(pictureId);
+		selectElement(document.createEvent('Events'), pictureId);
 	for (let picture of pictures)
 		picture.classList.remove('album__picture--selectable');
+	oldStopSelectMode();
 };
 
 window.hideSelection = function() {
@@ -110,9 +110,8 @@ window.selectElement = function(event, pictureId) {
 	}
 };
 
-window.showElement = function(pictureId) {
-	oldShowElement(pictureId);
-	let picture = document.getElementById('picture-' + pictureId);
+window.showElement = function(pictureId, link) {
+	oldShowElement(pictureId, link);
 };
 
 window.sendAction = function(actionName) {

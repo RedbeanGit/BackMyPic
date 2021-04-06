@@ -1,4 +1,5 @@
-var searchMode = false;
+var searchMode = false,
+	asked = [];
 
 function activeSearch() {
 	if (searchMode) {
@@ -20,6 +21,28 @@ function disableSearchBar() {
 
 function alertExperimental() {
 	alert('Cette fonctionnalité n\'est pas encore disponible !');
+}
+
+function showUserInput(msg, fct) {
+	sheet = document.getElementById('input-sheet');
+
+	if (sheet) {
+		sheet.querySelector('label').textContent = msg + ' :';
+		sheet.querySelector('input[type=submit]').onclick =	function(){
+			fct(document.getElementById('input-sheet__input').value);
+		};
+		sheet.classList.add('input-sheet--visible');
+	}
+}
+
+function hideUserInput() {
+	sheet = document.getElementById('input-sheet');
+
+	if (sheet) {
+		sheet.querySelector('label').textContent = '';
+		sheet.querySelector('input[type=submit]').onclick =	function(){	};
+		sheet.classList.remove('input-sheet--visible');
+	}
 }
 
 

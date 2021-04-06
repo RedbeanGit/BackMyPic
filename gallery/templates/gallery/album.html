@@ -1,0 +1,53 @@
+{% extends 'gallery/base.html' %}{% load static %}{% load sass_tags %}{% load gallery %}
+{% block style %}
+	<link rel="stylesheet" type="text/css" href="{% sass_src 'gallery/css/album.scss' %}">
+{% endblock %}
+{% block section %}
+	{% include 'mixins/actionnav.html' %}
+	<div class="album">
+		{% if album.pictures.all.count > 0 %}
+			{% for picture in album.pictures.all %}
+				{% if forloop.counter0|divisibleby:8 %}
+					<div class="album__sheet{% if forloop.counter == 1 %} album__sheet--visible{% endif %}">
+				{% endif %}
+				{% if forloop.counter0|divisibleby:4 %}
+					{% if forloop.counter0|frontpage:4 %}
+						<div class="album__page album__page--front{% if forloop.counter0 < 4 %} album__page--title{% endif %}" onclick="nextSheet();">
+					{% else %}
+						<div class="album__page album__page--back{% if forloop.revcounter0 < 4 %} album__page--last{% endif %}" onclick="previousSheet();">
+					{% endif %}
+				{% endif %}
+				<img src="{{ picture.image.url }}" class="album__picture" id="picture-{{ picture.id }}" onclick="activeSelection(event, {{ picture.id }}, '{% url 'gallery:picture' picture_id=picture.id %}');">
+				{% if forloop.counter|divisibleby:4 or forloop.last %}
+					</div>
+				{% endif %}
+				{% if forloop.last and forloop.counter0|frontpage:4 %}
+					<div class="album__page album__page--back{% if forloop.revcounter0 < 4 %} album__page--last{% endif %}" onclick="previousSheet();"></div>
+				{% endif %}
+				{% if forloop.counter|divisibleby:8 or forloop.last %}
+					</div>
+				{% endif %}
+			{% endfor %}
+		{% else %}
+			<div class="album__sheet album__sheet--visible">
+				<div class="album__page album__page--front album__page--title" onclick="nextSheet();"></div>
+				<div class="album__page album__page--back album__page--last" onclick="previousSheet();"></div>
+			</div>
+		{% endif %}
+		<div class="album__cover album__cover--left">
+			{% include 'mixins/slab.html' %}
+		</div>
+		<div class="album__cover album__cover--front album__cover--closeright">
+			{% include 'mixins/slab.html' %}
+		</div>
+		<div class="album__cover album__cover--right album__cover--closeright">
+			{% include 'mixins/slab.html' %}
+		</div>
+		<div class="album__bgline album__bgline--left"></div>
+		<div class="album__bgline album__bgline--right"></div>
+	</div>
+{% endblock %}
+{% block script %}
+	<script type="text/javascript" src="{% static 'gallery/js/actionnav.js' %}"></script>
+	<script type="text/javascript" src="{% static 'gallery/js/album.js' %}"></script>
+{% endblock %}

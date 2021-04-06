@@ -22,18 +22,18 @@ html {
 ::-webkit-scrollbar {
   width: 13px;
   height: 13px; }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-blue);
+    /*border-radius: 10px;*/ }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-blue5); }
+  ::-webkit-scrollbar-track {
+    background: var(--color-white);
+    /*border-radius: 10px;*/
+    box-shadow: inset 7px 10px 12px #f0f0f0; }
 
-::-webkit-scrollbar-thumb {
-  background: var(--color-blue);
-  /*border-radius: 10px;*/ }
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-blue5); }
-
-::-webkit-scrollbar-track {
-  background: var(--color-white);
-  /*border-radius: 10px;*/
-  box-shadow: inset 7px 10px 12px #f0f0f0; }
+input:focus, textarea:focus, select:focus {
+  outline: none; }
 
 body {
   margin: 0;
@@ -109,5 +109,55 @@ footer {
   text-decoration: none;
   color: var(--color-black5);
   font-size: 0.9em; }
+
+.input-sheet {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 100%);
+  opacity: 0;
+  z-index: 4;
+  transition-property: opacity, transform;
+  transition-duration: 0.2s;
+  padding: 60px 0;
+  width: 80%;
+  background-color: var(--color-white);
+  background-image: linear-gradient(to top, #f7f7f7 0%, #f7f7f7 80%, rgba(207, 207, 207, 0.6) 100%);
+  box-shadow: 5px 2px 20px gray;
+  font-family: "Valentime";
+  font-size: 2em; }
+  .input-sheet--visible {
+    opacity: 100%;
+    transform: translate(-50%, 0%); }
+  .input-sheet__input {
+    border: 0;
+    border-bottom: 2px solid black;
+    width: 50%;
+    background: transparent;
+    font-family: "Valentime";
+    font-size: 1em;
+    padding: 5px;
+    transition-duration: 0.2s;
+    overflow: visible; }
+    .input-sheet__input:hover {
+      background-color: var(--color-white); }
+  .input-sheet__clear, .input-sheet__submit {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: transparent;
+    border-radius: 50%; }
+    .input-sheet__clear:hover, .input-sheet__submit:hover {
+      cursor: pointer;
+      background-color: var(--color-white); }
+  .input-sheet__clear {
+    background-image: url("../img/cancel.svg"); }
+  .input-sheet__submit {
+    background-image: url("../img/validate.svg"); }
+  .input-sheet > * {
+    margin: 0 20px; }
 
 /*# sourceMappingURL=base.css.map */

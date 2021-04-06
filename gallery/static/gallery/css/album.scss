@@ -36,6 +36,10 @@ section {
 		border: 5px solid transparent;
 		transition-property: border, box-shadow, max-width, max-height, filter;
 
+		&:hover {
+			box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.1);
+		}
+
 		&--selectable {
 			border-color: var(--color-white);
 			box-shadow: 0 0 10px var(--color-shadow3);
