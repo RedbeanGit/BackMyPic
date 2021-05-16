@@ -1,0 +1,37 @@
+$color-primary: #10b5f3;
+$color-secondary: #707070;
+$color-back: #ffffff;
+$color-negative: #ff0000;
+
+$font-primary: "Cream Cake";
+$font-secondary: "Arial";
+
+$album-width: 500px;
+$album-height: 550px;
+$album-border-radius: 30px;
+
+$picture-border: 20px;
+
+$notebook-width: 580px;
+$notebook-height: 755px;
+$notebook-border-radius: 50px;
+
+$notebook-clip-width: 218px;
+$notebook-clip-height: 85px;
+
+$content-nav-offset: 5%;
+
+@font-face {
+	font-family: "Arial Rounded Bold";
+	src: url("../fonts/arlrdbd.ttf");
+}
+
+@font-face {
+	font-family: "Valentime";
+	src: url("../fonts/valentime.otf");
+}
+
+@font-face {
+	font-family: "Cream Cake";
+	src: url("../fonts/cream_cake.otf");
+}

@@ -1,163 +1,135 @@
-@import "mixins/geometry";
-@import "mixins/actionnav";
+@import "mixins/constants";
+@import "mixins/actionbar";
+@import "mixins/contentnav";
 
-$album-width: 20px;
-$album-height: 120px;
-$album_depth: 100px;
+@include actionbar;
 
-$shelf-width: 1000px;
-$shelf-height: 20px;
-$shelf-depth: 180px;
+$album-margin: 15px;
+$transition-speed: 0.1s;
 
-@include actionnav;
+body {
+	overflow-x: hidden;
+}
 
-section {
+.content {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-}
+	justify-content: center;
+	overflow: hidden;
+	margin-top: 40px;
 
-.library {
-	position: relative;
-	width: $shelf-width;
-	height: 510px;
-	perspective: 1400px;
-	margin-bottom: 60px;
-	transform-style: preserve-3d;
-	/*transform: rotate3d(-1, 0, 0, 20deg);*/
-
-	.storage {
-		width: $shelf-width;
+	.library {
+		display: flex;
+		align-items: center;
+		width: 100%;
 		height: $album-height;
-		position: absolute;
-		left: 50%;
-		transform: translateX(-50%);
-		transform-style: preserve-3d;
-
-		&--catD {
-			top: 150px - $album-height;
-
-			@for $i from 1 through 50 {
-				.album:nth-child(#{$i}) .album__cover .face {
-					background-color: rgb(random(255), random(255), random(255));
-				}
-			}
-		}
-
-		&--catS {
-			top: 320px - $album-height;
-
-			@for $i from 1 through 50 {
-				.album:nth-child(#{$i}) .album__cover .face {
-					background-color: rgb(random(255), random(255), random(255));
-				}
-			}
-		}
-
-		&--catU {
-			top: 490px - $album-height;
-
-			@for $i from 1 through 50 {
-				.album:nth-child(#{$i}) .album__cover .face {
-					background-color: rgb(random(255), random(255), random(255));
-				}
-			}
-		}
-	}
-
-	.album {
-		position: relative;
-		display: inline-block;
-		width: $album-width;
-		height: $album-height;
-
-		transition-duration: 0.1s;
-		transform-style: preserve-3d;
-		transform: translateX(5px) translateZ(30px);
-
-		&--selectable {
-			animation: clickme 0.8s;
-		}
-
-		&--selected {
-			transform: translateX(5px) translateZ(80px);
-		}
+		overflow: hidden;
 		
-		&__part {
+		.album {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: space-between;
+			justify-content: center;
+
+			width: $album-width * 0.5;
+			height: $album-height * 0.5;
+
+			background-color: $color-primary;
+			border-radius: 0 30px 30px 0;
+			box-shadow: 0px 3px 6px rgba(#000000, 0.16);
+
 			position: absolute;
-			top: 0;
-			left: 0;
-			transition-property: transform;
-			transition-duration: 0.2s;
-		}
+			transform: translate(-50%, 0);
+			left: -50%;
 
-		&__sheets {
-			@include slab($album-width - 4px, $album-height - 4px, $album-depth - 4px, 2px, 2px, 2px);
+			transition: left (2 * $transition-speed) ease-out $transition-speed;
 
-			.face {
-				background-color: var(--color-white);
-			}
-		}
-
-		&__cover {
-			&--left {
-				@include slab(2px, $album-height, $album-depth - 2px);
+			&--next ~ .album {
+				left: 150%;
 			}
 
-			&--front {
-				@include slab($album-width, $album-height, 2px, 0, 0, $album-depth - 2px);
+			&__bgline {
+				position: absolute;
+				left: 8%;
+				top: 0;
+				width: 3px;
+				height: 100%;
+				background-color: rgba($color-back, 0.3);
+				transition: width (2 * $transition-speed) ease-out 0s;
 			}
 
-			&--right {
-				@include slab(2px, $album-height, $album-depth - 2px, $album-width - 2px);
+			&__cover {
+				max-width: 70%;
+				max-height: 70%;
 			}
 
-			.face {
-				background-image: url("../img/album_texture.png");
-			}
-		}
+			&__title {
+				position: absolute;
+				left: 50%;
+				bottom: 5%;
+				transform: translate(-50%, 0);
+				font-family: $font-primary;
+				font-size: 1.6em;
+				color: $color-back;
 
-		@for $i from 1 to 50 {
-			&:nth-child(#{$i}) {
-				animation-delay: ($i - 1) * 0.1s;
+				transition: font-size $transition-speed ease-out 0s;
+
+				&--alone {
+					position: static;
+					left: 0;
+					bottom: 0;
+					transform: none;
+				}
+			}
+
+			&--previous {
+				left: 10%;
+				transition: width $transition-speed ease-out 0s,
+					height $transition-speed ease-out 0s,
+					left (2 * $transition-speed) ease-out $transition-speed;
+			}
+
+			&--current {
+				width: $album-width;
+				height: $album-height;
+				left: 50%;
+
+				transition: left (2 * $transition-speed) ease-out $transition-speed,
+					width $transition-speed ease-out (3 * $transition-speed),
+					height $transition-speed ease-out (3 * $transition-speed);
+
+				.album__bgline {
+					width: 6px;
+					transition: width $transition-speed ease-out (3 * $transition-speed);
+				}
+
+				.album__title {
+					font-size: 3.2em;
+					transition: font-size $transition-speed ease-out (3 * $transition-speed);
+				}
+			}
+
+			&--next {
+				left: 90%;
+				transition: width $transition-speed ease-out 0s,
+					height $transition-speed ease-out 0s,
+					left (2 * $transition-speed) ease-out $transition-speed;
+			}
+
+			&:hover {
+				cursor: pointer;
 			}
 		}
 	}
 
-	.shelf {
-		position: absolute;
-		left: 50%;
-		width: $shelf-width;
-		transform: translateX(-50%);
-		@include slab($shelf-width, $shelf-height, $shelf-depth);
+	.contentnav {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		width: $album-width;
 
-		&--top {
-			top: 150px;
-		}
-
-		&--middle {
-			top: 320px;
-		}
-
-		&--bottom {
-			top: 490px;
-		}
-
-		&:before {
-			content: "";
-			display: block;
-			box-shadow: 0 30px 30px 20px rgba(0, 0, 0, 0.5);
-		}
-
-		.face {
-			background-color: var(--color-blue);
-			background-image: url("../img/shelf_texture.png");
-		}
+		@include contentnav;
 	}
-}
-
-@keyframes clickme {
-	from { transform: translateX(5px) translateZ(30px); }
-	50% { transform: translateX(5px) translateZ(80px); }
-	to { transform: translateX(5px) translateZ(30px); }
 }

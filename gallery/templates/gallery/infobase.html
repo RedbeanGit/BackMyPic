@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	{% load static %}{% load compress %}{% load sass_tags %}
+	<head>
+		<meta charset="utf-8">
+		<title>{{ title }}</title>
+		{% compress css %}
+			<link rel="stylesheet" type="text/css" href="{% sass_src 'gallery/css/infobase.scss' %}">
+			{% block style %}{% endblock %}
+		{% endcompress %}
+	</head>
+	<body>
+		<section>
+			<img src="{% static 'gallery/img/cloud_bye.svg' %}">
+			<div class="description">
+				<h2 class="description__title">{{ title }}</h2>
+				<p class="description__text">{{ description }}</p>
+				<a class="button button--inverted description__button" href="{% url 'gallery:gallery' %}">
+					<p>Accueil</p>
+				</a>
+			</div>
+		</section>
+		<footer>
+			<div class="footer">
+				<p class="footer__element">© 2021 - BackMyPic Team</p>
+				<p class="footer__element">v{{ version }}</p>
+				<a href="" class="footer__element">Contact</a>
+			</div>
+		</footer>
+		<script type="text/javascript" src="{% static 'gallery/js/base.js' %}"></script>
+		{% block script %}{% endblock %}
+	</body>
+</html>

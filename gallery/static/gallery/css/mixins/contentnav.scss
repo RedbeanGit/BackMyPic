@@ -1,0 +1,31 @@
+@import "constants";
+
+@mixin contentnav {
+	&__element {
+		display: flex;
+		align-items: center;
+		user-select: none;
+		filter: invert(48%) sepia(6%) saturate(19%) hue-rotate(331deg) brightness(88%) contrast(85%);
+
+		p {
+			font-family: $font-primary;
+			font-size: 1.2em;
+		}
+
+		img {
+			height: 1.2em;
+		}
+
+		&--disabled {
+			filter: invert(93%) sepia(0%) saturate(437%) hue-rotate(135deg) brightness(93%) contrast(91%);
+		}
+
+		&:hover {
+			cursor: pointer;
+
+			&.contentnav__element--disabled {
+				cursor: not-allowed;
+			}
+		}
+	}
+}

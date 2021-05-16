@@ -1,13 +1,22 @@
-{% extends 'gallery/base.html' %}{% block section %}<form action="{% url 'login' %}" method="post">
-				{% csrf_token %}
-				<div>
-					<label for="{{ form.username.id_for_label }}">Nom d'utilisateur</label>
-					{{ form.username }}
-				</div>
-				<div>
-					<label for="{{ form.password.id_for_label }}">Mot de passe</label>
-					{{ form.password }}
-				</div>
-				<input type="submit" name="submit" value="Se connecter">
-			</form>
-			{% endblock %}
+{% extends 'gallery/base.html' %}
+{% load static %}{% load sass_tags %}{% load gallery %}
+{% block style %}
+	<link rel="stylesheet" type="text/css" href="{% sass_src 'gallery/css/login.scss' %}">
+{% endblock %}
+{% block section %}
+	<div class="section">
+		{% include 'mixins/sectiontitle.html' with text="Connecte-toi" subtext="Entre tes identifiants pour accéder à tes albums nuagiques" %}
+		<form method="post" action="{% url 'gallery:login' %}">
+			{% csrf_token %}
+			<div class="section__content">
+				<input class="input" type="text" name="username" placeholder="Nom d'utilisateur">
+				<input class="input" type="password" name="password" placeholder="Mot de passe">
+			</div>
+			<div class="section__content">
+				<span class="button">
+					<input type="submit" name="submit" value="Se connecter">
+				</span>
+			</div>
+		</form>
+	</div>
+{% endblock %}

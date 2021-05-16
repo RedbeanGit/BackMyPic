@@ -1,0 +1,167 @@
+@font-face {
+  font-family: "Arial Rounded Bold";
+  src: url("../fonts/arlrdbd.ttf"); }
+
+@font-face {
+  font-family: "Valentime";
+  src: url("../fonts/valentime.otf"); }
+
+@font-face {
+  font-family: "Cream Cake";
+  src: url("../fonts/cream_cake.otf"); }
+
+@font-face {
+  font-family: "Arial Rounded Bold";
+  src: url("../fonts/arlrdbd.ttf"); }
+
+@font-face {
+  font-family: "Valentime";
+  src: url("../fonts/valentime.otf"); }
+
+@font-face {
+  font-family: "Cream Cake";
+  src: url("../fonts/cream_cake.otf"); }
+
+@keyframes pour {
+  0% {
+    transform: translateY(-200%) rotate(0deg); }
+  50% {
+    transform: translateY(-100%) rotate(500deg); }
+  100% {
+    transform: translateY(0) rotate(0deg); } }
+
+@keyframes empty {
+  0% {
+    transform: translateY(200%) rotate(0deg); }
+  50% {
+    transform: translateY(100%) rotate(-500deg); }
+  100% {
+    transform: translateY(0) rotate(0deg); } }
+
+.button {
+  position: relative;
+  padding: 10px 26px;
+  font-size: 1.7em;
+  font-family: "Cream Cake";
+  color: #ffffff;
+  text-decoration: none;
+  background-color: #10b5f3;
+  border: 2px solid #10b5f3;
+  border-radius: 99999px;
+  overflow: hidden;
+  z-index: 0; }
+  .button * {
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    cursor: inherit;
+    margin: 0; }
+  .button:hover {
+    cursor: pointer;
+    color: #10b5f3;
+    transition: color 0.2s ease-in-out 0s;
+    position: relative;
+    overflow: hidden;
+    z-index: 1; }
+    .button:hover * {
+      position: relative;
+      z-index: 1; }
+    .button:hover::before {
+      content: "";
+      position: absolute;
+      bottom: -50%;
+      left: -50%;
+      width: 200%;
+      padding-bottom: 200%;
+      background: #ffffff;
+      border-radius: 40%;
+      animation: pour 2s ease-in-out -1.5s;
+      z-index: 0; }
+  .button--negative {
+    background-color: #ff0000;
+    border-color: #ff0000; }
+    .button--negative:hover {
+      color: #ff0000; }
+  .button--inverted {
+    background-color: #ffffff;
+    color: #707070;
+    border-color: #ffffff; }
+    .button--inverted:hover {
+      color: #ffffff;
+      position: relative;
+      overflow: hidden;
+      z-index: 1; }
+      .button--inverted:hover * {
+        position: relative;
+        z-index: 1; }
+      .button--inverted:hover::before {
+        content: "";
+        position: absolute;
+        bottom: -50%;
+        left: -50%;
+        width: 200%;
+        padding-bottom: 200%;
+        background: #10b5f3;
+        border-radius: 40%;
+        animation: pour 2s ease-in-out -1.5s;
+        z-index: 0; }
+
+::selection {
+  background-color: #707070;
+  color: #ffffff; }
+
+body {
+  background-color: #10b5f3;
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0; }
+
+section {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  font-family: "Cream Cake";
+  color: #ffffff; }
+  section img {
+    width: 400px;
+    margin: 40px;
+    user-select: none; }
+  section .description {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; }
+    section .description__title {
+      font-size: 3.4em;
+      margin: 0 0 30px 0; }
+    section .description__text {
+      font-size: 2em;
+      margin: 15px 0;
+      white-space: nowrap; }
+
+footer {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 100%;
+  transform: translate(-50%, 0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0; }
+  footer .footer {
+    display: flex;
+    align-items: center; }
+    footer .footer__element {
+      margin: 0 50px;
+      color: #ffffff;
+      font-family: "Arial";
+      font-size: 0.9em;
+      text-decoration: none; }
+
+/*# sourceMappingURL=infobase.css.map */

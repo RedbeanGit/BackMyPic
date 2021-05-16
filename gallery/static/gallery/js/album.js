@@ -1,13 +1,93 @@
-var currentSheet = 0, nbSheets = 0,
-	oldStartSelectMode = window.startSelectMode,
+/* Dependencies:
+	- mixins/actionbar.js
+*/
+
+var oldStartSelectMode = window.startSelectMode,
 	oldStopSelectMode = window.stopSelectMode,
-	oldHideSelection = window.hideSelection,
-	oldAddElement = window.addElement,
+	oldDownloadSelection = window.downloadSelection,
 	oldDeleteSelection = window.deleteSelection,
+	oldShareSelection = window.shareSelection,
+	oldHideSelection = window.hideSelection,
 	oldSelectElement = window.selectElement,
-	oldShowElement = window.showElement,
 	oldSendAction = window.sendAction,
 	selectedPictures = new Set();
+var currentSheet = 0,
+	nbSheets = 0;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+/// Actionbar features ////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+window.startSelectMode = function() {
+	let pictures = document.querySelectorAll('.album__picture');
+
+	for (let picture of pictures)
+		picture.classList.add('album__picture--selectable');
+	oldStartSelectMode();
+};
+
+window.stopSelectMode = function() {
+	let pictures = document.querySelectorAll('.album__picture');
+
+	for (let pictureId of selectedPictures)
+		selectElement(pictureId);
+	for (let picture of pictures)
+		picture.classList.remove('album__picture--selectable');
+	oldStopSelectMode();
+};
+
+window.downloadSelection = function() {
+	if (selectMode)
+		sendAction('download', Array.from(selectedPictures).join());
+	oldDownloadSelection();
+};
+
+window.deleteSelection = function() {
+	if (selectMode) {
+		for (let pictureId of selectedPictures) {
+			picture = document.getElementById('picture-' + pictureId);
+			picture.remove();
+		}
+		sendAction('delete', Array.from(selectedPictures).join());
+	}
+	oldDeleteSelection();
+};
+
+window.shareSelection = function() {
+	if (selectMode)
+		sendAction('share', Array.from(selectedPictures).join());
+	oldShareSelection();
+};
+
+window.hideSelection = function() {
+	if (selectMode) {
+		for (let pictureId of selectedPictures) {
+			picture = document.getElementById('picture-' + pictureId);
+			picture.remove();
+		}
+		sendAction('hide', Array.from(selectedPictures).join());
+	}
+	oldHideSelection();
+};
+
+window.selectElement = function(pictureId) {
+	if (selectMode) {
+		let picture = document.getElementById('picture-' + pictureId);
+
+		if (selectedPictures.has(pictureId)) {
+			selectedPictures.delete(pictureId);
+			picture.classList.remove('album__picture--selected');
+		} else {
+			selectedPictures.add(pictureId);
+			picture.classList.add('album__picture--selected');
+		}
+	}
+	oldSelectElement(pictureId);
+};
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+/// AlbumView features ////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 function nextSheet() {
 	if (currentSheet < nbSheets) {
@@ -25,6 +105,12 @@ function nextSheet() {
 					sheet.nextElementSibling.classList.add('album__sheet--visible');
 			}
 		}
+
+		if (currentSheet == 1)
+			document.querySelector('.contentnav__element--previous').classList.remove('contentnav__element--disabled');
+
+		if (currentSheet == nbSheets)
+			document.querySelector('.contentnav__element--next').classList.add('contentnav__element--disabled');
 	}
 }
 
@@ -45,6 +131,12 @@ function previousSheet() {
 					sheet.previousElementSibling.classList.add('album__sheet--visible');
 			}
 		}
+
+		if (currentSheet == nbSheets - 1)
+			document.querySelector('.contentnav__element--next').classList.remove('contentnav__element--disabled');
+
+		if (currentSheet == 0)
+			document.querySelector('.contentnav__element--previous').classList.add('contentnav__element--disabled');
 	}
 }
 
@@ -52,76 +144,6 @@ function getNbSheets() {
 	return document.querySelectorAll('.album__sheet').length;
 }
 
-/* actionnav functions */
-window.startSelectMode = function() {
-	oldStartSelectMode();
-	let pictures = document.querySelectorAll('.album__picture');
-
-	for (let picture of pictures)
-		picture.classList.add('album__picture--selectable');
-};
-
-window.stopSelectMode = function() {
-	let pictures = document.querySelectorAll('.album__picture');
-
-	for (let pictureId of selectedPictures)
-		selectElement(document.createEvent('Events'), pictureId);
-	for (let picture of pictures)
-		picture.classList.remove('album__picture--selectable');
-	oldStopSelectMode();
-};
-
-window.hideSelection = function() {
-	if (selectMode) {
-		for (let pictureId of selectedPictures) {
-			picture = document.getElementById('picture-' + pictureId);
-			picture.remove();
-		}
-	}
-	oldHideSelection();
-};
-
-window.addElement = function() {};
-
-window.deleteSelection = function() {
-	if (selectMode) {
-		for (let pictureId of selectedPictures) {
-			picture = document.getElementById('picture-' + pictureId);
-			picture.remove();
-		}
-	}
-	oldDeleteSelection();
-};
-
-window.selectElement = function(event, pictureId) {
-	oldSelectElement(event, pictureId);
-
-	if (selectMode) {
-		event.stopPropagation();
-		let picture = document.getElementById('picture-' + pictureId);
-
-		if (selectedPictures.has(pictureId)) {
-			selectedPictures.delete(pictureId);
-			picture.classList.remove('album__picture--selected');
-		} else {
-			selectedPictures.add(pictureId);
-			picture.classList.add('album__picture--selected');
-		}
-	}
-};
-
-window.showElement = function(pictureId, link) {
-	oldShowElement(pictureId, link);
-};
-
-window.sendAction = function(actionName) {
-	let inputContent = document.getElementById('actioncontent-input');
-	
-	if (inputContent) {
-		inputContent.value = Array.from(selectedPictures).join();
-	}
-	oldSendAction(actionName);
-};
 
 (function() {
 	nbSheets = getNbSheets();

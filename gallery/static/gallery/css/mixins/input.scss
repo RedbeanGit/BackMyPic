@@ -1,0 +1,27 @@
+@import "constants";
+
+@mixin input {
+	.input {
+		border: 2px solid $color-secondary;
+		border-radius: 9999px;
+		width: 600px;
+		font-family: $font-primary;
+		font-size: 1.6em;
+		text-align: center;
+		padding: 3px 0;
+		color: $color-secondary;
+
+		&::placeholder {
+			color: rgba($color-secondary, 0.5);
+		}
+
+		&:hover {
+			border-color: $color-primary;
+			color: $color-primary;
+
+			&::placeholder {
+				color: rgba($color-primary, 0.5);
+			}
+		}
+	}
+}

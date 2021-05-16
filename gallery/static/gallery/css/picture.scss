@@ -1,0 +1,98 @@
+@import "mixins/constants";
+@import "mixins/actionbar";
+@import "mixins/contentnav";
+
+@include actionbar;
+
+.content {
+	display: flex;
+	justify-content: space-between;
+	overflow-x: hidden;
+	padding: 40px 0;
+
+	.pictureview {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-grow: 1;
+
+		&__inside {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			max-width: calc(100% - #{$picture-border * 2} - 80px);
+		}
+
+		&__picture {
+			max-width: 100%;
+			max-height: $notebook-height;
+			border-radius: $album-border-radius * 2;
+			border: $picture-border solid $color-back;
+			box-sizing: border-box;
+			box-shadow: 0px 3px 6px rgba(#000000, 0.16);
+		}
+
+		.contentnav {
+			width: 100%;
+			@include contentnav;
+		}
+	}
+
+	.notebook {
+		position: relative;
+		left: 90px;
+		margin-left: -90px;
+		width: $notebook-width;
+		height: $notebook-height;
+		background: $color-primary;
+		border-radius: $notebook-border-radius;
+		box-shadow: 0px 3px 6px rgba(#000000, 0.16);
+
+		&__clip {
+			position: absolute;
+			top: 0;
+			left: 50%;
+			transform: translate(-50%, -13%);
+			width: $notebook-clip-width;
+			height: $notebook-clip-height;
+			background: linear-gradient(to bottom, #f8f8f8 0%, #fff 9.7%, #e1e1e1 19.4%, #d0d0d0 37.2%, #cecece 60.2%, #fff 90.7%, #d3d3d3 100%);
+			box-shadow: 0px 3px 6px rgba(#000000, 0.16);
+		}
+
+		&__sheet {
+			position: absolute;
+			top: 51%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			width: 95%;
+			height: 92%;
+			background: $color-back;
+			box-shadow: 0px 3px 6px rgba(#000000, 0.16);
+			padding: 40px 2px 0 2px;
+			box-sizing: border-box;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		&__line {
+			display: flex;
+			align-items: flex-end;
+			width: 96%;
+			height: 2.5em;
+			border-bottom: 1px dashed $color-secondary;
+			box-sizing: border-box;
+			padding: 0 10px;
+
+			> * {
+				font-family: $font-primary;
+				font-size: 1.5em;
+				margin: 0;
+			}
+
+			h2 {
+				font-size: 2.5em;
+			}
+		}
+	}
+}

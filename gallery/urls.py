@@ -1,32 +1,68 @@
-"""backmypic URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-	https://docs.djangoproject.com/en/3.1/topics/http/urls/
-Examples:
-Function views
-	1. Add an import:  from my_app import views
-	2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-	1. Add an import:  from other_app.views import Home
-	2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-	1. Import the include() function: from django.urls import include, path
-	2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-
 from django.conf.urls import url
 from django.views.generic.base import RedirectView
+from django.contrib.auth.views import LoginView, LogoutView
 from gallery import views
 
 app_name = 'gallery'
 
 urlpatterns = [
-	url(r'^$', RedirectView.as_view(url='album/'), name='gallery'),
-	url(r'^picture/(?P<picture_id>[0-9]+)/$', views.PictureView.as_view(), name='picture'),
-	url(r'^album/$', views.AlbumView.as_view(), name='album'),
-	url(r'^album/(?P<album_id>[0-9]+)/$', views.AlbumView.as_view(), name='album'),
-	url(r'^library/$', views.LibraryView.as_view(), name='library'),
-	url(r'^search/$', views.SearchView.as_view(), name='search'),
-	url(r'^settings/$', views.SettingsView.as_view(), name='settings'),
-	url(r'^register/$', views.RegisterView.as_view(), name='register')
+	# gallery
+	url(r'^$', 
+		RedirectView.as_view(url='album/'), 
+		name='gallery'
+	),
+	# picture
+	url(r'^picture/(?P<album_id>[0-9]+)/(?P<page_id>[0-9]+)/(?P<picture_id>[0-9]+)/$', 
+		views.PictureView.as_view(), 
+		name='picture'
+	),
+	# album
+	url(r'^album/$', 
+		views.AlbumView.as_view(), 
+		name='album'
+	),
+	url(r'^album/(?P<album_id>[0-9]+)/$', 
+		views.AlbumView.as_view(), 
+		name='album'
+	),
+	url(r'^album/(?P<album_id>[0-9]+)/(?P<page_id>[0-9]+)/$', 
+		views.AlbumView.as_view(), 
+		name='album'
+	),
+	# library
+	url(r'^library/$', 
+		views.LibraryView.as_view(), 
+		name='library'
+	),
+	# search
+	url(r'^search/$', 
+		views.SearchView.as_view(), 
+		name='search'
+	),
+	# settings
+	url(r'^settings/$', 
+		views.SettingsView.as_view(), 
+		name='settings'
+	),
+	# register
+	url(r'^register/$', 
+		views.RegisterView.as_view(), 
+		name='register'
+	),
+	# login
+	url(r'^login/$', 
+		LoginView.as_view(extra_context={
+			'title': 'Connecte-toi',
+			'version': views.VERSION
+		}),
+		name='login'
+	),
+	# logout
+	url(r'^logout/$', 
+		LogoutView.as_view(extra_context={
+			'title': 'Déconnecté',
+			'version': views.VERSION
+		}),
+		name='logout'
+	)
 ]

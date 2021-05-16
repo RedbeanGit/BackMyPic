@@ -18,7 +18,7 @@ from .forms import ErrorList, PictureForm
 from .models import Picture, Album, UserSettings
 from .utils import get_illegible_name
 
-VERSION = '0.5.2'
+VERSION = '0.6.0'
 TITLE = 'BackMyPic'
 
 
@@ -46,7 +46,8 @@ class BaseView(View):
 	version = VERSION
 	template_name = 'gallery/base.html'
 	view_name = 'gallery:gallery'
-	logged = True
+	nav_bar = True
+	nav_elements = ()
 
 	def get(self, request, *args, **kwargs):
 		return render(request, self.template_name, self.get_base_context())
@@ -56,134 +57,18 @@ class BaseView(View):
 			'title': self.title,
 			'version': self.version,
 			'viewName': self.view_name,
-			'logged': self.logged
+			'nav_bar': self.nav_bar,
+			'nav_elements': self.nav_elements
 		}
-
-
-class PictureView(LoginRequiredMixin, BaseView):
-	title = 'Photo - ' + TITLE
-	template_name = 'gallery/picture.html'
-	view_name = 'gallery:picture'
-
-
-class AlbumView(LoginRequiredMixin, BaseView):
-	title = 'Album - ' + TITLE
-	template_name = 'gallery/album.html'
-	view_name = 'gallery:album'
-
-	def render(self, request, form, album_id=None):
-		if album_id is None:
-			user_settings = get_or_create_user_settings(request.user)
-			album = user_settings.current_album
-		else:
-			album = get_object_or_404(Album, pk=album_id, user=request.user)
-
-		context = self.get_base_context()
-		context['form'] = form
-		context['album'] = album
-
-		return render(request, self.template_name, context)
-
-	def get(self, request, *args, **kwargs):
-		return self.render(request, PictureForm(), kwargs.get('album_id', None))
-
-	def post(self, request, *args, **kwargs):
-		actions = {
-			'hide': self.hide_pictures,
-			'delete': self.delete_pictures,
-			'share': self.share_pictures,
-			'download': self.download_pictures,
-			'upload': self.upload_pictures
-		}
-		
-		default_fct = lambda r, *a, **k: redirect(self.view_name)
-		action = actions.get(request.POST.get('action', None), default_fct)
-		return action(request, *args, **kwargs)
-
-	def loop_pictures_from_request(self, request):
-		for pk in request.POST['content'].strip().split(','):
-			if pk.isdigit():
-				pk = int(float(pk))
-				picture = get_object_or_404(Picture, pk=pk, user=request.user)
-				yield picture
-
-	def hide_pictures(self, request, *args, **kwargs):
-		filters = {'user': request.user, 'category': 'S'}
-		album_gallery = get_or_create_album(**filters, name='gallery')
-		album_hidden = get_or_create_album(**filters, name='hidden')
-
-		for picture in self.loop_pictures_from_request(request):
-			picture.hidden = True
-			picture.save()
-
-			if album_gallery.pictures.filter(pk=picture.pk).exists():
-				album_gallery.pictures.remove(picture)
-
-			if not album_hidden.pictures.filter(pk=picture.pk).exists():
-				album_hidden.pictures.add(picture)
-		album_gallery.save()
-		album_hidden.save()
-
-		return redirect(self.view_name, **kwargs)
-
-	def delete_pictures(self, request, *args, **kwargs):
-		for picture in self.loop_pictures_from_request(request):
-			picture.delete()
-		return redirect(self.view_name, **kwargs)
-
-	def share_pictures(self, request, *args, **kwargs):
-		for picture in self.loop_pictures_from_request(request):
-			pass
-			# TODO: find a way to share pictures
-		return redirect(self.view_name, **kwargs)
-
-	def download_pictures(self, request, *args, **kwargs):
-		if not request.POST['content'].strip():
-			return redirect(self.view_name, **kwargs)
-			
-		zippath = settings.TMP_ROOT / 'zipfiles' / (get_illegible_name() + '.zip')
-		filenames = set()
-
-		with zipfile.ZipFile(zippath, 'w', compression=zipfile.ZIP_DEFLATED) as file:
-			for picture in self.loop_pictures_from_request(request):
-				filename = picture.filename
-				
-				if filename in filenames:
-					name, ext = os.path.splitext(filename)
-					filename = name + ' ({})' + ext
-					index = 2
-
-					while filename.format(index) in filenames:
-						index += 1
-					filename = filename.format(index)
-				filenames.add(filename)
-				file.write(picture.image.path, arcname=filename)
-		
-		return FileResponse(open(zippath, 'rb'), as_attachment=True, filename='Photos.zip')
-
-	def upload_pictures(self, request, *args, **kwargs):
-		form = PictureForm(request.POST, request.FILES)
-
-		if form.is_valid():
-			album = get_or_create_album(user=request.user, category='S', name='gallery')
-			images = request.FILES.getlist('image')
-
-			for image in images:
-				picture = Picture(image=image, user=request.user, filename=image.name)
-				picture.save()
-				album.pictures.add(picture)
-			album.save()
-
-			return redirect(self.view_name, **kwargs)
-		return self.render(request, form, kwargs.get('album_id', None))
 
 
 class LibraryView(LoginRequiredMixin, BaseView):
 	title = 'Bibliothèque - ' + TITLE
 	template_name = 'gallery/library.html'
 	view_name = 'gallery:library'
+	nav_elements = ('select', 'download', 'add', 'delete', 'share')
 
-	def get(self, request, *args, **kwargs):
+	def get(self, request):
 		albums = Album.objects.filter(user=request.user)
 
 		context = self.get_base_context()
@@ -191,18 +76,18 @@ class LibraryView(LoginRequiredMixin, BaseView):
 
 		return render(request, self.template_name, context)
 
-	def post(self, request, *args, **kwargs):
+	def post(self, request):
 		actions = {
+			'upload': self.upload_albums,
+			'download': self.download_albums,
 			'add': self.add_albums,
 			'delete': self.delete_albums,
-			'share': self.share_albums,
-			'download': self.download_albums,
-			'upload': self.upload_albums
+			'share': self.share_albums
 		}
 
-		default_fct = lambda r, *a, **k: redirect(self.view_name)
+		default_fct = lambda r: redirect(self.view_name)
 		action = actions.get(request.POST.get('action', None), default_fct)
-		return action(request, *args, **kwargs)
+		return action(request)
 
 	def loop_albums_from_request(self, request):
 		for pk in request.POST.get('content', '').strip().split(','):
@@ -211,33 +96,10 @@ class LibraryView(LoginRequiredMixin, BaseView):
 				album = get_object_or_404(Album, pk=pk, user=request.user)
 				yield album
 
-	def add_albums(self, request, *args, **kwargs):
-		album_name = request.POST.get('content', '').strip()
-		filters = {
-			'user':request.user, 
-			'category':'U', 
-			'name': album_name
-		}
-
-		if Album.objects.filter(**filters).exists():
-			return redirect(self.view_name)
-		album = get_or_create_album(**filters)
-
-		return redirect(AlbumView.view_name, album_id=album.id)
-
-	def delete_albums(self, request, *args, **kwargs):
-		for album in self.loop_albums_from_request(request):
-			if album.category == 'U':
-				album.delete()
+	def upload_albums(self, request):
 		return redirect(self.view_name)
 
-	def share_albums(self, request, *args, **kwargs):
-		for album in self.loop_albums_from_request(request):
-			pass
-			# TODO: find a way to share albums
-		return redirect(self.view_name)
-
-	def download_albums(self, request, *args, **kwargs):
+	def download_albums(self, request):
 		if not request.POST['content'].strip():
 			return redirect(self.view_name, **kwargs)
 			
@@ -264,8 +126,200 @@ class LibraryView(LoginRequiredMixin, BaseView):
 		
 		return FileResponse(open(zippath, 'rb'), as_attachment=True, filename='Photos.zip')
 
-	def upload_albums(self, request, *args, **kwargs):
+	def add_albums(self, request):
+		album_name = request.POST.get('content', '').strip()
+		filters = {
+			'user':request.user, 
+			'category':'U', 
+			'name': album_name
+		}
+
+		if Album.objects.filter(**filters).exists():
+			return redirect(self.view_name)
+		album = get_or_create_album(**filters)
+
+		return redirect(AlbumView.view_name, album_id=album.id)
+
+	def delete_albums(self, request):
+		for album in self.loop_albums_from_request(request):
+			if album.category == 'U':
+				album.delete()
 		return redirect(self.view_name)
+
+	def share_albums(self, request):
+		for album in self.loop_albums_from_request(request):
+			pass
+			# TODO: find a way to share albums
+		return redirect(self.view_name)
+
+
+class AlbumView(LoginRequiredMixin, BaseView):
+	title = 'Album - ' + TITLE
+	template_name = 'gallery/album.html'
+	view_name = 'gallery:album'
+	nav_elements = ('select', 'upload', 'download', 'delete', 'share', 'hide')
+
+	def render(self, request, form, album_id, page_id):
+		if album_id is None:
+			user_settings = get_or_create_user_settings(request.user)
+			album = user_settings.current_album
+		else:
+			album = get_object_or_404(Album, pk=album_id, user=request.user)
+
+		context = self.get_base_context()
+		context['form'] = form
+		context['album'] = album
+
+		return render(request, self.template_name, context)
+
+	def get(self, request, album_id=None, page_id=0):
+		return self.render(request, PictureForm(), album_id, page_id)
+
+	def post(self, request, album_id=None, page_id=0):
+		actions = {
+			'upload': self.upload_pictures,
+			'download': self.download_pictures,
+			'delete': self.delete_pictures,
+			'share': self.share_pictures,
+			'hide': self.hide_pictures
+		}
+		
+		default_fct = lambda r, *a, **k: redirect(self.view_name)
+		action = actions.get(request.POST.get('action', None), default_fct)
+		return action(request, album_id, page_id)
+
+	def loop_pictures_from_request(self, request):
+		for pk in request.POST['content'].strip().split(','):
+			if pk.isdigit():
+				pk = int(float(pk))
+				picture = get_object_or_404(Picture, pk=pk, user=request.user)
+				yield picture
+
+	def upload_pictures(self, request, album_id, page_id):
+		form = PictureForm(request.POST, request.FILES)
+
+		if form.is_valid():
+			album = get_or_create_album(user=request.user, category='S', name='gallery')
+			images = request.FILES.getlist('image')
+
+			for image in images:
+				picture = Picture(image=image, user=request.user, filename=image.name)
+				picture.save()
+				album.pictures.add(picture)
+			album.save()
+
+			return redirect(self.view_name, album_id=album_id, page_id=page_id)
+		return self.render(request, form, album_id, page_id)
+	
+	def download_pictures(self, request, album_id, page_id):
+		if not request.POST['content'].strip():
+			return redirect(self.view_name, album_id=album_id, page_id=page_id)
+			
+		zippath = settings.TMP_ROOT / 'zipfiles' / (get_illegible_name() + '.zip')
+		filenames = set()
+
+		with zipfile.ZipFile(zippath, 'w', compression=zipfile.ZIP_DEFLATED) as file:
+			for picture in self.loop_pictures_from_request(request):
+				filename = picture.filename
+				
+				if filename in filenames:
+					name, ext = os.path.splitext(filename)
+					filename = name + ' ({})' + ext
+					index = 2
+
+					while filename.format(index) in filenames:
+						index += 1
+					filename = filename.format(index)
+				filenames.add(filename)
+				file.write(picture.image.path, arcname=filename)
+		
+		return FileResponse(open(zippath, 'rb'), as_attachment=True, filename='Photos.zip')
+
+	def delete_pictures(self, request, album_id, page_id):
+		for picture in self.loop_pictures_from_request(request):
+			picture.delete()
+		return redirect(self.view_name, album_id=album_id, page_id=page_id)
+
+	def share_pictures(self, request, album_id, page_id):
+		for picture in self.loop_pictures_from_request(request):
+			pass
+			# TODO: find a way to share pictures
+		return redirect(self.view_name, album_id=album_id, page_id=page_id)
+
+	def hide_pictures(self, request, album_id, page_id):
+		filters = {'user': request.user, 'category': 'S'}
+		album_gallery = get_or_create_album(**filters, name='gallery')
+		album_hidden = get_or_create_album(**filters, name='hidden')
+
+		for picture in self.loop_pictures_from_request(request):
+			picture.hidden = True
+			picture.save()
+
+			if album_gallery.pictures.filter(pk=picture.pk).exists():
+				album_gallery.pictures.remove(picture)
+
+			if not album_hidden.pictures.filter(pk=picture.pk).exists():
+				album_hidden.pictures.add(picture)
+		album_gallery.save()
+		album_hidden.save()
+
+		return redirect(self.view_name, album_id=album_id, page_id=page_id)
+
+
+class PictureView(LoginRequiredMixin, BaseView):
+	title = 'Photo - ' + TITLE
+	template_name = 'gallery/picture.html'
+	view_name = 'gallery:picture'
+	nav_elements = ('download', 'delete', 'share', 'hide')
+
+	def get(self, request, album_id, page_id, picture_id):
+		context = self.get_base_context()
+		context['album_id'] = album_id
+		context['page_id'] = page_id
+		context['picture_id'] = picture_id
+		context['picture'] = get_object_or_404(Picture, user=request.user, pk=picture_id)
+
+		return render(request, self.template_name, context)
+
+	def post(self, request, album_id, page_id, picture_id):
+		actions = {
+			'download': self.download_picture,
+			'delete': self.delete_picture,
+			'share': self.share_picture,
+			'hide': self.hide_picture,
+		}
+		
+		default_fct = lambda r, *a, **k: redirect(self.view_name)
+		action = actions.get(request.POST.get('action', None), default_fct)
+		return action(request, album_id, page_id, picture_id)
+
+	def download_picture(self, request, album_id, page_id, picture_id):
+		picture = get_object_or_404(Picture, user=request.user, pk=picture_id)
+		return FileResponse(open(picture.image.path, 'rb'), as_attachment=True, filename=picture.filename)
+
+	def delete_picture(self, request, album_id, page_id, picture_id):
+		picture = get_object_or_404(Picture, user=request.user, pk=picture_id)
+		picture.delete()
+		return redirect(AlbumView.view_name, album_id=album_id, page_id=page_id)
+
+	def share_picture(self, request, album_id, page_id, picture_id):
+		# TODO: find a way to share pictures
+		return redirect(self.view_name, album_id=album_id, page_id=page_id, picture_id=picture_id)
+
+	def hide_picture(self, request, album_id, page_id, picture_id):
+		filters = {'user': request.user, 'category': 'S'}
+
+		album_gallery = get_or_create_album(**filters, name='gallery')
+		album_hidden = get_or_create_album(**filters, name='hidden')
+		picture = get_object_or_404(Picture, user=request.user, pk=picture_id)
+
+		if album_gallery.pictures.filter(pk=picture_id).exists():
+			album_gallery.pictures.remove(picture)
+
+		if not album_hidden.pictures.filter(pk=picture_id).exists():
+			album_hidden.pictures.add(picture)
+
+		return redirect(self.view_name, album_id=album_id, page_id=page_id, picture_id=picture_id)
 
 
 class SearchView(LoginRequiredMixin, BaseView):
@@ -299,7 +353,7 @@ class RegisterView(BaseView):
 	title = 'Créer un compte - ' + TITLE
 	template_name = 'registration/register.html'
 	view_name = 'gallery:register'
-	logged = False
+	nav_bar = False
 
 	def render(self, request, form):
 		context = self.get_base_context()

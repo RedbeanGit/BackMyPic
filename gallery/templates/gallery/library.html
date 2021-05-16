@@ -1,42 +1,29 @@
-{% extends 'gallery/base.html' %}{% load static %}{% load sass_tags %}{% block style %}
-<link rel="stylesheet" type="text/css" href="{% sass_src 'gallery/css/library.scss' %}">
-{% endblock %}{% block section %}
-			{% include 'mixins/actionnav.html' %}
-			<div class="library">
-				{% for category in 'DSU' %}
-					<div class="storage storage--cat{{ category }}">
-						{% for album in albums %}
-							{% if album.category == category %}
-								<div class="album" id="album-{{ album.id }}" onclick="activeSelection(event, {{ album.id }}, '{% url 'gallery:album' album_id=album.id %}');" title="{{ album.name }}">
-									<div class="album__part album__sheets" title="{{ album.name }}">
-										{% include 'mixins/slab.html' %}
-									</div>
-									<div class="album__part album__cover album__cover--left">
-										{% include 'mixins/slab.html' %}
-									</div>
-									<div class="album__part album__cover album__cover--front">
-										{% include 'mixins/slab.html' %}
-									</div>
-									<div class="album__part album__cover album__cover--right">
-										{% include 'mixins/slab.html' %}
-									</div>
-								</div>
-							{% endif %}
-						{% endfor %}
-					</div>
-				{% endfor %}
-				<div class="shelf shelf--top">
-					{% include 'mixins/slab.html' %}
+{% extends 'gallery/base.html' %}
+{% load static %}{% load sass_tags %}
+{% block style %}
+	<link rel="stylesheet" type="text/css" href="{% sass_src 'gallery/css/library.scss' %}">
+{% endblock %}
+{% block section %}
+	{% include 'mixins/actionbar.html' %}
+	<div class="content">
+		<div class="library">
+			{% for album in albums %}
+				<div class="album{% if forloop.counter == 1 %} album--current{% elif forloop.counter == 2 %} album--next{% endif %}" onclick="activeSelection(event, {{ album.id }}, '{% url 'gallery:album' album_id=album.id %}');" id="album-{{ album.id }}">
+					<div class="album__bgline"></div>
+					{% if album.cover %}
+						<img class="album__cover" src="{{ album.cover.image.url }}" alt="Photo de couverture">
+					{% endif %}
+					<p class="album__title{% if not album.cover %} album__title--alone{% endif %}">{{ album.name }}</p>
 				</div>
-				<div class="shelf shelf--middle">
-					{% include 'mixins/slab.html' %}
-				</div>
-				<div class="shelf shelf--bottom">
-					{% include 'mixins/slab.html' %}
-				</div>
-			</div>
+			{% endfor %}
+		</div>
+		<div class="contentnav">
+			{% include 'mixins/contentnav.html' with identifier='previous contentnav__element--disabled' text='Album précédent' function='previousAlbum();' img='gallery/img/previous.svg' prefix=True %}
+			{% include 'mixins/contentnav.html' with identifier='next' text='Album suivant' function='nextAlbum();' img='gallery/img/next.svg' prefix=False %}
+		</div>
+	</div>
 {% endblock %}
 {% block script %}
-	<script type="text/javascript" src="{% static 'gallery/js/actionnav.js' %}"></script>
+	<script type="text/javascript" src="{% static 'gallery/js/mixins/actionbar.js' %}"></script>
 	<script type="text/javascript" src="{% static 'gallery/js/library.js' %}"></script>
 {% endblock %}

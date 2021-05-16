@@ -10,3 +10,8 @@ def index(indexable, i):
 @register.filter
 def frontpage(num, page_size):
 	return num % (page_size*2) < page_size
+
+
+@register.filter
+def modulus(num, by):
+	return num % by

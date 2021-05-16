@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html>{% load static %}{% load compress %}{% load sass_tags %}
+<html>
+	{% load static %}{% load compress %}{% load sass_tags %}
 	<head>
 		<meta charset="utf-8">
 		<title>{{ title }}</title>
@@ -9,21 +10,21 @@
 		{% endcompress %}
 	</head>
 	<body>
-		<header{% if not logged %} style="box-shadow: 1px 0 4px gray;"{% endif %}>
+		<header>
 			<a href="{% url 'gallery:gallery' %}" class="title">
 				<img src="{% static 'gallery/img/icon.svg' %}" class="title__icon" alt="BackMyPic">
 				<h1 class="title__text">BackMyPic</h1>
 			</a>
-			{% if logged %}
+			{% if nav_bar %}
 				<div class="nav">
-					<a href="{% url 'gallery:album' %}" class="nav__element{% if viewName == 'gallery:album' %} nav__element--selected{% endif %}">
+					<a href="{% url 'gallery:album' %}" class="nav__element{% if viewName == 'gallery:album' or viewName == 'gallery:picture' %} nav__element--selected{% endif %}">
 						<p>Album</p>
 					</a>
 					<a href="{% url 'gallery:library' %}" class="nav__element{% if viewName == 'gallery:library' %} nav__element--selected{% endif %}">
 						<p>Bibliothèque</p>
 					</a>
 					<a href="{% url 'gallery:settings' %}" class="nav__element{% if viewName == 'gallery:settings' %} nav__element--selected{% endif %}">
-						<p>Réglages</p>
+						<p>Compte</p>
 					</a>
 				</div>
 			{% endif %}
@@ -38,14 +39,8 @@
 				<a href="" class="footer__element">Contact</a>
 			</div>
 		</footer>
-		<form id="input-sheet" class="input-sheet" onsubmit="return false;">
-			{% csrf_token %}
-			<label for="input-sheet__input"></label>
-			<input type="text" name="user-input" id="input-sheet__input" class="input-sheet__input">
-			<input type="button" onclick="hideUserInput();" class="input-sheet__clear">
-			<input type="submit" name="input-sheet-submit" class="input-sheet__submit" value="">
-		</form>
 		<script type="text/javascript" src="{% static 'gallery/js/base.js' %}"></script>
 		{% block script %}{% endblock %}
+		<script> </script>
 	</body>
 </html>

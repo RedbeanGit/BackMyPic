@@ -1,0 +1,7 @@
+<form id="user-dialog" class="user-dialog" onsubmit="return false;">
+	{% csrf_token %}
+	<label for="user-dialog__input"></label>
+	<input type="text" name="user-dialog" id="user-dialog__input" class="user-dialog__input">
+	<input type="button" name="user-dialog-clear" onclick="hideUserInput();" class="user-dialog__clear">
+	<input type="submit" name="user-dialog-submit" class="user-dialog__submit" value="">
+</form>

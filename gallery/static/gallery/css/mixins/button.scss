@@ -1,0 +1,60 @@
+@import "constants";
+@import "wave";
+
+@mixin button {
+	.button {
+		position: relative;
+		padding: 10px 26px;
+		
+		font-size: 1.7em;
+		font-family: $font-primary;
+		color: $color-back;
+		text-decoration: none;
+
+		background-color: $color-primary;
+		border: 2px solid $color-primary;
+		border-radius: 99999px;
+		
+		overflow: hidden;
+		z-index: 0;
+
+		* {
+			border: none;
+			background: transparent;
+			font-family: inherit;
+			font-size: inherit;
+			color: inherit;
+			cursor: inherit;
+			margin: 0;
+		}
+
+		&:hover {
+			cursor: pointer;
+			color: $color-primary;
+			transition: color 0.2s ease-in-out 0s;
+
+			@include wave($color-back);
+		}
+
+		&--negative {
+			background-color: $color-negative;
+			border-color: $color-negative;
+
+			&:hover {
+				color: $color-negative;
+			}
+		}
+
+		&--inverted {
+			background-color: $color-back;
+			color: $color-secondary;
+			border-color: $color-back;
+
+			&:hover {
+				color: $color-back;
+
+				@include wave($color-primary);
+			}
+		}
+	}
+}

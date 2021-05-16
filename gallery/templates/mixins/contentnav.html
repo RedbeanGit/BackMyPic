@@ -1,0 +1,10 @@
+{% load static %}
+<div class="contentnav__element contentnav__element--{{ identifier }}" onclick="{{ function }}">
+	{% if prefix %}
+		<img src="{% static img %}" alt="{{ text }}">
+		<p>{{ text }}</p>
+	{% else %}
+		<p>{{ text }}</p>
+		<img src="{% static img %}" alt="{{ text }}">
+	{% endif %}
+</div>

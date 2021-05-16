@@ -1,5 +1,1 @@
-{% extends 'gallery/base.html' %}
-
-{% block content %}
-<h2>Nous ne pouvons pas répondre à votre requête ! Accès interdit ! (403)</h2>
-{% endblock %}
+{% include 'gallery/infobase.html' with cloud='gallery/img/cloud_suspicious.svg' description="Tu n'as pas le droit d'accès à cette page" %}
