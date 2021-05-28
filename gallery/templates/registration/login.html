@@ -6,15 +6,18 @@
 {% block section %}
 	<div class="section">
 		{% include 'mixins/sectiontitle.html' with text="Connecte-toi" subtext="Entre tes identifiants pour accéder à tes albums nuagiques" %}
-		<form method="post" action="{% url 'gallery:login' %}">
+		<form method="post" action="{% url 'gallery:login' %}" id="form">
 			{% csrf_token %}
 			<div class="section__content">
-				<input class="input" type="text" name="username" placeholder="Nom d'utilisateur">
-				<input class="input" type="password" name="password" placeholder="Mot de passe">
+				<input class="input" type="text" name="username" placeholder="Nom d'utilisateur" autocomplete="username">
+				<input class="input" type="password" name="password" placeholder="Mot de passe" autocomplete="current-password">
 			</div>
-			<div class="section__content">
-				<span class="button">
-					<input type="submit" name="submit" value="Se connecter">
+			<div class="section__content section__content--row">
+				<span class="button" onclick="window.location.href = '{% url 'gallery:register' %}';">
+					<p>Créer un compte</p>
+				</span>
+				<span class="button" onclick="document.getElementById('form').submit();">
+					<p>Se connecter</p>
 				</span>
 			</div>
 		</form>

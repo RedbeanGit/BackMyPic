@@ -110,7 +110,7 @@
   .actionbar__label {
     background-color: rgba(16, 181, 243, 0.2);
     margin: 10px 20px 10px 10px;
-    padding: 5px 10px 5px 5px;
+    padding: 2px 10px 2px 12px;
     border-radius: 50px;
     box-sizing: border-box;
     display: flex;
@@ -138,9 +138,10 @@
       border: none;
       width: 350px;
       background-color: transparent;
-      color: var(--color-black5);
+      color: #707070;
       /*transition-duration: 0.2s;*/
-      font-size: 1em; }
+      font-size: 1.6em;
+      font-family: "Cream Cake"; }
       .actionbar__label input:focus {
         /*width: 700px;
 					transition-duration: 0.2s;*/ }
@@ -212,17 +213,25 @@
 				&:nth-child(2n+1) {
 					transform: translateY(20px);
 				}*/ }
+      .content .album__page:hover {
+        cursor: pointer; }
     .content .album__picture {
       max-width: 85%;
       max-height: 90%;
       transition-duration: 0.2s;
+      transition-property: border-color, box-shadow;
       border: 10px solid transparent;
+      border-radius: 20px;
       box-sizing: border-box; }
       .content .album__picture--selectable {
         border-color: #ffffff;
         box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16); }
-      .content .album__picture:hover {
-        cursor: pointer; }
+        .content .album__picture--selectable:hover {
+          cursor: pointer; }
+      .content .album__picture:hover:not(.album__picture--selectable):not(.album__picture--selected) {
+        cursor: zoom-in;
+        border-color: #ffffff;
+        box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16); }
     .content .album__bgline {
       position: absolute;
       top: 0;
@@ -238,7 +247,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 1000px; }
+    width: 1000px;
+    position: relative; }
     .content .contentnav__element {
       display: flex;
       align-items: center;
@@ -246,7 +256,9 @@
       filter: invert(48%) sepia(6%) saturate(19%) hue-rotate(331deg) brightness(88%) contrast(85%); }
       .content .contentnav__element p {
         font-family: "Cream Cake";
-        font-size: 1.2em; }
+        font-size: 1.2em;
+        margin-left: 5px;
+        margin-right: 5px; }
       .content .contentnav__element img {
         height: 1.2em; }
       .content .contentnav__element--disabled {
@@ -255,5 +267,14 @@
         cursor: pointer; }
         .content .contentnav__element.contentnav__element--disabled:hover {
           cursor: not-allowed; }
+    .content .contentnav__info {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: "Cream Cake";
+      font-size: 1.8em;
+      color: #707070;
+      margin: 0; }
 
 /*# sourceMappingURL=album.css.map */

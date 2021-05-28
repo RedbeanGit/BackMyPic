@@ -14,9 +14,9 @@
 					{% endif %}
 					{% if forloop.counter0|divisibleby:4 %}
 						{% if forloop.counter0|frontpage:4 %}
-							<div class="album__page album__page--front{% if forloop.counter0 < 4 %} album__page--title{% endif %}" onclick="nextSheet();">
+							<div class="album__page album__page--front{% if forloop.counter0 < 4 %} album__page--title{% endif %}" onclick="contentnavNext();">
 						{% else %}
-							<div class="album__page album__page--back{% if forloop.revcounter0 < 4 %} album__page--last{% endif %}" onclick="previousSheet();">
+							<div class="album__page album__page--back{% if forloop.revcounter0 < 4 %} album__page--last{% endif %}" onclick="contentnavPrevious();">
 						{% endif %}
 					{% endif %}
 					{% with page_id=forloop.counter0|modulus:4 %}
@@ -26,7 +26,7 @@
 						</div>
 					{% endif %}
 					{% if forloop.last and forloop.counter0|frontpage:4 %}
-						<div class="album__page album__page--back{% if forloop.revcounter0 < 4 %} album__page--last{% endif %}" onclick="previousSheet();"></div>
+						<div class="album__page album__page--back{% if forloop.revcounter0 < 4 %} album__page--last{% endif %}" onclick="contentnavPrevious();"></div>
 					{% endif %}
 					{% if forloop.counter|divisibleby:8 or forloop.last %}
 						</div>
@@ -34,20 +34,22 @@
 				{% endfor %}
 			{% else %}
 				<div class="album__sheet album__sheet--visible">
-					<div class="album__page album__page--front album__page--title" onclick="nextSheet();"></div>
-					<div class="album__page album__page--back album__page--last" onclick="previousSheet();"></div>
+					<div class="album__page album__page--front album__page--title" onclick="contentnavNext();"></div>
+					<div class="album__page album__page--back album__page--last" onclick="contentnavPrevious();"></div>
 				</div>
 			{% endif %}
 			<div class="album__bgline album__bgline--left"></div>
 			<div class="album__bgline album__bgline--right"></div>
 		</div>
 		<div class="contentnav">
-			{% include 'mixins/contentnav.html' with identifier='previous contentnav__element--disabled' text='Page précédente' function='previousSheet();' img='gallery/img/previous.svg' prefix=True %}
-			{% include 'mixins/contentnav.html' with identifier='next' text='Page suivante' function='nextSheet();' img='gallery/img/next.svg' prefix=False %}
+			{% include 'mixins/contentnav.html' with identifier='previous contentnav__element--disabled' text='Page précédente' img='gallery/img/previous.svg' prefix=True %}
+			<p class="contentnav__info">{{ album.name.capitalize }}</p>
+			{% include 'mixins/contentnav.html' with identifier='next' text='Page suivante' img='gallery/img/next.svg' prefix=False %}
 		</div>
 	</div>
 {% endblock %}
 {% block script %}
 	<script type="text/javascript" src="{% static 'gallery/js/mixins/actionbar.js' %}"></script>
+	<script type="text/javascript" src="{% static 'gallery/js/mixins/contentnav.js' %}"></script>
 	<script type="text/javascript" src="{% static 'gallery/js/album.js' %}"></script>
 {% endblock %}

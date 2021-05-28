@@ -1,46 +1,46 @@
 {% load static %}
 <div class="actionbar">
 	<nav class="actionbar__nav">
-		{% if 'select' in nav_elements %}
-			<button class="actionbar__element actionbar__button" onclick="switchSelectMode();" title="Sélectionner">
+		{% if 'select' in actionElements %}
+			<button class="actionbar__element actionbar__button" onclick="actionSelect();" title="Sélectionner">
 				<img src="{% static 'gallery/img/select.svg' %}">
 			</button>
 		{% endif %}
-		{% if 'upload' in nav_elements %}
-			<button class="actionbar__element actionbar__button" onclick="document.getElementById('{{ form.image.id_for_label }}').click();" title="Envoyer">
+		{% if 'upload' in actionElements %}
+			<button class="actionbar__element actionbar__button" onclick="actionUpload('{{ form.image.id_for_label }}');" title="Envoyer">
 				<img src="{% static 'gallery/img/upload.svg' %}">
 			</button>
 		{% endif %}
-		{% if 'download' in nav_elements %}
-			<button class="actionbar__element actionbar__button{% if 'select' in nav_elements %} actionbar__element--disabled actionbar__element--selectable{% endif %}" onclick="downloadSelection();" title="Télécharger">
+		{% if 'download' in actionElements %}
+			<button class="actionbar__element actionbar__button{% if 'select' in actionElements %} actionbar__element--disabled actionbar__element--selectable{% endif %}" onclick="actionDownload();" title="Télécharger">
 				<img src="{% static 'gallery/img/download.svg' %}">
 			</button>
 		{% endif %}
-		{% if 'add' in nav_elements %}
-			<button class="actionbar__element actionbar__button" onclick="addElement();" title="Ajouter">
+		{% if 'add' in actionElements %}
+			<button class="actionbar__element actionbar__button" onclick="actionAdd();" title="Ajouter">
 				<img src="{% static 'gallery/img/add.svg' %}">
 			</button>
 		{% endif %}
-		{% if 'delete' in nav_elements %}
-			<button class="actionbar__element actionbar__button{% if 'select' in nav_elements %} actionbar__element--disabled actionbar__element--selectable{% endif %}" onclick="deleteSelection();" title="Supprimer">
+		{% if 'delete' in actionElements %}
+			<button class="actionbar__element actionbar__button{% if 'select' in actionElements %} actionbar__element--disabled actionbar__element--selectable{% endif %}" onclick="actionDelete();" title="Supprimer">
 				<img src="{% static 'gallery/img/delete.svg' %}">
 			</button>
 		{% endif %}
-		{% if 'share' in nav_elements %}
-			<button class="actionbar__element actionbar__button{% if 'select' in nav_elements %} actionbar__element--disabled actionbar__element--selectable{% endif %}" onclick="shareSelection();" title="Partager">
+		{% if 'share' in actionElements %}
+			<button class="actionbar__element actionbar__button{% if 'select' in actionElements %} actionbar__element--disabled actionbar__element--selectable{% endif %}" onclick="actionShare();" title="Partager">
 				<img src="{% static 'gallery/img/share.svg' %}">
 			</button>
 		{% endif %}
-		{% if 'hide' in nav_elements %}
-			<button class="actionbar__element actionbar__button{% if 'select' in nav_elements %} actionbar__element--disabled actionbar__element--selectable{% endif %}" onclick="hideSelection();" title="Cacher">
+		{% if 'hide' in actionElements %}
+			<button class="actionbar__element actionbar__button{% if 'select' in actionElements %} actionbar__element--disabled actionbar__element--selectable{% endif %}" onclick="actionHide();" title="Cacher">
 				<img src="{% static 'gallery/img/hide.svg' %}">
 			</button>
 		{% endif %}
 	</nav>
-	<form class="actionbar__search" method="post" action="{% url 'gallery:search' %}" id="search-form">
+	<form class="actionbar__search" method="get" action="{% if viewName == 'gallery:library' %}{% url 'gallery:library' %}{% elif viewName == 'gallery:album' %}{% url 'gallery:album' album_id=album.id %}{% elif viewName == 'gallery:picture' %}{% url 'gallery:album' album_id=album_id %}{% endif %}" id="search-form">
 		{% csrf_token %}
 		<label for="search-input" class="actionbar__element actionbar__label">
-			<input type="search" name="search" id="search-input">
+			<input type="search" name="query" id="search-input" value="{{ previousSearch }}">
 			<img src="{% static 'gallery/img/search.svg' %}" title="Rechercher" onclick="document.getElementById('search-form').submit();">
 		</label>
 	</form>

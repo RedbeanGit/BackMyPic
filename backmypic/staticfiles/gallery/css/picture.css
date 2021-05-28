@@ -170,7 +170,8 @@
       box-sizing: border-box;
       box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16); }
     .content .pictureview .contentnav {
-      width: 100%; }
+      width: 100%;
+      position: relative; }
       .content .pictureview .contentnav__element {
         display: flex;
         align-items: center;
@@ -178,7 +179,9 @@
         filter: invert(48%) sepia(6%) saturate(19%) hue-rotate(331deg) brightness(88%) contrast(85%); }
         .content .pictureview .contentnav__element p {
           font-family: "Cream Cake";
-          font-size: 1.2em; }
+          font-size: 1.2em;
+          margin-left: 5px;
+          margin-right: 5px; }
         .content .pictureview .contentnav__element img {
           height: 1.2em; }
         .content .pictureview .contentnav__element--disabled {
@@ -187,6 +190,15 @@
           cursor: pointer; }
           .content .pictureview .contentnav__element.contentnav__element--disabled:hover {
             cursor: not-allowed; }
+      .content .pictureview .contentnav__info {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-family: "Cream Cake";
+        font-size: 1.8em;
+        color: #707070;
+        margin: 0; }
   .content .notebook {
     position: relative;
     left: 90px;

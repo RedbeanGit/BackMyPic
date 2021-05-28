@@ -1,6 +1,8 @@
 @import "constants";
 
 @mixin contentnav {
+	position: relative;
+
 	&__element {
 		display: flex;
 		align-items: center;
@@ -10,6 +12,8 @@
 		p {
 			font-family: $font-primary;
 			font-size: 1.2em;
+			margin-left: 5px;
+			margin-right: 5px;
 		}
 
 		img {
@@ -27,5 +31,16 @@
 				cursor: not-allowed;
 			}
 		}
+	}
+
+	&__info {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		font-family: $font-primary;
+		font-size: 1.8em;
+		color: $color-secondary;
+		margin: 0;
 	}
 }

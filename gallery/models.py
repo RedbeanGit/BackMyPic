@@ -19,6 +19,8 @@ def get_picture_path(instance, filename):
 class Picture(models.Model):
 	date = models.DateTimeField('date', default=datetime.now)
 	image = models.ImageField(upload_to=get_picture_path)
+	width = models.IntegerField(null=True)
+	height = models.IntegerField(null=True)
 	tags = models.CharField('tags', max_length=200, null=True, blank=True)
 	user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 	filename = models.CharField(max_length=200, default='Unknown')
@@ -34,6 +36,8 @@ class Picture(models.Model):
 	def save(self, force_insert=False, force_update=False):
 		super(Picture, self).save(force_insert=force_insert, force_update=force_update)
 		self.date = get_picture_date(self)
+		self.width = self.image.width
+		self.height = self.image.height
 		super(Picture, self).save(force_insert=force_insert, force_update=force_update)
 
 

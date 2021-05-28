@@ -1,5 +1,5 @@
 {% load static %}
-<div class="contentnav__element contentnav__element--{{ identifier }}" onclick="{{ function }}">
+<div class="contentnav__element contentnav__element--{{ identifier }}" onclick="contentnav{% if prefix %}Previous{% else %}Next{% endif %}();">
 	{% if prefix %}
 		<img src="{% static img %}" alt="{{ text }}">
 		<p>{{ text }}</p>

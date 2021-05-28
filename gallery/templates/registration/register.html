@@ -9,9 +9,9 @@
 		<form method="post" action="{% url 'gallery:register' %}">
 			{% csrf_token %}
 			<div class="section__content">
-				<input class="input" type="text" name="username" placeholder="Nom d'utilisateur">
-				<input class="input" type="password" name="password" placeholder="Mot de passe">
-				<input class="input" type="password" name="confirm_password" placeholder="Confirmer le mot de passe">
+				<input class="input" type="text" name="username" placeholder="Nom d'utilisateur" autocomplete="username">
+				<input class="input" type="password" name="password1" placeholder="Mot de passe" autocomplete="new-password">
+				<input class="input" type="password" name="password2" placeholder="Confirmer le mot de passe" autocomplete="new-password">
 			</div>
 			<div class="section__content">
 				<span class="button">

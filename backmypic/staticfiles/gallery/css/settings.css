@@ -62,6 +62,110 @@
   100% {
     transform: translateY(0) rotate(0deg); } }
 
+@font-face {
+  font-family: "Arial Rounded Bold";
+  src: url("../fonts/arlrdbd.ttf"); }
+
+@font-face {
+  font-family: "Valentime";
+  src: url("../fonts/valentime.otf"); }
+
+@font-face {
+  font-family: "Cream Cake";
+  src: url("../fonts/cream_cake.otf"); }
+
+@font-face {
+  font-family: "Arial Rounded Bold";
+  src: url("../fonts/arlrdbd.ttf"); }
+
+@font-face {
+  font-family: "Valentime";
+  src: url("../fonts/valentime.otf"); }
+
+@font-face {
+  font-family: "Cream Cake";
+  src: url("../fonts/cream_cake.otf"); }
+
+@keyframes pour {
+  0% {
+    transform: translateY(-200%) rotate(0deg); }
+  50% {
+    transform: translateY(-100%) rotate(500deg); }
+  100% {
+    transform: translateY(0) rotate(0deg); } }
+
+@keyframes empty {
+  0% {
+    transform: translateY(200%) rotate(0deg); }
+  50% {
+    transform: translateY(100%) rotate(-500deg); }
+  100% {
+    transform: translateY(0) rotate(0deg); } }
+
+@font-face {
+  font-family: "Arial Rounded Bold";
+  src: url("../fonts/arlrdbd.ttf"); }
+
+@font-face {
+  font-family: "Valentime";
+  src: url("../fonts/valentime.otf"); }
+
+@font-face {
+  font-family: "Cream Cake";
+  src: url("../fonts/cream_cake.otf"); }
+
+@font-face {
+  font-family: "Arial Rounded Bold";
+  src: url("../fonts/arlrdbd.ttf"); }
+
+@font-face {
+  font-family: "Valentime";
+  src: url("../fonts/valentime.otf"); }
+
+@font-face {
+  font-family: "Cream Cake";
+  src: url("../fonts/cream_cake.otf"); }
+
+@font-face {
+  font-family: "Arial Rounded Bold";
+  src: url("../fonts/arlrdbd.ttf"); }
+
+@font-face {
+  font-family: "Valentime";
+  src: url("../fonts/valentime.otf"); }
+
+@font-face {
+  font-family: "Cream Cake";
+  src: url("../fonts/cream_cake.otf"); }
+
+@keyframes pour {
+  0% {
+    transform: translateY(-200%) rotate(0deg); }
+  50% {
+    transform: translateY(-100%) rotate(500deg); }
+  100% {
+    transform: translateY(0) rotate(0deg); } }
+
+@keyframes empty {
+  0% {
+    transform: translateY(200%) rotate(0deg); }
+  50% {
+    transform: translateY(100%) rotate(-500deg); }
+  100% {
+    transform: translateY(0) rotate(0deg); } }
+
+@font-face {
+  font-family: "Arial Rounded Bold";
+  src: url("../fonts/arlrdbd.ttf"); }
+
+@font-face {
+  font-family: "Valentime";
+  src: url("../fonts/valentime.otf"); }
+
+@font-face {
+  font-family: "Cream Cake";
+  src: url("../fonts/cream_cake.otf"); }
+
 .sectiontitle {
   display: flex;
   flex-direction: column;
@@ -172,6 +276,254 @@
         border-radius: 40%;
         animation: pour 2s ease-in-out -1.5s;
         z-index: 0; }
+
+.inputdialog {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  background: #ffffff;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden; }
+  .inputdialog__header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #10b5f3;
+    border-radius: 20px 20px 0 0;
+    padding: 10px 0;
+    margin-bottom: 40px;
+    width: 100%; }
+    .inputdialog__header p {
+      color: #ffffff;
+      font-family: "Cream Cake";
+      font-size: 1.8em;
+      margin: 0; }
+  .inputdialog__body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 20px 20px 20px;
+    box-sizing: border-box; }
+    .inputdialog__body .input {
+      border: 2px solid #707070;
+      border-radius: 9999px;
+      width: 600px;
+      font-family: "Cream Cake";
+      font-size: 1.6em;
+      text-align: center;
+      padding: 3px 0;
+      color: #707070; }
+      .inputdialog__body .input::placeholder {
+        color: rgba(112, 112, 112, 0.5); }
+      .inputdialog__body .input:hover {
+        border-color: #10b5f3;
+        color: #10b5f3; }
+        .inputdialog__body .input:hover::placeholder {
+          color: rgba(16, 181, 243, 0.5); }
+    .inputdialog__body .button {
+      position: relative;
+      padding: 10px 26px;
+      font-size: 1.7em;
+      font-family: "Cream Cake";
+      color: #ffffff;
+      text-decoration: none;
+      background-color: #10b5f3;
+      border: 2px solid #10b5f3;
+      border-radius: 99999px;
+      overflow: hidden;
+      z-index: 0; }
+      .inputdialog__body .button * {
+        border: none;
+        background: transparent;
+        font-family: inherit;
+        font-size: inherit;
+        color: inherit;
+        cursor: inherit;
+        margin: 0; }
+      .inputdialog__body .button:hover {
+        cursor: pointer;
+        color: #10b5f3;
+        transition: color 0.2s ease-in-out 0s;
+        position: relative;
+        overflow: hidden;
+        z-index: 1; }
+        .inputdialog__body .button:hover * {
+          position: relative;
+          z-index: 1; }
+        .inputdialog__body .button:hover::before {
+          content: "";
+          position: absolute;
+          bottom: -50%;
+          left: -50%;
+          width: 200%;
+          padding-bottom: 200%;
+          background: #ffffff;
+          border-radius: 40%;
+          animation: pour 2s ease-in-out -1.5s;
+          z-index: 0; }
+      .inputdialog__body .button--negative {
+        background-color: #ff0000;
+        border-color: #ff0000; }
+        .inputdialog__body .button--negative:hover {
+          color: #ff0000; }
+      .inputdialog__body .button--inverted {
+        background-color: #ffffff;
+        color: #707070;
+        border-color: #ffffff; }
+        .inputdialog__body .button--inverted:hover {
+          color: #ffffff;
+          position: relative;
+          overflow: hidden;
+          z-index: 1; }
+          .inputdialog__body .button--inverted:hover * {
+            position: relative;
+            z-index: 1; }
+          .inputdialog__body .button--inverted:hover::before {
+            content: "";
+            position: absolute;
+            bottom: -50%;
+            left: -50%;
+            width: 200%;
+            padding-bottom: 200%;
+            background: #10b5f3;
+            border-radius: 40%;
+            animation: pour 2s ease-in-out -1.5s;
+            z-index: 0; }
+    .inputdialog__body .input {
+      width: 300px; }
+    .inputdialog__body .button {
+      padding: 4px 26px; }
+  .inputdialog__nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 40px;
+    width: 100%; }
+
+.infodialog {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  background: #ffffff;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden; }
+  .infodialog__header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #10b5f3;
+    border-radius: 20px 20px 0 0;
+    padding: 10px 0;
+    margin-bottom: 40px;
+    width: 100%; }
+    .infodialog__header p {
+      color: #ffffff;
+      font-family: "Cream Cake";
+      font-size: 1.8em;
+      margin: 0; }
+  .infodialog__body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 20px 20px 20px;
+    box-sizing: border-box; }
+    .infodialog__body .button {
+      position: relative;
+      padding: 10px 26px;
+      font-size: 1.7em;
+      font-family: "Cream Cake";
+      color: #ffffff;
+      text-decoration: none;
+      background-color: #10b5f3;
+      border: 2px solid #10b5f3;
+      border-radius: 99999px;
+      overflow: hidden;
+      z-index: 0; }
+      .infodialog__body .button * {
+        border: none;
+        background: transparent;
+        font-family: inherit;
+        font-size: inherit;
+        color: inherit;
+        cursor: inherit;
+        margin: 0; }
+      .infodialog__body .button:hover {
+        cursor: pointer;
+        color: #10b5f3;
+        transition: color 0.2s ease-in-out 0s;
+        position: relative;
+        overflow: hidden;
+        z-index: 1; }
+        .infodialog__body .button:hover * {
+          position: relative;
+          z-index: 1; }
+        .infodialog__body .button:hover::before {
+          content: "";
+          position: absolute;
+          bottom: -50%;
+          left: -50%;
+          width: 200%;
+          padding-bottom: 200%;
+          background: #ffffff;
+          border-radius: 40%;
+          animation: pour 2s ease-in-out -1.5s;
+          z-index: 0; }
+      .infodialog__body .button--negative {
+        background-color: #ff0000;
+        border-color: #ff0000; }
+        .infodialog__body .button--negative:hover {
+          color: #ff0000; }
+      .infodialog__body .button--inverted {
+        background-color: #ffffff;
+        color: #707070;
+        border-color: #ffffff; }
+        .infodialog__body .button--inverted:hover {
+          color: #ffffff;
+          position: relative;
+          overflow: hidden;
+          z-index: 1; }
+          .infodialog__body .button--inverted:hover * {
+            position: relative;
+            z-index: 1; }
+          .infodialog__body .button--inverted:hover::before {
+            content: "";
+            position: absolute;
+            bottom: -50%;
+            left: -50%;
+            width: 200%;
+            padding-bottom: 200%;
+            background: #10b5f3;
+            border-radius: 40%;
+            animation: pour 2s ease-in-out -1.5s;
+            z-index: 0; }
+    .infodialog__body > p {
+      max-width: 500px;
+      min-width: 300px;
+      text-align: center;
+      color: #707070;
+      font-family: "Cream Cake";
+      font-size: 1.8em;
+      margin: 0; }
+    .infodialog__body .button {
+      padding: 4px 26px; }
+  .infodialog__nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 40px;
+    width: 100%; }
 
 .sectiontitle {
   margin: 50px 0; }

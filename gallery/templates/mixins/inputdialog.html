@@ -1,7 +1,16 @@
-<form id="user-dialog" class="user-dialog" onsubmit="return false;">
-	{% csrf_token %}
-	<label for="user-dialog__input"></label>
-	<input type="text" name="user-dialog" id="user-dialog__input" class="user-dialog__input">
-	<input type="button" name="user-dialog-clear" onclick="hideUserInput();" class="user-dialog__clear">
-	<input type="submit" name="user-dialog-submit" class="user-dialog__submit" value="">
-</form>
+<div class="inputdialog" style="height: 0px; opacity: 0;">
+	<div class="inputdialog__header">
+		<p>Input dialog</p>
+	</div>
+	<div class="inputdialog__body">
+		<input type="text" name="inputdialog-content" id="inputdialog-content" class="input">
+		<div class="inputdialog__nav">
+			<span class="button button--negative" onclick="inputDialogCancel();">
+				<p>Annuler</p>
+			</span>
+			<span class="button" id="inputdialog-accept" onclick="inputDialogAccept();">
+				<p>Valider</p>
+			</span>
+		</div>
+	</div>
+</div>

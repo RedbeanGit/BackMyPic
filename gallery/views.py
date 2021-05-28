@@ -1,3 +1,4 @@
+import datetime
 import math
 import re
 import os
@@ -10,15 +11,19 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.conf import settings
 from django.core.files.base import ContentFile
+from django.db.models import CharField, QuerySet
+from django.db.models.functions import Lower
 from django.http import HttpResponseForbidden, FileResponse
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.views.generic.base import View
 
 from .forms import ErrorList, PictureForm
 from .models import Picture, Album, UserSettings
-from .utils import get_illegible_name
+from .utils import get_illegible_name, translate_month
 
-VERSION = '0.6.0'
+CharField.register_lookup(Lower)
+
+VERSION = '0.7.0'
 TITLE = 'BackMyPic'
 
 
@@ -41,13 +46,24 @@ def get_or_create_user_settings(user):
 	return user_settings
 
 
+def get_album_from_id(user, album_id=None):
+	if album_id is None:
+		user_settings = get_or_create_user_settings(user)
+		album = user_settings.current_album
+	else:
+		album = get_object_or_404(Album, pk=album_id, user=user)
+	return album
+
+
 class BaseView(View):
 	title = TITLE
 	version = VERSION
 	template_name = 'gallery/base.html'
 	view_name = 'gallery:gallery'
 	nav_bar = True
-	nav_elements = ()
+	nav_selected = ()
+	action_elements = ()
+	action_search_view = view_name
 
 	def get(self, request, *args, **kwargs):
 		return render(request, self.template_name, self.get_base_context())
@@ -57,8 +73,10 @@ class BaseView(View):
 			'title': self.title,
 			'version': self.version,
 			'viewName': self.view_name,
-			'nav_bar': self.nav_bar,
-			'nav_elements': self.nav_elements
+			'navBar': self.nav_bar,
+			'navSelected': self.nav_selected,
+			'actionElements': self.action_elements,
+			'actionSearchView': self.action_search_view
 		}
 
 
@@ -66,11 +84,19 @@ class LibraryView(LoginRequiredMixin, BaseView):
 	title = 'Bibliothèque - ' + TITLE
 	template_name = 'gallery/library.html'
 	view_name = 'gallery:library'
-	nav_elements = ('select', 'download', 'add', 'delete', 'share')
+	nav_selected = ('library',)
+	action_elements = ('select', 'download', 'add', 'delete', 'share')
+	action_search_view = view_name
 
 	def get(self, request):
-		albums = Album.objects.filter(user=request.user)
+		question = request.GET.get('query', None)
 
+		if question is not None:
+			context['previousSearch'] = question
+			albums = Album.objects.filter(user=request.user, name__icontains=question).exclude(category='S', name='Search')
+		else:
+			albums = Album.objects.filter(user=request.user).exclude(category='S', name='search')
+		
 		context = self.get_base_context()
 		context['albums'] = albums
 
@@ -129,8 +155,8 @@ class LibraryView(LoginRequiredMixin, BaseView):
 	def add_albums(self, request):
 		album_name = request.POST.get('content', '').strip()
 		filters = {
-			'user':request.user, 
-			'category':'U', 
+			'user': request.user,
+			'category': 'U',
 			'name': album_name
 		}
 
@@ -157,14 +183,11 @@ class AlbumView(LoginRequiredMixin, BaseView):
 	title = 'Album - ' + TITLE
 	template_name = 'gallery/album.html'
 	view_name = 'gallery:album'
-	nav_elements = ('select', 'upload', 'download', 'delete', 'share', 'hide')
+	nav_selected = ('album',)
+	action_elements = ('select', 'upload', 'download', 'delete', 'share', 'hide')
+	action_search_view = view_name
 
 	def render(self, request, form, album_id, page_id):
-		if album_id is None:
-			user_settings = get_or_create_user_settings(request.user)
-			album = user_settings.current_album
-		else:
-			album = get_object_or_404(Album, pk=album_id, user=request.user)
 
 		context = self.get_base_context()
 		context['form'] = form
@@ -172,8 +195,111 @@ class AlbumView(LoginRequiredMixin, BaseView):
 
 		return render(request, self.template_name, context)
 
+	def search_for_date(self, question, pictures):
+		patterns = (
+			{
+				'regex': r'(\s|^)[0-9]{1,2} [a-zA-Z]+ [0-9]{4}(\s|$)',
+				'precision': 'day',
+				'letter_month': True
+			},
+			{
+				'regex': r'(\s|^)[0-9]{1,2}[\s/][0-9]{1,2}[\s/][0-9]{4}(\s|$)',
+				'precision': 'day',
+				'letter_month': False
+			},
+			{
+				'regex': r'(\s|^)[a-zA-Z]+ [0-9]{4}(\s|$)',
+				'precision': 'month',
+				'letter_month': True
+			},
+			{
+				'regex': r'(\s|^)[0-9]{1,2}[\s/][0-9]{4}(\s|$)',
+				'precision': 'month',
+				'letter_month': False
+			},
+			{
+				'regex': r'(\s|^)[0-9]{4}(\s|$)',
+				'precision': 'year',
+				'letter_month': False
+			}
+		)
+
+		for pattern in patterns:
+			match = re.search(pattern['regex'], question)
+
+			if match:
+				a, b = match.span()
+				datestr = question[a:b].replace('/', ' ').strip()
+
+				if pattern['precision'] == 'day':
+					day, month, year = datestr.split()
+
+					if pattern['letter_month']:
+						month = translate_month(month)
+
+					date = datetime.datetime.strptime(day + ' ' + month + ' ' + year, '%d %m %Y')
+					pictures = pictures.filter(date__year=date.year, date__month=date.month, date__day=date.day)
+				elif pattern['precision'] == 'month':
+					month, year = datestr.split()
+
+					if pattern['letter_month']:
+						month = translate_month(month)
+
+					date = datetime.datetime.strptime(month + ' ' + year, '%m %Y')
+					pictures = pictures.filter(date__year=date.year, date__month=date.month)
+				else:
+					year = datestr
+
+					date = datetime.datetime.strptime(year, '%Y')
+					pictures = pictures.filter(date__year=date.year)
+
+				question = question.replace(question[a:b], '')
+				break
+
+		return pictures, question
+
+	def search_for_size(self, question, pictures):
+		rsize = r'(\s|^)[0-9]+x[0-9]+(\s|$)'
+		match = re.search(rsize, question)
+
+		if match:
+			a, b = match.span()
+			width, height = question[a:b].split('x')
+			question = question.replace(question[a:b], '')
+
+			return pictures.filter(width=int(width), height=int(height)), question
+		return pictures, question
+
+	def search_for_tags(self, question, pictures):
+		words = question.split()
+		
+		for word in words:
+			if word:
+				pictures = pictures.intersection(Picture.objects.filter(tags__unaccent__icontains=word))
+		return pictures, question
+
 	def get(self, request, album_id=None, page_id=0):
-		return self.render(request, PictureForm(), album_id, page_id)
+		album = get_album_from_id(request.user, album_id)
+		question = request.GET.get('query', None)
+		context = self.get_base_context()
+		context['form'] = PictureForm()
+		
+		if question:
+			pictures = album.pictures.all()
+			psize, question = self.search_for_size(question, pictures)
+			pdate, question = self.search_for_date(question, pictures)
+			ptags, question = self.search_for_tags(question, pictures)
+
+			pictures = pdate.intersection(psize, ptags)
+			album = get_or_create_album(user=request.user, name='search', category='S')
+			album.pictures.all().delete()
+
+			for picture in pictures:
+				album.pictures.add(picture)
+			context['previousSearch'] = question
+			
+		context['album'] = album
+		return render(request, self.template_name, context)
 
 	def post(self, request, album_id=None, page_id=0):
 		actions = {
@@ -199,17 +325,28 @@ class AlbumView(LoginRequiredMixin, BaseView):
 		form = PictureForm(request.POST, request.FILES)
 
 		if form.is_valid():
-			album = get_or_create_album(user=request.user, category='S', name='gallery')
+			album_gallery = get_or_create_album(user=request.user, category='S', name='gallery')
+			album_current = get_album_from_id(request.user, album_id)
 			images = request.FILES.getlist('image')
 
 			for image in images:
 				picture = Picture(image=image, user=request.user, filename=image.name)
 				picture.save()
-				album.pictures.add(picture)
-			album.save()
+				album_gallery.pictures.add(picture)
 
-			return redirect(self.view_name, album_id=album_id, page_id=page_id)
-		return self.render(request, form, album_id, page_id)
+				if album_current.category != 'S':
+					album_current.pictures.add(picture)
+
+			album_gallery.save()
+
+			if album_current.category == 'S':
+				if album_current.name == 'search':
+					album_id = album_gallery.id
+					page_id = 0
+			else:
+				album_current.save()
+			
+		return redirect(self.view_name, album_id=album_id, page_id=page_id)
 	
 	def download_pictures(self, request, album_id, page_id):
 		if not request.POST['content'].strip():
@@ -270,7 +407,9 @@ class PictureView(LoginRequiredMixin, BaseView):
 	title = 'Photo - ' + TITLE
 	template_name = 'gallery/picture.html'
 	view_name = 'gallery:picture'
-	nav_elements = ('download', 'delete', 'share', 'hide')
+	nav_selected = ('album',)
+	action_elements = ('download', 'delete', 'share', 'hide')
+	action_search_view = AlbumView.view_name
 
 	def get(self, request, album_id, page_id, picture_id):
 		context = self.get_base_context()
@@ -322,31 +461,45 @@ class PictureView(LoginRequiredMixin, BaseView):
 		return redirect(self.view_name, album_id=album_id, page_id=page_id, picture_id=picture_id)
 
 
-class SearchView(LoginRequiredMixin, BaseView):
-	title = 'Recherche - ' + TITLE
-	template_name = 'gallery/search.html'
-	view_name = 'gallery:search'
-
-	def get(self, request, *args, **kwargs):
-		question = request.GET.get('query')
-		pictures = []
-
-		if question:
-			words = question.split()
-
-			for word in words:
-				pictures += list(Picture.objects.filter(user=request.user, tags__icontains=word))
-
-		context = self.get_base_context()
-		context['pictures'] = pictures
-
-		return render(request, self.template_name, context)
-
-
 class SettingsView(LoginRequiredMixin, BaseView):
 	title = 'Réglages - ' + TITLE
 	template_name = 'gallery/settings.html'
 	view_name = 'gallery:settings'
+	nav_selected = ('settings',)
+
+	def post(self, request):
+		actions = {
+			'delete': self.delete,
+			'logout': self.logout,
+			'save': self.save
+		}
+
+		default_fct = lambda r: redirect(self.view_name)
+		action = actions.get(request.POST.get('action', None), default_fct)
+		return action(request)
+
+	def delete(self, request):
+		if request.user.check_password(request.POST.get('confirm_password', '')):
+			Picture.objects.filter(user=request.user).delete()
+			Album.objects.filter(user=request.user).delete()
+			request.user.delete()
+
+			return redirect('gallery:logout')
+		return self.get(request)
+
+	def logout(self, request):
+		return redirect('gallery:logout')
+
+	def save(self, request):
+		if request.user.check_password(request.POST.get('confirm_password', '')):
+			request.user.username = request.POST.get('username', request.user.username)
+			password = request.POST.get('password', '')
+
+			if password:
+				request.user.set_password(password)
+			request.user.save()
+
+		return self.get(request)
 
 
 class RegisterView(BaseView):

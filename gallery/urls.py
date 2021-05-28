@@ -34,11 +34,6 @@ urlpatterns = [
 		views.LibraryView.as_view(), 
 		name='library'
 	),
-	# search
-	url(r'^search/$', 
-		views.SearchView.as_view(), 
-		name='search'
-	),
 	# settings
 	url(r'^settings/$', 
 		views.SettingsView.as_view(), 

@@ -11,9 +11,7 @@
 				<img class="pictureview__picture" src="{{ picture.image.url }}">
 				<div class="contentnav">
 					{% url 'gallery:album' album_id=album_id page_id=page_id as link %}
-					{% with 'window.location.href = "'|add:link|add:'";' as function %}
-						{% include 'mixins/contentnav.html' with identifier='back' text="Retour à l'album" function=function img='gallery/img/back.svg' prefix=True %}
-					{% endwith %}
+					{% include 'mixins/contentnav.html' with identifier='back' text="Retour à l'album" img='gallery/img/back.svg' prefix=True %}
 				</div>
 			</div>
 		</div>
@@ -49,5 +47,7 @@
 {% endblock %}
 {% block script %}
 	<script type="text/javascript" src="{% static 'gallery/js/mixins/actionbar.js' %}"></script>
+	<script type="text/javascript" src="{% static 'gallery/js/mixins/contentnav.js' %}"></script>
+	<script type="text/javascript">var albumLink = '{{ link }}';</script>
 	<script type="text/javascript" src="{% static 'gallery/js/picture.js' %}"></script>
 {% endblock %}

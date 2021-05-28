@@ -6,24 +6,32 @@
 {% block section %}
 	<div class="section">
 		{% include 'mixins/sectiontitle.html' with text="Compte" subtext="Tu peux changer tes informations de connexion ici" %}
-		<form method="post" action="{% url 'gallery:settings' %}">
-			{% csrf_token %}
+		<form method="post" action="{% url viewName %}" id="form-action">
 			<div class="section__content">
-				<input class="input" type="text" name="username" placeholder="Nom d'utilisateur">
-				<input class="input" type="password" name="password" placeholder="Mot de passe">
-				<input class="input" type="password" name="confirm_password" placeholder="Confirmer le mot de passe">
+				{% csrf_token %}
+				<input type="text" name="username" class="input" placeholder="Nouveau pseudo" autocomplete="off">
+				<input type="password" name="password" class="input" placeholder="Nouveau mot de passe" autocomplete="new-password">
+				<input type="hidden" name="confirm_password" value="" id="input-confirm-password">
+				<input type="hidden" name="action" value="" id="input-action">
 			</div>
 			<div class="section__content section__content--row">
-				<span class="button button--negative">
-					<input type="button" name="delete" value="Supprimer">
+				<span class="button button--negative" onclick="settingsDelete();">
+					<p>Supprimer</p>
 				</span>
-				<span class="button">
-					<input type="button" name="logout" value="Se déconnecter">
+				<span class="button" onclick="settingsLogout();">
+					<p>Se déconnecter</p>
 				</span>
-				<span class="button">
-					<input type="submit" name="submit" value="Enregistrer">
+				<span class="button" onclick="settingsSave();">
+					<p>Enregistrer</p>
 				</span>
 			</div>
 		</form>
 	</div>
+	{% include 'mixins/inputdialog.html' %}
+	{% include 'mixins/infodialog.html' %}
+{% endblock %}
+{% block script %}
+	<script type="text/javascript" src="{% static 'gallery/js/mixins/inputdialog.js' %}"></script>
+	<script type="text/javascript" src="{% static 'gallery/js/mixins/infodialog.js' %}"></script>
+	<script type="text/javascript" src="{% static 'gallery/js/settings.js' %}"></script>
 {% endblock %}

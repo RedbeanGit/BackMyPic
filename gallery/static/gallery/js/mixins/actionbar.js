@@ -12,7 +12,7 @@ var selectMode = false,
 	searchMode = false;
 
 // Select
-function switchSelectMode() {
+function actionSelect() {
 	if (selectMode)
 		stopSelectMode();
 	else
@@ -49,44 +49,49 @@ function showElement(elementId, link) {
 	window.location.href = link;
 }
 
+// Upload
+function actionUpload(formId) {
+	document.getElementById(formId).click();
+}
+
 // Download
-function downloadSelection() {}
+function actionDownload() {}
 
 // Add
-function addElement() {}
+function actionAdd() {}
 
 // Delete
-function deleteSelection() {}
+function actionDelete() {}
 
 // Share
-function shareSelection() {
+function actionShare() {
 	if (selectMode) {
 		alertExperimental();
 	}
 }
 
 // Hide
-function hideSelection() {
+function actionHide() {
 	if (selectMode) {
 		alertExperimental();
 	}
 }
 
 // Search
-function activeSearch() {
+function actionSearch() {
 	if (searchMode) {
-		disableSearchBar();
+		stopSearchBar();
 	} else {
-		enableSearchBar();
+		startSearchBar();
 	}
 }
 
-function enableSearchBar() {
+function startSearchBar() {
 	searchMode = true;
 	document.querySelector('input.search-bar').classList.remove('disabled');
 }
 
-function disableSearchBar() {
+function stopSearchBar() {
 	searchMode = false;
 	document.querySelector('input.search-bar').classList.add('disabled');
 }
@@ -113,7 +118,7 @@ function sendAction(actionName, content) {
 
 		if (searchBar) {
 			if (!searchBar.contains(e.target) && searchMode) {
-				disableSearchBar();
+				stopSearchBar();
 			}
 		}
 	}, true);

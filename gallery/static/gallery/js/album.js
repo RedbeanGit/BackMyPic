@@ -1,16 +1,19 @@
 /* Dependencies:
 	- mixins/actionbar.js
+	- mixins/contentnav.js
 */
 
 var oldStartSelectMode = window.startSelectMode,
 	oldStopSelectMode = window.stopSelectMode,
-	oldDownloadSelection = window.downloadSelection,
-	oldDeleteSelection = window.deleteSelection,
-	oldShareSelection = window.shareSelection,
-	oldHideSelection = window.hideSelection,
 	oldSelectElement = window.selectElement,
 	oldSendAction = window.sendAction,
-	selectedPictures = new Set();
+	oldActionDownload = window.ActionDownload,
+	oldActionDelete = window.ActionDelete,
+	oldActionShare = window.ActionShare,
+	oldActionHide = window.ActionHide;
+var oldContentnavNext = window.contentnavNext,
+	oldContentnavPrevious = window.contentnavPrevious;
+var selectedPictures = new Set();
 var currentSheet = 0,
 	nbSheets = 0;
 
@@ -18,6 +21,7 @@ var currentSheet = 0,
 /// Actionbar features ////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Select
 window.startSelectMode = function() {
 	let pictures = document.querySelectorAll('.album__picture');
 
@@ -36,40 +40,6 @@ window.stopSelectMode = function() {
 	oldStopSelectMode();
 };
 
-window.downloadSelection = function() {
-	if (selectMode)
-		sendAction('download', Array.from(selectedPictures).join());
-	oldDownloadSelection();
-};
-
-window.deleteSelection = function() {
-	if (selectMode) {
-		for (let pictureId of selectedPictures) {
-			picture = document.getElementById('picture-' + pictureId);
-			picture.remove();
-		}
-		sendAction('delete', Array.from(selectedPictures).join());
-	}
-	oldDeleteSelection();
-};
-
-window.shareSelection = function() {
-	if (selectMode)
-		sendAction('share', Array.from(selectedPictures).join());
-	oldShareSelection();
-};
-
-window.hideSelection = function() {
-	if (selectMode) {
-		for (let pictureId of selectedPictures) {
-			picture = document.getElementById('picture-' + pictureId);
-			picture.remove();
-		}
-		sendAction('hide', Array.from(selectedPictures).join());
-	}
-	oldHideSelection();
-};
-
 window.selectElement = function(pictureId) {
 	if (selectMode) {
 		let picture = document.getElementById('picture-' + pictureId);
@@ -85,11 +55,49 @@ window.selectElement = function(pictureId) {
 	oldSelectElement(pictureId);
 };
 
+// Download
+window.actionDownload = function() {
+	if (selectMode)
+		sendAction('download', Array.from(selectedPictures).join());
+	oldActionDownload();
+};
+
+// Delete
+window.actionDelete = function() {
+	if (selectMode) {
+		for (let pictureId of selectedPictures) {
+			picture = document.getElementById('picture-' + pictureId);
+			picture.remove();
+		}
+		sendAction('delete', Array.from(selectedPictures).join());
+	}
+	oldActionDelete();
+};
+
+// Share
+window.actionShare = function() {
+	if (selectMode)
+		sendAction('share', Array.from(selectedPictures).join());
+	oldActionShare();
+};
+
+// Hide
+window.actionHide = function() {
+	if (selectMode) {
+		for (let pictureId of selectedPictures) {
+			picture = document.getElementById('picture-' + pictureId);
+			picture.remove();
+		}
+		sendAction('hide', Array.from(selectedPictures).join());
+	}
+	oldActionHide();
+};
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-/// AlbumView features ////////////////////////////////////////////////////////////////////////////
+/// Contentnav features ///////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-function nextSheet() {
+window.contentnavNext = function() {
 	if (currentSheet < nbSheets) {
 		currentSheet++;
 		var visibles = document.querySelectorAll('.album__sheet--visible');
@@ -112,9 +120,9 @@ function nextSheet() {
 		if (currentSheet == nbSheets)
 			document.querySelector('.contentnav__element--next').classList.add('contentnav__element--disabled');
 	}
-}
+};
 
-function previousSheet() {
+window.contentnavPrevious = function() {
 	if (currentSheet > 0) {
 		currentSheet--;
 		var visibles = document.querySelectorAll('.album__sheet--visible');
@@ -138,7 +146,11 @@ function previousSheet() {
 		if (currentSheet == 0)
 			document.querySelector('.contentnav__element--previous').classList.add('contentnav__element--disabled');
 	}
-}
+};
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+/// AlbumView features ////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 function getNbSheets() {
 	return document.querySelectorAll('.album__sheet').length;

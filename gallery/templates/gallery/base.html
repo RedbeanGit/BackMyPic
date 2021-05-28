@@ -15,15 +15,15 @@
 				<img src="{% static 'gallery/img/icon.svg' %}" class="title__icon" alt="BackMyPic">
 				<h1 class="title__text">BackMyPic</h1>
 			</a>
-			{% if nav_bar %}
+			{% if navBar %}
 				<div class="nav">
-					<a href="{% url 'gallery:album' %}" class="nav__element{% if viewName == 'gallery:album' or viewName == 'gallery:picture' %} nav__element--selected{% endif %}">
+					<a href="{% url 'gallery:album' %}" class="nav__element{% if 'album' in navSelected %} nav__element--selected{% endif %}">
 						<p>Album</p>
 					</a>
-					<a href="{% url 'gallery:library' %}" class="nav__element{% if viewName == 'gallery:library' %} nav__element--selected{% endif %}">
+					<a href="{% url 'gallery:library' %}" class="nav__element{% if 'library' in navSelected %} nav__element--selected{% endif %}">
 						<p>Bibliothèque</p>
 					</a>
-					<a href="{% url 'gallery:settings' %}" class="nav__element{% if viewName == 'gallery:settings' %} nav__element--selected{% endif %}">
+					<a href="{% url 'gallery:settings' %}" class="nav__element{% if 'settings' in navSelected %} nav__element--selected{% endif %}">
 						<p>Compte</p>
 					</a>
 				</div>

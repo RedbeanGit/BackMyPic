@@ -3,11 +3,14 @@ $color-secondary: #707070;
 $color-back: #ffffff;
 $color-negative: #ff0000;
 
+$shadow-primary: 0px 3px 6px rgba(#000000, 0.16);
+
 $font-primary: "Cream Cake";
 $font-secondary: "Arial";
 
 $album-width: 500px;
 $album-height: 550px;
+$album-margin: 15px;
 $album-border-radius: 30px;
 
 $picture-border: 20px;
@@ -19,7 +22,7 @@ $notebook-border-radius: 50px;
 $notebook-clip-width: 218px;
 $notebook-clip-height: 85px;
 
-$content-nav-offset: 5%;
+$inputdialog-border-radius: 20px;
 
 @font-face {
 	font-family: "Arial Rounded Bold";

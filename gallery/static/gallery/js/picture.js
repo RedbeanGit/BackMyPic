@@ -1,32 +1,42 @@
 /* Dependencies:
 	- mixins/actionbar.js
+	- mixins/contentnav.js
 */
 
-var oldDownloadSelection = window.downloadSelection,
-	oldDeleteSelection = window.deleteSelection,
-	oldShareSelection = window.shareSelection,
-	oldHideSelection = window.hideSelection;
+var oldActionDownload = window.actionDownload,
+	oldActionDelete = window.actionDelete,
+	oldActionShare = window.actionShare,
+	oldActionHide = window.actionHide;
+var oldContentnavPrevious = window.contentnavPrevious;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /// Actionbar features ////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-window.downloadSelection = function() {
+window.actionDownload = function() {
 	sendAction('download', null);
-	oldDownloadSelection();
+	oldActionDownload();
 };
 
-window.deleteSelection = function() {
+window.actionDelete = function() {
 	sendAction('delete', null);
-	oldDeleteSelection();
+	oldActionDelete();
 };
 
-window.shareSelection = function() {
+window.actionShare = function() {
 	sendAction('share', null);
-	oldShareSelection();
+	oldActionShare();
 };
 
-window.hideSelection = function() {
+window.actionHide = function() {
 	sendAction('hide', null);
-	oldHideSelection();
+	oldActionHide();
 };
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+/// Contentnav features ///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+window.contentnavPrevious = function() {
+	window.location.href = albumLink;
+}

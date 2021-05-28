@@ -1,6 +1,8 @@
+import calendar
 import datetime
 import piexif
 import random
+import unidecode
 
 from os import path as op
 from PIL import Image
@@ -37,3 +39,14 @@ def get_picture_date(picture):
 	except Exception:
 		pass
 	return date
+
+
+def translate_month(name):
+	MONTH_FR = ('janvier', 'fevrier', 'mars', 'avril', 'mai', 'juin', 'juillet', 'aout', 'septembre', 'octobre', 'novembre', 'decembre')
+	month = unidecode.unidecode(name).lower()
+
+	if month in MONTH_FR:
+		return str(MONTH_FR.index(month) + 1)
+	if month.capitalize() in calendar.month_name:
+		return str(calendar.month_name.index(month.capitalize()))
+	return None

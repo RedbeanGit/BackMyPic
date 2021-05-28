@@ -1,16 +1,19 @@
 /* Dependencies:
 	- mixins/actionbar.js
+	- mixins/contentnav.js
 	- mixins/inputdialog.js
 */
 
 var oldStartSelectMode = window.startSelectMode,
 	oldStopSelectMode = window.stopSelectMode,
-	oldDownloadSelection = window.downloadSelection,
-	oldAddElement = window.addElement,
-	oldDeleteSelection = window.deleteSelection,
-	oldShareSelection = window.shareSelection,
 	oldSelectElement = window.selectElement,
-	oldShowElement = window.showElement;
+	oldShowElement = window.showElement,
+	oldActionDownload = window.actionDownload,
+	oldActionAdd = window.actionAdd,
+	oldActionDelete = window.actionDelete,
+	oldActionShare = window.actionShare;
+var oldContentnavNext = window.contentnavNext,
+	oldContentnavPrevious = window.contentnavPrevious;
 var selectedAlbums = new Set();
 var currentAlbum = 0,
 	nbAlbums;
@@ -19,6 +22,7 @@ var currentAlbum = 0,
 /// Actionbar features ////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Select
 window.startSelectMode = function() {
 	let albums = document.querySelectorAll('.album');
 
@@ -35,41 +39,6 @@ window.stopSelectMode = function() {
 	for (let album of albums)
 		album.classList.remove('album--selectable');
 	oldStopSelectMode();
-};
-
-window.downloadSelection = function() {
-	if (selectMode)
-		sendAction('download', Array.from(selectedAlbums).join());
-	oldDownloadSelection();
-};
-
-window.addElement = function() {
-	showInputDialog('Nom de l\'album', function(value){
-		let inputContent = document.getElementById('actioncontent-input');
-	
-		if (inputContent) {
-			inputContent.value = value;
-		};
-		sendAction('add', Array.from(selectedAlbums).join());
-	});
-	oldAddElement();
-};
-
-window.deleteSelection = function() {
-	if (selectMode) {
-		for (let albumId of selectedAlbums) {
-			album = document.getElementById('album-' + albumId);
-			album.remove();
-		}
-		sendAction('delete', Array.from(selectedAlbums).join());
-	}
-	oldDeleteSelection();
-};
-
-window.shareSelection = function() {
-	if (selectMode)
-		sendAction('share', Array.from(selectedAlbums).join());
-	oldShareSelection();
 };
 
 window.selectElement = function(albumId) {
@@ -93,20 +62,59 @@ window.showElement = function(albumId, link) {
 	for (let i = 0; i < nbAlbums; i++) {
 		if (albums[i].id == 'album-' + albumId) {
 			if (i < currentAlbum)
-				previousAlbum();
+				contentnavPrevious();
 			else if (i == currentAlbum)
 				oldShowElement(albumId, link);
 			else
-				nextAlbum();
+				contentnavNext();
 		}
 	}
 };
 
+// Download
+window.actionDownload = function() {
+	if (selectMode)
+		sendAction('download', Array.from(selectedAlbums).join());
+	oldActionDownload();
+};
+
+// Add
+window.actionAdd = function() {
+	inputDialogRun(
+		'Créer un nouvel album',
+		'Nom de l\'album', 
+		function(value){
+			sendAction('add', value);
+		},
+		function(){}
+	);
+	oldActionAdd();
+};
+
+// Delete
+window.actionDelete = function() {
+	if (selectMode) {
+		for (let albumId of selectedAlbums) {
+			album = document.getElementById('album-' + albumId);
+			album.remove();
+		}
+		sendAction('delete', Array.from(selectedAlbums).join());
+	}
+	oldActionDelete();
+};
+
+// Share
+window.actionShare = function() {
+	if (selectMode)
+		sendAction('share', Array.from(selectedAlbums).join());
+	oldActionShare();
+};
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-/// LibraryView features //////////////////////////////////////////////////////////////////////////
+/// Contentnav features ///////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-function nextAlbum() {
+window.contentnavNext = function() {
 	if (currentAlbum < nbAlbums-1) {
 		var albums = document.querySelectorAll('.library .album');
 
@@ -128,9 +136,9 @@ function nextAlbum() {
 		if (currentAlbum == nbAlbums - 1)
 			document.querySelector('.contentnav__element--next').classList.add('contentnav__element--disabled');
 	}
-}
+};
 
-function previousAlbum() {
+window.contentnavNext = function previousAlbum() {
 	if (currentAlbum > 0) {
 		var albums = document.querySelectorAll('.library .album');
 
@@ -152,8 +160,17 @@ function previousAlbum() {
 		if (currentAlbum == 0)
 			document.querySelector('.contentnav__element--previous').classList.add('contentnav__element--disabled');
 	}
-}
+};
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+/// LibraryView features //////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 (function() {
 	nbAlbums = document.querySelectorAll('.library .album').length;
+
+	if (currentAlbum == 0)
+		document.querySelector('.contentnav__element--previous').classList.add('contentnav__element--disabled');
+	if (currentAlbum == nbAlbums - 1)
+		document.querySelector('.contentnav__element--next').classList.add('contentnav__element--disabled');
 })();

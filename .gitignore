@@ -2,3 +2,4 @@
 *.cmd
 media/*
 tmp/*
+secrets.json
