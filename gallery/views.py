@@ -6,7 +6,7 @@ import zipfile
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.conf import settings
@@ -23,7 +23,7 @@ from .utils import get_illegible_name, translate_month
 
 CharField.register_lookup(Lower)
 
-VERSION = '0.7.0'
+VERSION = '0.8.0'
 TITLE = 'BackMyPic'
 
 
@@ -55,6 +55,16 @@ def get_album_from_id(user, album_id=None):
 	return album
 
 
+def get_picture_shape(picture):
+	ratio = picture.width / picture.height
+
+	if ratio < 0.86:
+		return 'h'
+	elif ratio > 1.14:
+		return 'l'
+	return 's'
+
+
 class BaseView(View):
 	title = TITLE
 	version = VERSION
@@ -64,6 +74,7 @@ class BaseView(View):
 	nav_selected = ()
 	action_elements = ()
 	action_search_view = view_name
+	errors = {'other': ''}
 
 	def get(self, request, *args, **kwargs):
 		return render(request, self.template_name, self.get_base_context())
@@ -76,7 +87,8 @@ class BaseView(View):
 			'navBar': self.nav_bar,
 			'navSelected': self.nav_selected,
 			'actionElements': self.action_elements,
-			'actionSearchView': self.action_search_view
+			'actionSearchView': self.action_search_view,
+			'errors': self.errors
 		}
 
 
@@ -90,21 +102,20 @@ class LibraryView(LoginRequiredMixin, BaseView):
 
 	def get(self, request):
 		question = request.GET.get('query', None)
+		context = self.get_base_context()
 
 		if question is not None:
 			context['previousSearch'] = question
-			albums = Album.objects.filter(user=request.user, name__icontains=question).exclude(category='S', name='Search')
+			albums = Album.objects.filter(user=request.user, name__unaccent__icontains=question).exclude(category='S', name='Search')
 		else:
 			albums = Album.objects.filter(user=request.user).exclude(category='S', name='search')
 		
-		context = self.get_base_context()
 		context['albums'] = albums
 
 		return render(request, self.template_name, context)
 
 	def post(self, request):
 		actions = {
-			'upload': self.upload_albums,
 			'download': self.download_albums,
 			'add': self.add_albums,
 			'delete': self.delete_albums,
@@ -122,12 +133,9 @@ class LibraryView(LoginRequiredMixin, BaseView):
 				album = get_object_or_404(Album, pk=pk, user=request.user)
 				yield album
 
-	def upload_albums(self, request):
-		return redirect(self.view_name)
-
 	def download_albums(self, request):
 		if not request.POST['content'].strip():
-			return redirect(self.view_name, **kwargs)
+			return redirect(self.view_name)
 			
 		zippath = settings.TMP_ROOT / 'zipfiles' / (get_illegible_name() + '.zip')
 		filepaths = set()
@@ -154,17 +162,21 @@ class LibraryView(LoginRequiredMixin, BaseView):
 
 	def add_albums(self, request):
 		album_name = request.POST.get('content', '').strip()
-		filters = {
-			'user': request.user,
-			'category': 'U',
-			'name': album_name
-		}
 
-		if Album.objects.filter(**filters).exists():
-			return redirect(self.view_name)
-		album = get_or_create_album(**filters)
+		if album_name:
+			filters = {
+				'user': request.user,
+				'category': 'U',
+				'name': album_name
+			}
 
-		return redirect(AlbumView.view_name, album_id=album.id)
+			if Album.objects.filter(**filters).exists():
+				return redirect(self.view_name)
+			album = get_or_create_album(**filters)
+			return redirect(AlbumView.view_name, album_id=album.id)
+		
+		self.errors['other'] = 'Le nom d\'album ne peut pas être vide'
+		return redirect(self.view_name)
 
 	def delete_albums(self, request):
 		for album in self.loop_albums_from_request(request):
@@ -186,14 +198,6 @@ class AlbumView(LoginRequiredMixin, BaseView):
 	nav_selected = ('album',)
 	action_elements = ('select', 'upload', 'download', 'delete', 'share', 'hide')
 	action_search_view = view_name
-
-	def render(self, request, form, album_id, page_id):
-
-		context = self.get_base_context()
-		context['form'] = form
-		context['album'] = album
-
-		return render(request, self.template_name, context)
 
 	def search_for_date(self, question, pictures):
 		patterns = (
@@ -278,11 +282,53 @@ class AlbumView(LoginRequiredMixin, BaseView):
 				pictures = pictures.intersection(Picture.objects.filter(tags__unaccent__icontains=word))
 		return pictures, question
 
+	def get_pages(self, album):
+		configs = []
+		current_config = ''
+		pictures = album.pictures.all()
+
+		for picture in pictures:
+			shape = get_picture_shape(picture)
+
+			if shape == 's':
+				if current_config not in ('', 's', 'ss', 'sss', 'sl', 'sh', 'l', 'h', 'ls', 'hs'):
+					configs.append(current_config)
+					current_config = ''
+			elif shape == 'l':
+				if current_config not in ('', 's', 'ss', 'l'):
+					configs.append(current_config)
+					current_config = ''
+			elif shape == 'h':
+				if current_config not in ('', 's', 'ss', 'h'):
+					configs.append(current_config)
+					current_config = ''
+			current_config += shape
+
+		if current_config:
+			configs.append(current_config)
+
+		if len(configs) % 2:
+			configs.append('')
+
+		picIndex = 0
+		pages = [None] * len(configs)
+
+		for index, config in enumerate(configs):
+			if index % 2:
+				pages[index] = ((pictures[picIndex:picIndex+len(config)], config))
+			else:
+				pages[len(configs) - index - 2] = ((pictures[picIndex:picIndex+len(config)], config))
+			picIndex += len(config)
+		return pages
+
 	def get(self, request, album_id=None, page_id=0):
-		album = get_album_from_id(request.user, album_id)
 		question = request.GET.get('query', None)
 		context = self.get_base_context()
 		context['form'] = PictureForm()
+		album = get_album_from_id(request.user, album_id)
+
+		if album.category == 'S' and album.name == 'search':
+			album = get_album_from_id(request.user)
 		
 		if question:
 			pictures = album.pictures.all()
@@ -292,13 +338,14 @@ class AlbumView(LoginRequiredMixin, BaseView):
 
 			pictures = pdate.intersection(psize, ptags)
 			album = get_or_create_album(user=request.user, name='search', category='S')
-			album.pictures.all().delete()
+			album.pictures.clear()
 
 			for picture in pictures:
 				album.pictures.add(picture)
 			context['previousSearch'] = question
 			
 		context['album'] = album
+		context['pages'] = self.get_pages(album)
 		return render(request, self.template_name, context)
 
 	def post(self, request, album_id=None, page_id=0):
@@ -345,11 +392,14 @@ class AlbumView(LoginRequiredMixin, BaseView):
 					page_id = 0
 			else:
 				album_current.save()
+		else:
+			self.errors['other'] = 'Ces fichiers ne sont pas des images valides'
 			
 		return redirect(self.view_name, album_id=album_id, page_id=page_id)
 	
 	def download_pictures(self, request, album_id, page_id):
 		if not request.POST['content'].strip():
+			self.errors['other'] = 'Aucune image sélectionée'
 			return redirect(self.view_name, album_id=album_id, page_id=page_id)
 			
 		zippath = settings.TMP_ROOT / 'zipfiles' / (get_illegible_name() + '.zip')
@@ -389,14 +439,18 @@ class AlbumView(LoginRequiredMixin, BaseView):
 		album_hidden = get_or_create_album(**filters, name='hidden')
 
 		for picture in self.loop_pictures_from_request(request):
-			picture.hidden = True
+			if picture.hidden:
+				if not album_gallery.pictures.filter(pk=picture.pk).exists():
+					album_gallery.pictures.add(picture)
+				if album_hidden.pictures.filter(pk=picture.pk).exists():
+					album_hidden.pictures.remove(picture)
+			else:
+				if album_gallery.pictures.filter(pk=picture.pk).exists():
+					album_gallery.pictures.remove(picture)
+				if not album_hidden.pictures.filter(pk=picture.pk).exists():
+					album_hidden.pictures.add(picture)
+			picture.hidden = not picture.hidden
 			picture.save()
-
-			if album_gallery.pictures.filter(pk=picture.pk).exists():
-				album_gallery.pictures.remove(picture)
-
-			if not album_hidden.pictures.filter(pk=picture.pk).exists():
-				album_hidden.pictures.add(picture)
 		album_gallery.save()
 		album_hidden.save()
 
@@ -408,19 +462,16 @@ class PictureView(LoginRequiredMixin, BaseView):
 	template_name = 'gallery/picture.html'
 	view_name = 'gallery:picture'
 	nav_selected = ('album',)
-	action_elements = ('download', 'delete', 'share', 'hide')
+	action_elements = ('back', 'download', 'delete', 'share', 'hide')
 	action_search_view = AlbumView.view_name
 
-	def get(self, request, album_id, page_id, picture_id):
+	def get(self, request, picture_id):
 		context = self.get_base_context()
-		context['album_id'] = album_id
-		context['page_id'] = page_id
-		context['picture_id'] = picture_id
 		context['picture'] = get_object_or_404(Picture, user=request.user, pk=picture_id)
 
 		return render(request, self.template_name, context)
 
-	def post(self, request, album_id, page_id, picture_id):
+	def post(self, request, picture_id):
 		actions = {
 			'download': self.download_picture,
 			'delete': self.delete_picture,
@@ -428,37 +479,44 @@ class PictureView(LoginRequiredMixin, BaseView):
 			'hide': self.hide_picture,
 		}
 		
-		default_fct = lambda r, *a, **k: redirect(self.view_name)
+		default_fct = lambda r, *a, **k: redirect(self.view_name, *a, **k)
 		action = actions.get(request.POST.get('action', None), default_fct)
-		return action(request, album_id, page_id, picture_id)
+		return action(request, picture_id)
 
-	def download_picture(self, request, album_id, page_id, picture_id):
+	def download_picture(self, request, picture_id):
 		picture = get_object_or_404(Picture, user=request.user, pk=picture_id)
 		return FileResponse(open(picture.image.path, 'rb'), as_attachment=True, filename=picture.filename)
 
-	def delete_picture(self, request, album_id, page_id, picture_id):
+	def delete_picture(self, request, picture_id):
 		picture = get_object_or_404(Picture, user=request.user, pk=picture_id)
 		picture.delete()
-		return redirect(AlbumView.view_name, album_id=album_id, page_id=page_id)
+		return redirect(AlbumView.view_name)
 
-	def share_picture(self, request, album_id, page_id, picture_id):
+	def share_picture(self, request, picture_id):
 		# TODO: find a way to share pictures
-		return redirect(self.view_name, album_id=album_id, page_id=page_id, picture_id=picture_id)
+		return redirect(self.view_name, picture_id=picture_id)
 
-	def hide_picture(self, request, album_id, page_id, picture_id):
+	def hide_picture(self, request, picture_id):
 		filters = {'user': request.user, 'category': 'S'}
 
 		album_gallery = get_or_create_album(**filters, name='gallery')
 		album_hidden = get_or_create_album(**filters, name='hidden')
 		picture = get_object_or_404(Picture, user=request.user, pk=picture_id)
 
-		if album_gallery.pictures.filter(pk=picture_id).exists():
-			album_gallery.pictures.remove(picture)
+		if picture.hidden:
+			if not album_gallery.pictures.filter(pk=picture_id).exists():
+				album_gallery.pictures.add(picture)
+			if album_hidden.pictures.filter(pk=picture_id).exists():
+				album_hidden.pictures.remove(picture)
+		else:
+			if album_gallery.pictures.filter(pk=picture_id).exists():
+				album_gallery.pictures.remove(picture)
+			if not album_hidden.pictures.filter(pk=picture_id).exists():
+				album_hidden.pictures.add(picture)
+		picture.hidden = not picture.hidden
+		picture.save()
 
-		if not album_hidden.pictures.filter(pk=picture_id).exists():
-			album_hidden.pictures.add(picture)
-
-		return redirect(self.view_name, album_id=album_id, page_id=page_id, picture_id=picture_id)
+		return redirect(self.view_name, picture_id=picture_id)
 
 
 class SettingsView(LoginRequiredMixin, BaseView):
@@ -466,6 +524,13 @@ class SettingsView(LoginRequiredMixin, BaseView):
 	template_name = 'gallery/settings.html'
 	view_name = 'gallery:settings'
 	nav_selected = ('settings',)
+
+	def render(self, request):
+		return super(SettingsView, self).get(request)
+
+	def get(self, request):
+		self.errors.clear()
+		return super(SettingsView, self).get(request)
 
 	def post(self, request):
 		actions = {
@@ -479,27 +544,49 @@ class SettingsView(LoginRequiredMixin, BaseView):
 		return action(request)
 
 	def delete(self, request):
-		if request.user.check_password(request.POST.get('confirm_password', '')):
+		password = request.POST.get('password', '')
+		if request.user.check_password(password):
 			Picture.objects.filter(user=request.user).delete()
 			Album.objects.filter(user=request.user).delete()
 			request.user.delete()
 
 			return redirect('gallery:logout')
-		return self.get(request)
+		self.errors['other'] = 'Mauvais mot de passe'
+		return self.render(request)
 
 	def logout(self, request):
 		return redirect('gallery:logout')
 
 	def save(self, request):
-		if request.user.check_password(request.POST.get('confirm_password', '')):
-			request.user.username = request.POST.get('username', request.user.username)
-			password = request.POST.get('password', '')
+		form = PasswordChangeForm(user=request.user, data=request.POST)
+		username = request.POST.get('username', '')
+		password = request.POST.get('new_password1', '')
+		modified = False
 
-			if password:
-				request.user.set_password(password)
+		if username and username != request.user.username:
+			request.user.username = username
 			request.user.save()
-
-		return self.get(request)
+			self.errors['other'] = 'Compte mis à jour'
+			modified = True
+		
+		if form.is_valid():
+			form.save()
+			self.errors['other'] = 'Compte mis à jour'
+		else:
+			if 'new_password1' in form.errors and 'Ce champ est obligatoire.' in form.errors['new_password1']:
+				if not modified:
+					self.errors['other'] = 'Tu dois d\'abord définir un nouveau pseudo ou un nouveau mot de passe'
+			elif 'new_password2' in form.errors:
+				if 'Ce champ est obligatoire.' in form.errors['new_password2']:
+					self.errors['other'] = 'Tu n\'a pas rempli la confirmation du mot de passe'
+				else:
+					self.errors['other'] = 'Le mot de passe entré et sa confirmation sont différents'
+			elif 'old_password':
+				if 'Ce champ est obligatoire.' in form.errors['old_password']:
+					self.errors['other'] = 'Tu n\'a pas donné ton ancien mot de passe'
+				else:
+					self.errors['other'] = 'Le nouveau mot de passe doit être différent de l\'ancien'
+		return self.render(request)
 
 
 class RegisterView(BaseView):
@@ -527,5 +614,9 @@ class RegisterView(BaseView):
 			login(request, user)
 
 			return redirect('gallery:gallery')
-
+		else:
+			self.errors.clear()
+			if '__all__' in form.errors:
+				form.errors['other'] = form.errors.pop('__all__')
+			self.errors.update(form.errors)
 		return self.render(request, form)

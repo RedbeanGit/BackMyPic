@@ -21,7 +21,6 @@ MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login'
-LOGOUT_REDIRECT_URL = '/'
 
 
 # loading secret settings (secret key, db password)

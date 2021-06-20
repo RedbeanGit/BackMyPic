@@ -8,7 +8,7 @@ from django.dispatch import receiver
 from django.conf import settings
 from django.contrib.auth.models import User
 
-from .utils import get_illegible_name, get_picture_date
+from .utils import get_illegible_name, get_picture_date, get_picture_size
 
 
 def get_picture_path(instance, filename):
@@ -36,8 +36,7 @@ class Picture(models.Model):
 	def save(self, force_insert=False, force_update=False):
 		super(Picture, self).save(force_insert=force_insert, force_update=force_update)
 		self.date = get_picture_date(self)
-		self.width = self.image.width
-		self.height = self.image.height
+		self.width, self.height = get_picture_size(self)
 		super(Picture, self).save(force_insert=force_insert, force_update=force_update)
 
 

@@ -112,6 +112,17 @@ header {
 	}
 }
 
+.errorlist {
+	p {
+		font-family: $font-primary;
+		/*font-style: italic;*/
+		font-size: 1.4em;
+		text-align: center;
+		margin: 5px 0;
+		color: $color-negative;
+	}
+}
+
 footer {
 	display: flex;
 	justify-content: center;

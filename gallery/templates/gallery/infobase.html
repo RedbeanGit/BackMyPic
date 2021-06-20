@@ -11,13 +11,14 @@
 	</head>
 	<body>
 		<section>
-			<img src="{% static 'gallery/img/cloud_bye.svg' %}">
+			{% include 'svg/cloud.html' with cls="image" %}
 			<div class="description">
 				<h2 class="description__title">{{ title }}</h2>
 				<p class="description__text">{{ description }}</p>
-				<a class="button button--inverted description__button" href="{% url 'gallery:gallery' %}">
-					<p>Accueil</p>
-				</a>
+				{% url 'gallery:gallery' as link %}
+				{% with 'window.location.href = "'|add:link|add:'";' as function %}
+					{% include 'mixins/button.html' with function=function text='Accueil' style='inverted' id="home-button" %}
+				{% endwith %}
 			</div>
 		</section>
 		<footer>
@@ -28,6 +29,6 @@
 			</div>
 		</footer>
 		<script type="text/javascript" src="{% static 'gallery/js/base.js' %}"></script>
-		{% block script %}{% endblock %}
+		<script type="text/javascript" src="{% static 'gallery/js/infobase.js' %}"></script>
 	</body>
 </html>

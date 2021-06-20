@@ -213,11 +213,13 @@
       .actionbar__label input:focus {
         /*width: 700px;
 					transition-duration: 0.2s;*/ }
+      .actionbar__label input::placeholder {
+        color: rgba(16, 181, 243, 0.5); }
     .actionbar__label img:hover {
       cursor: pointer; }
 
-.inputdialog {
-  position: absolute;
+.dialog {
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -229,7 +231,7 @@
   flex-direction: column;
   align-items: center;
   overflow: hidden; }
-  .inputdialog__header {
+  .dialog__header {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -238,18 +240,18 @@
     padding: 10px 0;
     margin-bottom: 40px;
     width: 100%; }
-    .inputdialog__header p {
+    .dialog__header p {
       color: #ffffff;
       font-family: "Cream Cake";
       font-size: 1.8em;
       margin: 0; }
-  .inputdialog__body {
+  .dialog__body {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 0 20px 20px 20px;
     box-sizing: border-box; }
-    .inputdialog__body .input {
+    .dialog__body .input {
       border: 2px solid #707070;
       border-radius: 9999px;
       width: 600px;
@@ -258,14 +260,14 @@
       text-align: center;
       padding: 3px 0;
       color: #707070; }
-      .inputdialog__body .input::placeholder {
+      .dialog__body .input::placeholder {
         color: rgba(112, 112, 112, 0.5); }
-      .inputdialog__body .input:hover {
+      .dialog__body .input:hover {
         border-color: #10b5f3;
         color: #10b5f3; }
-        .inputdialog__body .input:hover::placeholder {
+        .dialog__body .input:hover::placeholder {
           color: rgba(16, 181, 243, 0.5); }
-    .inputdialog__body .button {
+    .dialog__body .button {
       position: relative;
       padding: 10px 26px;
       font-size: 1.7em;
@@ -277,7 +279,7 @@
       border-radius: 99999px;
       overflow: hidden;
       z-index: 0; }
-      .inputdialog__body .button * {
+      .dialog__body .button * {
         border: none;
         background: transparent;
         font-family: inherit;
@@ -285,17 +287,17 @@
         color: inherit;
         cursor: inherit;
         margin: 0; }
-      .inputdialog__body .button:hover {
+      .dialog__body .button:hover {
         cursor: pointer;
         color: #10b5f3;
         transition: color 0.2s ease-in-out 0s;
         position: relative;
         overflow: hidden;
         z-index: 1; }
-        .inputdialog__body .button:hover * {
+        .dialog__body .button:hover * {
           position: relative;
           z-index: 1; }
-        .inputdialog__body .button:hover::before {
+        .dialog__body .button:hover::before {
           content: "";
           position: absolute;
           bottom: -50%;
@@ -306,24 +308,24 @@
           border-radius: 40%;
           animation: pour 2s ease-in-out -1.5s;
           z-index: 0; }
-      .inputdialog__body .button--negative {
+      .dialog__body .button--negative {
         background-color: #ff0000;
         border-color: #ff0000; }
-        .inputdialog__body .button--negative:hover {
+        .dialog__body .button--negative:hover {
           color: #ff0000; }
-      .inputdialog__body .button--inverted {
+      .dialog__body .button--inverted {
         background-color: #ffffff;
         color: #707070;
         border-color: #ffffff; }
-        .inputdialog__body .button--inverted:hover {
+        .dialog__body .button--inverted:hover {
           color: #ffffff;
           position: relative;
           overflow: hidden;
           z-index: 1; }
-          .inputdialog__body .button--inverted:hover * {
+          .dialog__body .button--inverted:hover * {
             position: relative;
             z-index: 1; }
-          .inputdialog__body .button--inverted:hover::before {
+          .dialog__body .button--inverted:hover::before {
             content: "";
             position: absolute;
             bottom: -50%;
@@ -334,11 +336,19 @@
             border-radius: 40%;
             animation: pour 2s ease-in-out -1.5s;
             z-index: 0; }
-    .inputdialog__body .input {
+    .dialog__body .input {
       width: 300px; }
-    .inputdialog__body .button {
+    .dialog__body > p {
+      max-width: 500px;
+      min-width: 300px;
+      text-align: center;
+      color: #707070;
+      font-family: "Cream Cake";
+      font-size: 1.8em;
+      margin: 0; }
+    .dialog__body .button {
       padding: 4px 26px; }
-  .inputdialog__nav {
+  .dialog__nav {
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -375,9 +385,20 @@ body {
       position: absolute;
       transform: translate(-50%, 0);
       left: -50%;
-      transition: left 0.2s ease-out 0.1s; }
+      transition: left 0.2s ease-out 0.1s, border 0.2s ease-out; }
       .content .library .album--next ~ .album {
         left: 150%; }
+      .content .library .album__selectbox {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 63px;
+        height: 58px;
+        overflow: visible;
+        filter: drop-shadow(0px 3px 6px rgba(0, 0, 0, 0.16));
+        opacity: 0;
+        transform: translate(-25%, -35%);
+        transition: opacity 0.2s, stroke 0.2s, stroke-width 0.2s, width 0.2s ease-out, height 0.2s ease-out; }
       .content .library .album__bgline {
         position: absolute;
         left: 8%;
@@ -405,23 +426,36 @@ body {
           transform: none; }
       .content .library .album--previous {
         left: 10%;
-        transition: width 0.1s ease-out 0s, height 0.1s ease-out 0s, left 0.2s ease-out 0.1s; }
+        transition: width 0.1s ease-out 0s, height 0.1s ease-out 0s, left 0.2s ease-out 0.1s, border 0.2s ease-out; }
       .content .library .album--current {
         width: 500px;
         height: 550px;
         left: 50%;
-        transition: left 0.2s ease-out 0.1s, width 0.1s ease-out 0.3s, height 0.1s ease-out 0.3s; }
+        transition: left 0.2s ease-out 0.1s, width 0.1s ease-out 0.3s, height 0.1s ease-out 0.3s, border 0.2s ease-out; }
         .content .library .album--current .album__bgline {
           width: 6px;
           transition: width 0.1s ease-out 0.3s; }
         .content .library .album--current .album__title {
           font-size: 3.2em;
           transition: font-size 0.1s ease-out 0.3s; }
+        .content .library .album--current .album__selectbox {
+          width: 126px;
+          height: 116px;
+          transition: opacity 0.2s, stroke 0.2s, stroke-width 0.2s, width 0.2s ease-out 0.3s, height 0.2s ease-out 0.3s; }
       .content .library .album--next {
         left: 90%;
-        transition: width 0.1s ease-out 0s, height 0.1s ease-out 0s, left 0.2s ease-out 0.1s; }
+        transition: width 0.1s ease-out 0s, height 0.1s ease-out 0s, left 0.2s ease-out 0.1s, border 0.2s ease-out; }
       .content .library .album:hover {
+        cursor: zoom-in; }
+      .content .library .album--selectable:hover {
         cursor: pointer; }
+      .content .library .album--selectable .album__selectbox {
+        opacity: 1; }
+      .content .library .album--selected {
+        border: 4px solid #707070; }
+        .content .library .album--selected .album__selectbox {
+          stroke: #707070;
+          stroke-width: 80px; }
   .content .contentnav {
     display: flex;
     justify-content: space-between;
@@ -444,7 +478,7 @@ body {
         filter: invert(93%) sepia(0%) saturate(437%) hue-rotate(135deg) brightness(93%) contrast(91%); }
       .content .contentnav__element:hover {
         cursor: pointer; }
-        .content .contentnav__element.contentnav__element--disabled:hover {
+        .content .contentnav__element:hover.contentnav__element--disabled {
           cursor: not-allowed; }
     .content .contentnav__info {
       position: absolute;

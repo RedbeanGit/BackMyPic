@@ -110,7 +110,7 @@
   .actionbar__label {
     background-color: rgba(16, 181, 243, 0.2);
     margin: 10px 20px 10px 10px;
-    padding: 5px 10px 5px 5px;
+    padding: 2px 10px 2px 12px;
     border-radius: 50px;
     box-sizing: border-box;
     display: flex;
@@ -138,9 +138,10 @@
       border: none;
       width: 350px;
       background-color: transparent;
-      color: var(--color-black5);
+      color: #707070;
       /*transition-duration: 0.2s;*/
-      font-size: 1em; }
+      font-size: 1.6em;
+      font-family: "Cream Cake"; }
       .actionbar__label input:focus {
         /*width: 700px;
 					transition-duration: 0.2s;*/ }
@@ -188,7 +189,7 @@
           filter: invert(93%) sepia(0%) saturate(437%) hue-rotate(135deg) brightness(93%) contrast(91%); }
         .content .pictureview .contentnav__element:hover {
           cursor: pointer; }
-          .content .pictureview .contentnav__element.contentnav__element--disabled:hover {
+          .content .pictureview .contentnav__element:hover.contentnav__element--disabled {
             cursor: not-allowed; }
       .content .pictureview .contentnav__info {
         position: absolute;

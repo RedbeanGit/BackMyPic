@@ -2,10 +2,10 @@
 @import "mixins/actionbar";
 @import "mixins/contentnav";
 @import "mixins/wave";
-@import "mixins/inputdialog";
+@import "mixins/dialog";
 
 @include actionbar;
-@include inputdialog;
+@include dialog;
 
 $transition-speed: 0.1s;
 
@@ -46,10 +46,28 @@ body {
 			transform: translate(-50%, 0);
 			left: -50%;
 
-			transition: left (2 * $transition-speed) ease-out $transition-speed;
+			transition: left (2 * $transition-speed) ease-out $transition-speed,
+				border (2 * $transition-speed) ease-out;
 
 			&--next ~ .album {
 				left: 150%;
+			}
+
+			&__selectbox {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 63px;
+				height: 58px;
+				overflow: visible;
+				filter: drop-shadow($shadow-primary);
+				opacity: 0;
+				transform: translate(-25%, -35%);
+				transition: opacity (2 * $transition-speed),
+					stroke (2 * $transition-speed),
+					stroke-width (2 * $transition-speed),
+					width (2 * $transition-speed) ease-out,
+					height (2 * $transition-speed) ease-out;
 			}
 
 			&__bgline {
@@ -90,7 +108,8 @@ body {
 				left: 10%;
 				transition: width $transition-speed ease-out 0s,
 					height $transition-speed ease-out 0s,
-					left (2 * $transition-speed) ease-out $transition-speed;
+					left (2 * $transition-speed) ease-out $transition-speed,
+					border (2 * $transition-speed) ease-out;
 			}
 
 			&--current {
@@ -100,7 +119,8 @@ body {
 
 				transition: left (2 * $transition-speed) ease-out $transition-speed,
 					width $transition-speed ease-out (3 * $transition-speed),
-					height $transition-speed ease-out (3 * $transition-speed);
+					height $transition-speed ease-out (3 * $transition-speed),
+					border (2 * $transition-speed) ease-out;
 
 				.album__bgline {
 					width: 6px;
@@ -111,25 +131,47 @@ body {
 					font-size: 3.2em;
 					transition: font-size $transition-speed ease-out (3 * $transition-speed);
 				}
+
+				.album__selectbox {
+					width: 63px * 2;
+					height: 58px * 2;
+					transition: opacity (2 * $transition-speed),
+						stroke (2 * $transition-speed),
+						stroke-width (2 * $transition-speed),
+						width (2 * $transition-speed) ease-out (3 * $transition-speed),
+						height (2 * $transition-speed) ease-out (3 * $transition-speed);
+				}
 			}
 
 			&--next {
 				left: 90%;
 				transition: width $transition-speed ease-out 0s,
 					height $transition-speed ease-out 0s,
-					left (2 * $transition-speed) ease-out $transition-speed;
-			}
-
-			&--selectable {
-				
-			}
-
-			&--selected {
-				
+					left (2 * $transition-speed) ease-out $transition-speed,
+					border (2 * $transition-speed) ease-out;
 			}
 
 			&:hover {
-				cursor: pointer;
+				cursor: zoom-in;
+			}
+
+			&--selectable {
+				&:hover {
+					cursor: pointer;
+				}
+
+				.album__selectbox {
+					opacity: 1;
+				}
+			}
+
+			&--selected {
+				border: 4px solid $color-secondary;
+
+				.album__selectbox {
+					stroke: $color-secondary;
+					stroke-width: 80px;
+				}
 			}
 		}
 	}

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 	{% load static %}{% load compress %}{% load sass_tags %}
 	<head>
 		<meta charset="utf-8">
@@ -12,7 +12,7 @@
 	<body>
 		<header>
 			<a href="{% url 'gallery:gallery' %}" class="title">
-				<img src="{% static 'gallery/img/icon.svg' %}" class="title__icon" alt="BackMyPic">
+				{% include 'svg/cloud.html' with cls='title__icon' %}
 				<h1 class="title__text">BackMyPic</h1>
 			</a>
 			{% if navBar %}

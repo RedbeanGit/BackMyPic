@@ -128,8 +128,9 @@ section {
   align-items: center;
   font-family: "Cream Cake";
   color: #ffffff; }
-  section img {
+  section .image {
     width: 400px;
+    height: 300px;
     margin: 40px;
     user-select: none; }
   section .description {

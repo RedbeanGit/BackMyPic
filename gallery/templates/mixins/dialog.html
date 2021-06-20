@@ -1,0 +1,11 @@
+<div class="dialog" style="height: 0px; opacity: 0;">
+	<div class="dialog__header">
+		<p>Dialog</p>
+	</div>
+	<div class="dialog__body">
+		<div class="dialog__nav">
+			{% include 'mixins/button.html' with function='dialogCancel();' text='Annuler' style="negative" %}
+			{% include 'mixins/button.html' with function='dialogAccept();' text='Continuer' id="dialog-accept" %}
+		</div>
+	</div>
+</div>

@@ -119,6 +119,14 @@ header {
         font-size: 1.9em;
         margin: 0; }
 
+.errorlist p {
+  font-family: "Cream Cake";
+  /*font-style: italic;*/
+  font-size: 1.4em;
+  text-align: center;
+  margin: 5px 0;
+  color: #ff0000; }
+
 footer {
   display: flex;
   justify-content: center;

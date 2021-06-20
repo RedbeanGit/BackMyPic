@@ -9,43 +9,91 @@
 */
 
 var selectMode = false,
-	searchMode = false;
+	searchMode = false,
+	selectableClass = 'itemClass',
+	idBaseName = 'item',
+	selectedIds = new Set();
 
 // Select
 function actionSelect() {
 	if (selectMode)
-		stopSelectMode();
+		actionStopSelectMode();
 	else
-		startSelectMode();
+		actionStartSelectMode();
 }
 
-function startSelectMode() {
+function actionStartSelectMode() {
 	selectMode = true;
-	let selActions = document.querySelectorAll('.actionbar__element--selectable');
+	var selActions = document.querySelectorAll('.actionbar__element--selectable');
+	var items = document.querySelectorAll('.' + selectableClass);
 
 	for (let selAction of selActions)
 		selAction.classList.remove('actionbar__element--disabled');
+	for (let item of items)
+		item.classList.add(selectableClass + '--selectable');
+
+	addKeyboardShortcut(['Delete'], actionDelete);
+	addKeyboardShortcut(['Shift', 'A'], actionSelectAllItems);
+	addKeyboardShortcut(['Shift', 'S'], actionDownload);
+	addKeyboardShortcut(['Shift', 'N'], actionAdd);
+	addKeyboardShortcut(['Shift', 'H'], actionHide);
 }
 
-function stopSelectMode() {
-	selectMode = false;
-	let selActions = document.querySelectorAll('.actionbar__element--selectable');
+function actionStopSelectMode() {
+	var selActions = document.querySelectorAll('.actionbar__element--selectable');
+	var items = document.querySelectorAll('.' + selectableClass);
 
 	for (let selAction of selActions)
 		selAction.classList.add('actionbar__element--disabled');
+	for (let itemId of selectedIds)
+		actionSelectItem(itemId);
+	for (let item of items)
+		item.classList.remove(selectableClass + '--selectable');
+	selectMode = false;
+
+	removeKeyboardShortcut(['Delete'], actionDelete);
+	removeKeyboardShortcut(['Shift', 'A'], actionSelectAllItems);
+	removeKeyboardShortcut(['Shift', 'S'], actionDownload);
+	removeKeyboardShortcut(['Shift', 'N'], actionAdd);
+	removeKeyboardShortcut(['Shift', 'H'], actionHide);
 }
 
-function activeSelection(event, elementId, link) {
+function actionActiveSelection(event, itemId, link) {
 	event.stopPropagation();
 	if (selectMode)
-		selectElement(elementId);
+		actionSelectItem(itemId);
 	else
-		showElement(elementId, link);
+		actionShowItem(itemId, link);
 }
 
-function selectElement(elementId) {}
+function actionSelectItem(itemId) {
+	if (selectMode) {
+		var item = document.getElementById(idBaseName + '-' + itemId);
 
-function showElement(elementId, link) {
+		if (selectedIds.has(itemId)) {
+			selectedIds.delete(itemId);
+			item.classList.remove(selectableClass + '--selected');
+		} else {
+			selectedIds.add(itemId);
+			item.classList.add(selectableClass + '--selected');
+		}
+	}
+}
+
+function actionSelectAllItems() {
+	var items = document.querySelectorAll('.' + selectableClass);
+
+	for (let item of items) {
+		var itemId = parseInt(item.id.split('-')[1]);
+
+		if (!selectedIds.has(itemId)) {
+			selectedIds.add(itemId);
+			item.classList.add(selectableClass + '--selected');
+		}
+	}
+}
+
+function actionShowItem(itemId, link) {
 	window.location.href = link;
 }
 
@@ -55,49 +103,58 @@ function actionUpload(formId) {
 }
 
 // Download
-function actionDownload() {}
+function actionDownload() {
+	if (selectMode)
+		actionSend('download', Array.from(selectedIds).join());
+}
 
 // Add
 function actionAdd() {}
 
 // Delete
-function actionDelete() {}
+function actionDelete() {
+	if (selectMode) {
+		for (let itemId of selectedIds) {
+			item = document.getElementById(idBaseName + '-' + itemId);
+			item.remove();
+		}
+		actionSend('delete', Array.from(selectedIds).join());
+	}
+}
 
 // Share
 function actionShare() {
 	if (selectMode) {
 		alertExperimental();
+		//actionSendAction('share', Array.from(selectedIds).join());
 	}
 }
 
 // Hide
-function actionHide() {
-	if (selectMode) {
-		alertExperimental();
-	}
-}
+function actionHide() {}
 
 // Search
 function actionSearch() {
-	if (searchMode) {
-		stopSearchBar();
-	} else {
-		startSearchBar();
-	}
+	if (searchMode)
+		actionStopSearchBar();
+	else
+		actionStartSearchBar();
 }
 
-function startSearchBar() {
+function actionStartSearchBar() {
 	searchMode = true;
 	document.querySelector('input.search-bar').classList.remove('disabled');
 }
 
-function stopSearchBar() {
+function actionStopSearchBar() {
 	searchMode = false;
 	document.querySelector('input.search-bar').classList.add('disabled');
 }
 
 // send action to the server
-function sendAction(actionName, content) {
+function actionSend(actionName, content) {
+	resetKeyPressed();
+	
 	let inputType = document.getElementById('actiontype-input');
 	let inputContent = document.getElementById('actioncontent-input');
 	let form = document.getElementById('action-form');
@@ -108,8 +165,15 @@ function sendAction(actionName, content) {
 		inputContent.value = content;
 	if (form)
 		form.submit();
+}
 
-	stopSelectMode();
+// API
+function actionSetSelectableClass(clsName) {
+	selectableClass = clsName;
+}
+
+function actionSetIdBaseName(name) {
+	idBaseName = name;
 }
 
 (function() {
@@ -118,7 +182,7 @@ function sendAction(actionName, content) {
 
 		if (searchBar) {
 			if (!searchBar.contains(e.target) && searchMode) {
-				stopSearchBar();
+				actionStopSearchBar();
 			}
 		}
 	}, true);

@@ -95,6 +95,10 @@
 					/*width: 700px;
 					transition-duration: 0.2s;*/
 				}
+
+				&::placeholder {
+					color: rgba($color-primary, 0.5);
+				}
 			}
 
 			img:hover {

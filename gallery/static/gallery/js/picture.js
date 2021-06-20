@@ -14,22 +14,22 @@ var oldContentnavPrevious = window.contentnavPrevious;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 window.actionDownload = function() {
-	sendAction('download', null);
+	actionSend('download', null);
 	oldActionDownload();
 };
 
 window.actionDelete = function() {
-	sendAction('delete', null);
+	actionSend('delete', null);
 	oldActionDelete();
 };
 
 window.actionShare = function() {
-	sendAction('share', null);
+	actionSend('share', null);
 	oldActionShare();
 };
 
 window.actionHide = function() {
-	sendAction('hide', null);
+	actionSend('hide', null);
 	oldActionHide();
 };
 
@@ -38,5 +38,5 @@ window.actionHide = function() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 window.contentnavPrevious = function() {
-	window.location.href = albumLink;
+	window.history.back();
 }

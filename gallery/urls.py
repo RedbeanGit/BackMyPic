@@ -12,8 +12,8 @@ urlpatterns = [
 		name='gallery'
 	),
 	# picture
-	url(r'^picture/(?P<album_id>[0-9]+)/(?P<page_id>[0-9]+)/(?P<picture_id>[0-9]+)/$', 
-		views.PictureView.as_view(), 
+	url(r'^picture/(?P<picture_id>[0-9]+)/$',
+		views.PictureView.as_view(),
 		name='picture'
 	),
 	# album

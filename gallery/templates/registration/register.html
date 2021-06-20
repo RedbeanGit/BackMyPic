@@ -6,18 +6,54 @@
 {% block section %}
 	<div class="section">
 		{% include 'mixins/sectiontitle.html' with text="Créer un compte" subtext="Crée un compte pour ouvrir un nouveau nuage de souvenirs" %}
-		<form method="post" action="{% url 'gallery:register' %}">
+		<form method="post" action="{% url 'gallery:register' %}" id="register-form">
 			{% csrf_token %}
 			<div class="section__content">
-				<input class="input" type="text" name="username" placeholder="Nom d'utilisateur" autocomplete="username">
-				<input class="input" type="password" name="password1" placeholder="Mot de passe" autocomplete="new-password">
-				<input class="input" type="password" name="password2" placeholder="Confirmer le mot de passe" autocomplete="new-password">
+				<div>
+					<input class="input" type="text" name="username" placeholder="Nom d'utilisateur" autocomplete="username">
+					{% if errors.username %}
+						{% autoescape off %}
+							{{ errors.username }}
+						{% endautoescape %}
+					{% else %}
+						<div>
+							<p></p>
+						</div>
+					{% endif %}
+				</div>
+				<div>
+					<input class="input" type="password" name="password1" placeholder="Mot de passe" autocomplete="new-password">
+					{% if errors.password1 %}
+						{% autoescape off %}
+							{{ errors.password1 }}
+						{% endautoescape %}
+					{% else %}
+						<div>
+							<p></p>
+						</div>
+					{% endif %}
+				</div>
+				<div>
+					<input class="input" type="password" name="password2" placeholder="Confirmer le mot de passe" autocomplete="new-password">
+					{% if errors.password2 %}
+						{% autoescape off %}
+							{{ errors.password2 }}
+						{% endautoescape %}
+					{% else %}
+						<div>
+							<p></p>
+						</div>
+					{% endif %}
+				</div>
 			</div>
 			<div class="section__content">
-				<span class="button">
-					<input type="submit" name="submit" value="Allons-y">
-				</span>
+				{% include 'mixins/button.html' with text='Allons-y' id='button-submit' type='submit' %}
 			</div>
 		</form>
 	</div>
+	{% include 'mixins/dialog.html' %}
+{% endblock %}
+{% block script %}
+	<script type="text/javascript" src="{% static 'gallery/js/mixins/dialog.js' %}"></script>
+	<script type="text/javascript" src="{% static 'gallery/js/register.js' %}"></script>
 {% endblock %}

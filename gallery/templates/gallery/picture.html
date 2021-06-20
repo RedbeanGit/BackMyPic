@@ -10,7 +10,6 @@
 			<div class="pictureview__inside">
 				<img class="pictureview__picture" src="{{ picture.image.url }}">
 				<div class="contentnav">
-					{% url 'gallery:album' album_id=album_id page_id=page_id as link %}
 					{% include 'mixins/contentnav.html' with identifier='back' text="Retour à l'album" img='gallery/img/back.svg' prefix=True %}
 				</div>
 			</div>
@@ -30,7 +29,7 @@
 					<p>Date: {{ picture.date }}</p>
 				</div>
 				<div class="notebook__line">
-					<p>Taille: {{ picture.image.width }}x{{ picture.image.height }}</p>
+					<p>Taille: {{ picture.width }}x{{ picture.height }}</p>
 				</div>
 				<div class="notebook__line">
 					<p>Auteur: {{ picture.user.username }}</p>
@@ -48,6 +47,5 @@
 {% block script %}
 	<script type="text/javascript" src="{% static 'gallery/js/mixins/actionbar.js' %}"></script>
 	<script type="text/javascript" src="{% static 'gallery/js/mixins/contentnav.js' %}"></script>
-	<script type="text/javascript">var albumLink = '{{ link }}';</script>
 	<script type="text/javascript" src="{% static 'gallery/js/picture.js' %}"></script>
 {% endblock %}

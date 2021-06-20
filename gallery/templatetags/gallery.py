@@ -15,3 +15,8 @@ def frontpage(num, page_size):
 @register.filter
 def modulus(num, by):
 	return num % by
+
+
+@register.filter
+def updatevar(variable, value):
+	return value

@@ -41,6 +41,20 @@ def get_picture_date(picture):
 	return date
 
 
+def get_picture_size(picture):
+	metadata = get_picture_metadata(picture)
+	w, h = picture.image.width, picture.image.height
+	orientation = metadata.get('0th', {}).get(274, 1)
+	transformation = metadata.get('Exif', {}).get(48130, 1)
+	
+	if orientation > 4:
+		w, h = h, w
+	if transformation >= 4:
+		w, h = h, w
+
+	return w, h
+
+
 def translate_month(name):
 	MONTH_FR = ('janvier', 'fevrier', 'mars', 'avril', 'mai', 'juin', 'juillet', 'aout', 'septembre', 'octobre', 'novembre', 'decembre')
 	month = unidecode.unidecode(name).lower()

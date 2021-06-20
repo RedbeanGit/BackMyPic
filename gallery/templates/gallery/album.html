@@ -7,35 +7,31 @@
 	{% include 'mixins/actionbar.html' %}
 	<div class="content">
 		<div class="album">
-			{% if album.pictures.all.count > 0 %}
-				{% for picture in album.pictures.all %}
-					{% if forloop.counter0|divisibleby:8 %}
-						<div class="album__sheet{% if forloop.counter == 1 %} album__sheet--visible{% endif %}">
+			{% if pages %}
+				{% for page in pages %}
+					{% if forloop.counter0|divisibleby:2 %}
+						<div class="album__page album__page--right{% if page|index:1 %} album__page--{{ page|index:1 }}{% else %} album__page--empty{% endif %}{% if forloop.revcounter0 == 1 %} album__page--title{% endif %}" onclick="contentnavNext();">
+					{% else %}
+						<div class="album__page album__page--left{% if page|index:1 %} album__page--{{ page|index:1 }}{% else %} album__page--empty{% endif %}{% if forloop.revcounter == 1 %} album__page--last{% endif %}" onclick="contentnavPrevious();">
 					{% endif %}
-					{% if forloop.counter0|divisibleby:4 %}
-						{% if forloop.counter0|frontpage:4 %}
-							<div class="album__page album__page--front{% if forloop.counter0 < 4 %} album__page--title{% endif %}" onclick="contentnavNext();">
-						{% else %}
-							<div class="album__page album__page--back{% if forloop.revcounter0 < 4 %} album__page--last{% endif %}" onclick="contentnavPrevious();">
-						{% endif %}
-					{% endif %}
-					{% with page_id=forloop.counter0|modulus:4 %}
-						<img src="{{ picture.image.url }}" class="album__picture" id="picture-{{ picture.id }}" onclick="activeSelection(event, {{ picture.id }}, '{% url 'gallery:picture' album_id=album.id page_id=page_id picture_id=picture.id %}');">
-					{% endwith %}
-					{% if forloop.counter|divisibleby:4 or forloop.last %}
+					<div class="album__content">
+					{% for picture in page|index:0 %}
+						<div class="album__picture" id="picture-{{ picture.id }}" onclick="actionActiveSelection(event, {{ picture.id }}, '{% url 'gallery:picture' picture_id=picture.id %}');">
+							{% include 'svg/cloud.html' with cls='album__selectbox' %}
+							<img src="{{ picture.image.url }}">
 						</div>
-					{% endif %}
-					{% if forloop.last and forloop.counter0|frontpage:4 %}
-						<div class="album__page album__page--back{% if forloop.revcounter0 < 4 %} album__page--last{% endif %}" onclick="contentnavPrevious();"></div>
-					{% endif %}
-					{% if forloop.counter|divisibleby:8 or forloop.last %}
+					{% endfor %}
 						</div>
-					{% endif %}
+					</div>
 				{% endfor %}
 			{% else %}
-				<div class="album__sheet album__sheet--visible">
-					<div class="album__page album__page--front album__page--title" onclick="contentnavNext();"></div>
-					<div class="album__page album__page--back album__page--last" onclick="contentnavPrevious();"></div>
+				<div class="album__page album__page--right album__page--title album__page--empty" onclick="contentnavNext();">
+					<div class="album__content">
+						<p>{% if album.category == 'S' and album.name == 'search' %}Aucune photo trouvée{% elif album.category == 'S' and album.name == 'hidden' %}Aucune photo cachée{% else %}Cet album est vide<br> C'est le début d'une nouvelle histoire{% endif %}</p>
+					</div>
+				</div>
+				<div class="album__page album__page--left album__page--last album__page--empty" onclick="contentnavPrevious();">
+					<div class="album__content"></div>
 				</div>
 			{% endif %}
 			<div class="album__bgline album__bgline--left"></div>

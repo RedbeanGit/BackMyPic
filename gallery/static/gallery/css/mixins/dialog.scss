@@ -2,9 +2,9 @@
 @import "button";
 @import "input";
 
-@mixin infodialog {
-	.infodialog {
-		position: absolute;
+@mixin dialog {
+	.dialog {
+		position: fixed;
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
@@ -43,7 +43,12 @@
 			padding: 0 20px 20px 20px;
 			box-sizing: border-box;
 
+			@include input;
 			@include button;
+
+			.input {
+				width: 300px;
+			}
 
 			> p {
 				max-width: 500px;
