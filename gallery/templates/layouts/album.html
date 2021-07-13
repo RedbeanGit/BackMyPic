@@ -1,0 +1,32 @@
+{% load gallery %}
+<div class="album">
+	{% if pages %}
+		{% for page in pages %}
+			{% if forloop.counter0|divisibleby:2 %}
+				<div class="album__page album__page--right{% if page|index:1 %} album__page--{{ page|index:1 }}{% else %} album__page--empty{% endif %}{% if forloop.revcounter0 == 1 %} album__page--title{% endif %}" onclick="contentnavNext();">
+			{% else %}
+				<div class="album__page album__page--left{% if page|index:1 %} album__page--{{ page|index:1 }}{% else %} album__page--empty{% endif %}{% if forloop.revcounter == 1 %} album__page--last{% endif %}" onclick="contentnavPrevious();">
+			{% endif %}
+			<div class="album__content">
+			{% for picture in page|index:0 %}
+				<div class="album__picture" id="picture-{{ picture.id }}" onclick="actionActiveSelection(event, {{ picture.id }}, '{% url 'gallery:picture' picture_id=picture.id %}');">
+					{% include 'components/cloud.html' with cls='album__selectbox' %}
+					<img src="{{ picture.image.url }}">
+				</div>
+			{% endfor %}
+				</div>
+			</div>
+		{% endfor %}
+	{% else %}
+		<div class="album__page album__page--right album__page--title album__page--empty" onclick="contentnavNext();">
+			<div class="album__content">
+				<p>{% if album.category == 'S' and album.name == 'search' %}Aucune photo trouvée{% elif album.category == 'S' and album.name == 'hidden' %}Aucune photo cachée{% else %}Cet album est vide<br> C'est le début d'une nouvelle histoire{% endif %}</p>
+			</div>
+		</div>
+		<div class="album__page album__page--left album__page--last album__page--empty" onclick="contentnavPrevious();">
+			<div class="album__content"></div>
+		</div>
+	{% endif %}
+	<div class="album__bgline album__bgline--left"></div>
+	<div class="album__bgline album__bgline--right"></div>
+</div>

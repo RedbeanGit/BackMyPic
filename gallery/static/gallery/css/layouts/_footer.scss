@@ -1,0 +1,20 @@
+.footer {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	padding: 20px 0;
+
+	&__container {
+		display: flex;
+		align-items: center;
+	}
+
+	&__element {
+		margin: 0 50px;
+		color: $color-secondary;
+		font-family: $font-secondary;
+		font-size: 0.9em;
+		text-decoration: none;
+	}
+}

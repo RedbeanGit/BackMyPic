@@ -1,0 +1,4 @@
+<a href="{% url 'gallery:gallery' %}" class="icon{% if cls %} {{ cls }}{% endif %}">
+	{% include 'components/cloud.html' with cls='icon__image' %}
+	<h1 class="icon__text">{{ appName }}</h1>
+</a>

@@ -1,0 +1,19 @@
+.picturecontainer {
+	display: flex;
+	justify-content: center;
+	overflow-x: hidden;
+	padding: 40px 0;
+	min-height: $notebook-height;
+
+	.picture {
+		max-width: calc(100% - #{$notebook-width} - 80px);
+		max-height: $notebook-height;
+		width: auto;
+		height: auto;
+		border-radius: $picture-border-radius;
+		border: $picture-border solid $color-back;
+		box-sizing: border-box;
+		box-shadow: 0px 3px 6px rgba(#000000, 0.16);
+		margin-right: $notebook-width - 90px;
+	}
+}

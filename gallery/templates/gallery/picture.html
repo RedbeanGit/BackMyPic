@@ -1,51 +1,15 @@
 {% extends 'gallery/base.html' %}
-{% load static %}{% load sass_tags %}
-{% block style %}
-	<link rel="stylesheet" type="text/css" href="{% sass_src 'gallery/css/picture.scss' %}">
-{% endblock %}
-{% block section %}
-	{% include 'mixins/actionbar.html' %}
-	<div class="content">
-		<div class="pictureview">
-			<div class="pictureview__inside">
-				<img class="pictureview__picture" src="{{ picture.image.url }}">
-				<div class="contentnav">
-					{% include 'mixins/contentnav.html' with identifier='back' text="Retour à l'album" img='gallery/img/back.svg' prefix=True %}
-				</div>
-			</div>
-		</div>
-		<div class="notebook">
-			<div class="notebook__sheet">
-				<div class="notebook__line">
-					<h2>Détails</h2>
-				</div>
-				<div class="notebook__line">
-					<p></p>
-				</div>
-				<div class="notebook__line">
-					<p>Nom: {{ picture.filename }}</p>
-				</div>
-				<div class="notebook__line">
-					<p>Date: {{ picture.date }}</p>
-				</div>
-				<div class="notebook__line">
-					<p>Taille: {{ picture.width }}x{{ picture.height }}</p>
-				</div>
-				<div class="notebook__line">
-					<p>Auteur: {{ picture.user.username }}</p>
-				</div>
-				{% for i in '00000'|make_list %}
-					<div class="notebook__line">
-						<p></p>
-					</div>
-				{% endfor %}
-			</div>
-			<div class="notebook__clip"></div>
-		</div>
+{% load static %}
+{% block body %}
+	{% include 'layouts/header.html' %}
+	{% include 'layouts/actionbar.html' %}
+	<div class="picturecontainer">
+		<img class="picture" src="{{ picture.image.url }}">
+		{% include 'layouts/notebook.html' %}
 	</div>
+	{% include 'layouts/footer.html' %}
 {% endblock %}
 {% block script %}
-	<script type="text/javascript" src="{% static 'gallery/js/mixins/actionbar.js' %}"></script>
-	<script type="text/javascript" src="{% static 'gallery/js/mixins/contentnav.js' %}"></script>
-	<script type="text/javascript" src="{% static 'gallery/js/picture.js' %}"></script>
+	<script type="text/javascript" src="{% static 'gallery/js/layouts/actionbar.js' %}"></script>
+	<script type="text/javascript" src="{% static 'gallery/js/pages/picture.js' %}"></script>
 {% endblock %}

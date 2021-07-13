@@ -1,33 +1,21 @@
 {% extends 'gallery/base.html' %}
-{% load static %}{% load sass_tags %}
-{% block style %}
-	<link rel="stylesheet" type="text/css" href="{% sass_src 'gallery/css/library.scss' %}">
-{% endblock %}
-{% block section %}
-	{% include 'mixins/actionbar.html' %}
-	<div class="content">
-		<div class="library">
+{% load static %}
+{% block body %}
+	{% include 'layouts/header.html' %}
+	{% include 'layouts/actionbar.html' %}
+	<div class="librarycontainer">
+		<div class="covers">
 			{% for album in albums %}
-				<div class="album{% if forloop.counter == 1 %} album--current{% elif forloop.counter == 2 %} album--next{% endif %}" onclick="actionActiveSelection(event, {{ album.id }}, '{% url 'gallery:album' album_id=album.id %}');" id="album-{{ album.id }}">
-					<div class="album__bgline"></div>
-					{% include 'svg/cloud.html' with cls='album__selectbox' %}
-					{% if album.cover %}
-						<img class="album__cover" src="{{ album.cover.image.url }}" alt="Photo de couverture">
-					{% endif %}
-					<p class="album__title{% if not album.cover %} album__title--alone{% endif %}">{{ album.name.capitalize }}</p>
-				</div>
+				{% include 'layouts/cover.html' %}
 			{% endfor %}
 		</div>
-		<div class="contentnav">
-			{% include 'mixins/contentnav.html' with identifier='previous' text='Album précédent' img='gallery/img/previous.svg' prefix=True %}
-			{% include 'mixins/contentnav.html' with identifier='next' text='Album suivant' img='gallery/img/next.svg' prefix=False %}
-		</div>
+		{% include 'layouts/contentnav.html' with textPrevious='Album précédent' textNext='Album suivant' %}
 	</div>
-	{% include 'mixins/dialog.html' %}
+	{% include 'components/dialog.html' with id='libraryDialog' %}
+	{% include 'layouts/footer.html' %}
 {% endblock %}
 {% block script %}
-	<script type="text/javascript" src="{% static 'gallery/js/mixins/actionbar.js' %}"></script>
-	<script type="text/javascript" src="{% static 'gallery/js/mixins/contentnav.js' %}"></script>
-	<script type="text/javascript" src="{% static 'gallery/js/mixins/dialog.js' %}"></script>
-	<script type="text/javascript" src="{% static 'gallery/js/library.js' %}"></script>
+	<script type="text/javascript" src="{% static 'gallery/js/layouts/actionbar.js' %}"></script>
+	<script type="text/javascript" src="{% static 'gallery/js/layouts/contentnav.js' %}"></script>
+	<script type="text/javascript" src="{% static 'gallery/js/pages/library.js' %}"></script>
 {% endblock %}

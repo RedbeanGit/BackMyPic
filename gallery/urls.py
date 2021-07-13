@@ -48,7 +48,8 @@ urlpatterns = [
 	url(r'^login/$', 
 		LoginView.as_view(extra_context={
 			'title': 'Connecte-toi',
-			'version': views.VERSION
+			'version': views.VERSION,
+			'appName': views.TITLE
 		}),
 		name='login'
 	),
@@ -56,7 +57,8 @@ urlpatterns = [
 	url(r'^logout/$', 
 		LogoutView.as_view(extra_context={
 			'title': 'Déconnecté',
-			'version': views.VERSION
+			'version': views.VERSION,
+			'appName': views.TITLE
 		}),
 		name='logout'
 	)

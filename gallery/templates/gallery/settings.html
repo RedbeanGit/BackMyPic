@@ -1,34 +1,27 @@
 {% extends 'gallery/base.html' %}
-{% load static %}{% load sass_tags %}{% load gallery %}
-{% block style %}
-	<link rel="stylesheet" type="text/css" href="{% sass_src 'gallery/css/settings.scss' %}">
-{% endblock %}
-{% block section %}
-	<div class="section">
-		{% include 'mixins/sectiontitle.html' with text="Compte" subtext="Tu peux changer tes informations de connexion ici" %}
-		<form method="post" action="{% url viewName %}" id="action-form">
-			<div class="section__content">
+{% load static %}
+{% block body %}
+	{% include 'layouts/header.html' %}
+	<section class="settingscontainer">
+		{% include 'layouts/sectiontitle.html' with text='Compte' subtext='Tu peux changer tes informations de connexion ici' %}
+		<form method="post" action="{% url viewName %}" id="action-form" class="form">
+			<div class="form__content">
 				{% csrf_token %}
-				<input type="text" name="username" class="input" placeholder="Nouveau pseudo" autocomplete="off">
-				<input type="password" name="new_password1" class="input" placeholder="Nouveau mot de passe" autocomplete="new-password" id="new-password-input">
-				<input type="hidden" name="password" id="password-input">
-				<input type="hidden" name="new_password2" id="confirm-password-input">
-				<input type="hidden" name="old_password" id="old-password-input">
+				{% include 'components/input.html' with type='password' name='new_password1' placeholder='Nouveau mot de passe' autocomplete='new-password' %}
+				{% include 'components/input.html' with type='password' name='new_password2' placeholder='Confirmer le nouveau mot de passe' autocomplete='new-password' %}
+				{% include 'components/dialog.html' with id='oldPasswordDialog' %}
+				{% include 'components/dialog.html' with id='logoutDialog' %}
 				<input type="hidden" name="action" value="" id="action-input">
 			</div>
-			<div class="section__content section__content--row">
-				{% include 'mixins/button.html' with function='settingsDelete();' text='Supprimer' style='negative' %}
-				{% include 'mixins/button.html' with function='settingsLogout();' text='Se déconnecter' %}
-				{% include 'mixins/button.html' with function='settingsSave();' text='Enregistrer' %}
+			<div class="form__content form__content--row">
+				{% include 'components/button.html' with function='settingsDelete();' text='Supprimer' style='negative' %}
+				{% include 'components/button.html' with function='settingsLogout();' text='Se déconnecter' %}
+				{% include 'components/button.html' with function='settingsSave();' text='Enregistrer' %}
 			</div>
 		</form>
-	</div>
-	{% include 'mixins/dialog.html' %}
+	</section>
+	{% include 'layouts/footer.html' %}
 {% endblock %}
 {% block script %}
-	<script type="text/javascript" src="{% static 'gallery/js/mixins/dialog.js' %}"></script>
-	<script type="text/javascript" src="{% static 'gallery/js/settings.js' %}"></script>
-	{% if errors.other %}
-		<script type="text/javascript">showError('{{ errors.other }}');</script>
-	{% endif %}
+	<script type="text/javascript" src="{% static 'gallery/js/pages/settings.js' %}"></script>
 {% endblock %}

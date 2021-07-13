@@ -1,46 +1,21 @@
+{% load compress %}{% load static %}{% load sass_tags %}
 <!DOCTYPE html>
-<html lang="fr">
-	{% load static %}{% load compress %}{% load sass_tags %}
+<html>
 	<head>
 		<meta charset="utf-8">
 		<title>{{ title }}</title>
 		{% compress css %}
-			<link rel="stylesheet" type="text/css" href="{% sass_src 'gallery/css/base.scss' %}">
-			{% block style %}{% endblock %}
+			<link rel="stylesheet" type="text/css" href="{% sass_src 'gallery/css/main.scss' %}">
 		{% endcompress %}
 	</head>
-	<body>
-		<header>
-			<a href="{% url 'gallery:gallery' %}" class="title">
-				{% include 'svg/cloud.html' with cls='title__icon' %}
-				<h1 class="title__text">BackMyPic</h1>
-			</a>
-			{% if navBar %}
-				<div class="nav">
-					<a href="{% url 'gallery:album' %}" class="nav__element{% if 'album' in navSelected %} nav__element--selected{% endif %}">
-						<p>Album</p>
-					</a>
-					<a href="{% url 'gallery:library' %}" class="nav__element{% if 'library' in navSelected %} nav__element--selected{% endif %}">
-						<p>Bibliothèque</p>
-					</a>
-					<a href="{% url 'gallery:settings' %}" class="nav__element{% if 'settings' in navSelected %} nav__element--selected{% endif %}">
-						<p>Compte</p>
-					</a>
-				</div>
-			{% endif %}
-		</header>
-		<section>
-			{% block section %}{% endblock %}
-		</section>
-		<footer>
-			<div class="footer">
-				<p class="footer__element">© 2021 - BackMyPic Team</p>
-				<p class="footer__element">v{{ version }}</p>
-				<a href="" class="footer__element">Contact</a>
-			</div>
-		</footer>
-		<script type="text/javascript" src="{% static 'gallery/js/base.js' %}"></script>
+	<body> 
+		{% block body %}{% endblock %}
+		{% include 'components/dialog.html' with id='baseDialog' %}
+		<script type="text/javascript" src="{% static 'gallery/js/components/dialog.js' %}"></script>
+		<script type="text/javascript" src="{% static 'gallery/js/pages/base.js' %}"></script>
+		{% if message %}
+			<script type="text/javascript">alert('{{ message }}');</script>
+		{% endif %}
 		{% block script %}{% endblock %}
-		<script> </script>
 	</body>
 </html>

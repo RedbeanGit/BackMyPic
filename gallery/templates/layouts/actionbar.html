@@ -1,0 +1,63 @@
+{% load static %}
+<div class="actionbar{% if cls %} {{ cls }}{% endif %}">
+	<nav class="actionbar__nav">
+		{% if 'back' in actionElements %}
+			<button class="actionbar__element actionbar__button" onclick="window.history.back();" title="Retour">
+				<img src="{% static 'gallery/img/previous.svg' %}">
+			</button>
+		{% endif %}
+		{% if 'select' in actionElements %}
+			<button class="actionbar__element actionbar__button" onclick="actionSelect();" title="Sélectionner">
+				<img src="{% static 'gallery/img/select.svg' %}">
+			</button>
+		{% endif %}
+		{% if 'upload' in actionElements %}
+			<button class="actionbar__element actionbar__button" onclick="actionUpload('{{ form.image.id_for_label }}');" title="Envoyer">
+				<img src="{% static 'gallery/img/upload.svg' %}">
+			</button>
+		{% endif %}
+		{% if 'download' in actionElements %}
+			<button class="actionbar__element actionbar__button{% if 'select' in actionElements %} actionbar__element--disabled actionbar__element--selectable{% endif %}" onclick="actionDownload();" title="Télécharger">
+				<img src="{% static 'gallery/img/download.svg' %}">
+			</button>
+		{% endif %}
+		{% if 'add' in actionElements %}
+			<button class="actionbar__element actionbar__button" onclick="actionAdd();" title="Ajouter">
+				<img src="{% static 'gallery/img/add.svg' %}">
+			</button>
+		{% endif %}
+		{% if 'delete' in actionElements %}
+			<button class="actionbar__element actionbar__button{% if 'select' in actionElements %} actionbar__element--disabled actionbar__element--selectable{% endif %}" onclick="actionDelete();" title="Supprimer">
+				<img src="{% static 'gallery/img/delete.svg' %}">
+			</button>
+		{% endif %}
+		<!--{% if 'share' in actionElements %}
+			<button class="actionbar__element actionbar__button{% if 'select' in actionElements %} actionbar__element--disabled actionbar__element--selectable{% endif %}" onclick="actionShare();" title="Partager">
+				<img src="{% static 'gallery/img/share.svg' %}">
+			</button>
+		{% endif %}-->
+		{% if 'hide' in actionElements %}
+			<button class="actionbar__element actionbar__button{% if 'select' in actionElements %} actionbar__element--disabled actionbar__element--selectable{% endif %}" onclick="actionHide();" title="Cacher">
+				<img src="{% static 'gallery/img/hide.svg' %}">
+			</button>
+		{% endif %}
+	</nav>
+	<form class="actionbar__search" method="get" action="{% if viewName == 'gallery:library' %}{% url 'gallery:library' %}{% elif viewName == 'gallery:album' %}{% url 'gallery:album' album_id=album.id %}{% elif viewName == 'gallery:picture' %}{% url 'gallery:album' %}{% endif %}" id="search-form">
+		{% csrf_token %}
+		<label for="search-input" class="actionbar__element actionbar__label">
+			<input type="search" name="query" id="search-input" value="{{ previousSearch }}" placeholder="{% if viewName == 'gallery:library' %}Entre un nom d'album{% else %}Entre une date ou une taille d'image{% endif %}">
+			<img src="{% static 'gallery/img/search.svg' %}" title="Rechercher" onclick="document.getElementById('search-form').submit();">
+		</label>
+	</form>
+	<!-- hidden forms -->
+	<form style="display: none;" method="post" action="{% if viewName == 'gallery:album' %}{% url viewName album_id=album.id %}{% elif viewName == 'gallery:picture' %}{% url 'gallery:album' %}{% else %}{% url viewName %}{% endif %}" id="action-form">
+		{% csrf_token %}
+		<input type="hidden" name="action" value="" id="actiontype-input">
+		<input type="hidden" name="content" value="" id="actioncontent-input">
+	</form>
+	<form style="display: none;" method="post" enctype="multipart/form-data" action="{% if viewName == 'gallery:album' %}{% url viewName album_id=album.id %}{% elif viewName == 'gallery:picture' %}{% url 'gallery:album' %}{% else %}{% url viewName %}{% endif %}" id="upload-form">
+		{% csrf_token %}
+		<input type="hidden" name="action" value="upload">
+		{{ form.image }}
+	</form>
+</div>

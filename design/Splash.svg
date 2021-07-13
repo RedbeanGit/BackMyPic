@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <clipPath id="clip-Splash">
+      <rect width="1920" height="1080"/>
+    </clipPath>
+  </defs>
+  <g id="Splash" clip-path="url(#clip-Splash)">
+    <rect width="1920" height="1080" fill="#fff"/>
+    <rect id="Rectangle_4" data-name="Rectangle 4" width="1920" height="1080" fill="#10b5f3"/>
+    <g id="cloud" transform="translate(682.368 355.003)">
+      <rect id="Rectangle_5" data-name="Rectangle 5" width="555.263" height="185.088" rx="92.544" transform="translate(0 138.786)" fill="#fff"/>
+      <ellipse id="Ellipse_1" data-name="Ellipse 1" cx="138.5" cy="139" rx="138.5" ry="139" transform="translate(93.034 -0.003)" fill="#fff"/>
+      <ellipse id="Ellipse_2" data-name="Ellipse 2" cx="92.531" cy="92.531" rx="92.531" ry="92.531" transform="translate(277.632 46.269)" fill="#fff"/>
+      <circle id="Ellipse_3" data-name="Ellipse 3" cx="138.5" cy="138.5" r="138.5" transform="translate(93.034 92.997)" fill="#fff"/>
+      <circle id="Ellipse_4" data-name="Ellipse 4" cx="74" cy="74" r="74" transform="translate(296.034 203.997)" fill="#fff"/>
+    </g>
+    <text id="BackMyPic" transform="translate(959 582)" fill="#707070" font-size="70" font-family="CreamCake, Cream Cake"><tspan x="-129.395" y="0">BackMyPic</tspan></text>
+    <g id="Groupe_50" data-name="Groupe 50" transform="translate(682 822)">
+      <rect id="Rectangle_6" data-name="Rectangle 6" width="556" height="12" rx="6" fill="#fff"/>
+      <rect id="Rectangle_7" data-name="Rectangle 7" width="12" height="12" rx="6" fill="#00f8ff"/>
+    </g>
+  </g>
+</svg>

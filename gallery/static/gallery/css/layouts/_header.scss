@@ -1,0 +1,47 @@
+.header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background-color: $color-primary;
+	padding: 20px 30px;
+	font-family: $font-primary;
+	user-select: none;
+
+	&__nav {
+		display: flex;
+		align-items: center;
+	}
+
+	&__button {
+		display: flex;
+		align-items: center;
+		text-decoration: none;
+		color: $color-back;
+		background: $color-primary;
+		padding: 6px 15px;
+		margin: 0 20px;
+		border-radius: 50px;
+
+		transition-duration: color 0.2s ease-in-out 0s;
+
+		&--selected {
+			color: $color-primary;
+			background-color: $color-back;
+		}
+
+		&:hover {
+			cursor: pointer;
+			color: $color-secondary;
+
+			&:not(.nav__element--selected) {
+				@include wave($color-back, empty);
+			}
+		}
+
+		p {
+			font-family: $font-primary;
+			font-size: 1.9em;
+			margin: 0;
+		}
+	}
+}

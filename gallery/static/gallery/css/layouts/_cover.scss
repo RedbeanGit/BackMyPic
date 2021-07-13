@@ -1,0 +1,146 @@
+.cover {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	justify-content: center;
+
+	width: $album-width * 0.5;
+	height: $album-height * 0.5;
+
+	background-color: $color-primary;
+	border-radius: 0 30px 30px 0;
+	box-shadow: $shadow-primary;
+
+	position: absolute;
+	transform: translate(-50%, 0);
+	left: -50%;
+
+	transition: left (2 * $transition-speed) ease-out $transition-speed,
+		border (2 * $transition-speed) ease-out;
+
+	&--next ~ .cover {
+		left: 150%;
+	}
+
+	&__selectbox {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 63px;
+		height: 58px;
+		overflow: visible;
+		filter: drop-shadow($shadow-primary);
+		opacity: 0;
+		transform: translate(-25%, -35%);
+		transition: opacity (2 * $transition-speed),
+			stroke (2 * $transition-speed),
+			stroke-width (2 * $transition-speed),
+			width (2 * $transition-speed) ease-out,
+			height (2 * $transition-speed) ease-out;
+	}
+
+	&__bgline {
+		position: absolute;
+		left: 8%;
+		top: 0;
+		width: 3px;
+		height: 100%;
+		background-color: rgba($color-back, 0.3);
+		transition: width (2 * $transition-speed) ease-out 0s;
+	}
+
+	&__cover {
+		max-width: 70%;
+		max-height: 70%;
+	}
+
+	&__title {
+		position: absolute;
+		left: 50%;
+		bottom: 5%;
+		transform: translate(-50%, 0);
+		font-family: $font-primary;
+		font-size: 1.6em;
+		color: $color-back;
+
+		transition: font-size $transition-speed ease-out 0s;
+
+		&--alone {
+			position: static;
+			left: 0;
+			bottom: 0;
+			transform: none;
+		}
+	}
+
+	&--previous {
+		left: 10%;
+		transition: width $transition-speed ease-out 0s,
+			height $transition-speed ease-out 0s,
+			left (2 * $transition-speed) ease-out $transition-speed,
+			border (2 * $transition-speed) ease-out;
+	}
+
+	&--current {
+		width: $album-width;
+		height: $album-height;
+		left: 50%;
+
+		transition: left (2 * $transition-speed) ease-out $transition-speed,
+			width $transition-speed ease-out (3 * $transition-speed),
+			height $transition-speed ease-out (3 * $transition-speed),
+			border (2 * $transition-speed) ease-out;
+
+		.cover__bgline {
+			width: 6px;
+			transition: width $transition-speed ease-out (3 * $transition-speed);
+		}
+
+		.cover__title {
+			font-size: 3.2em;
+			transition: font-size $transition-speed ease-out (3 * $transition-speed);
+		}
+
+		.cover__selectbox {
+			width: 63px * 2;
+			height: 58px * 2;
+			transition: opacity (2 * $transition-speed),
+				stroke (2 * $transition-speed),
+				stroke-width (2 * $transition-speed),
+				width (2 * $transition-speed) ease-out (3 * $transition-speed),
+				height (2 * $transition-speed) ease-out (3 * $transition-speed);
+		}
+	}
+
+	&--next {
+		left: 90%;
+		transition: width $transition-speed ease-out 0s,
+			height $transition-speed ease-out 0s,
+			left (2 * $transition-speed) ease-out $transition-speed,
+			border (2 * $transition-speed) ease-out;
+	}
+
+	&:hover {
+		cursor: zoom-in;
+	}
+
+	&--selectable {
+		&:hover {
+			cursor: pointer;
+		}
+
+		.cover__selectbox {
+			opacity: 1;
+		}
+	}
+
+	&--selected {
+		border: 4px solid $color-secondary;
+
+		.cover__selectbox {
+			stroke: $color-secondary;
+			stroke-width: 80px;
+		}
+	}
+}

@@ -1,0 +1,56 @@
+.notebook {
+	position: absolute;
+	right: -90px;
+	width: $notebook-width;
+	height: $notebook-height;
+	background: $color-primary;
+	border-radius: $notebook-border-radius;
+	box-shadow: 0px 3px 6px rgba(#000000, 0.16);
+
+	&__clip {
+		position: absolute;
+		top: 0;
+		left: 50%;
+		transform: translate(-50%, -13%);
+		width: $notebook-clip-width;
+		height: $notebook-clip-height;
+		background: linear-gradient(to bottom, #f8f8f8 0%, #fff 9.7%, #e1e1e1 19.4%, #d0d0d0 37.2%, #cecece 60.2%, #fff 90.7%, #d3d3d3 100%);
+		box-shadow: 0px 3px 6px rgba(#000000, 0.16);
+	}
+
+	&__sheet {
+		position: absolute;
+		top: 51%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 95%;
+		height: 92%;
+		background: $color-back;
+		box-shadow: 0px 3px 6px rgba(#000000, 0.16);
+		padding: 40px 2px 0 2px;
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	&__line {
+		display: flex;
+		align-items: flex-end;
+		width: 96%;
+		height: 2.5em;
+		border-bottom: 1px dashed $color-secondary;
+		box-sizing: border-box;
+		padding: 0 10px;
+
+		> * {
+			font-family: $font-primary;
+			font-size: 1.5em;
+			margin: 0;
+		}
+
+		h2 {
+			font-size: 2.5em;
+		}
+	}
+}

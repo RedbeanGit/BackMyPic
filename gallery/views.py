@@ -74,7 +74,7 @@ class BaseView(View):
 	nav_selected = ()
 	action_elements = ()
 	action_search_view = view_name
-	errors = {'other': ''}
+	message = ''
 
 	def get(self, request, *args, **kwargs):
 		return render(request, self.template_name, self.get_base_context())
@@ -82,13 +82,14 @@ class BaseView(View):
 	def get_base_context(self):
 		return {
 			'title': self.title,
+			'appName': TITLE,
 			'version': self.version,
 			'viewName': self.view_name,
 			'navBar': self.nav_bar,
 			'navSelected': self.nav_selected,
 			'actionElements': self.action_elements,
 			'actionSearchView': self.action_search_view,
-			'errors': self.errors
+			'message': self.message
 		}
 
 
@@ -393,13 +394,13 @@ class AlbumView(LoginRequiredMixin, BaseView):
 			else:
 				album_current.save()
 		else:
-			self.errors['other'] = 'Ces fichiers ne sont pas des images valides'
+			self.message = 'Ces fichiers ne sont pas des images valides'
 			
 		return redirect(self.view_name, album_id=album_id, page_id=page_id)
 	
 	def download_pictures(self, request, album_id, page_id):
 		if not request.POST['content'].strip():
-			self.errors['other'] = 'Aucune image sélectionée'
+			self.message = 'Aucune image sélectionée'
 			return redirect(self.view_name, album_id=album_id, page_id=page_id)
 			
 		zippath = settings.TMP_ROOT / 'zipfiles' / (get_illegible_name() + '.zip')
@@ -529,7 +530,6 @@ class SettingsView(LoginRequiredMixin, BaseView):
 		return super(SettingsView, self).get(request)
 
 	def get(self, request):
-		self.errors.clear()
 		return super(SettingsView, self).get(request)
 
 	def post(self, request):
@@ -544,14 +544,14 @@ class SettingsView(LoginRequiredMixin, BaseView):
 		return action(request)
 
 	def delete(self, request):
-		password = request.POST.get('password', '')
+		password = request.POST.get('old_password', '')
 		if request.user.check_password(password):
 			Picture.objects.filter(user=request.user).delete()
 			Album.objects.filter(user=request.user).delete()
 			request.user.delete()
 
 			return redirect('gallery:logout')
-		self.errors['other'] = 'Mauvais mot de passe'
+		self.message = 'Mauvais mot de passe'
 		return self.render(request)
 
 	def logout(self, request):
@@ -559,33 +559,14 @@ class SettingsView(LoginRequiredMixin, BaseView):
 
 	def save(self, request):
 		form = PasswordChangeForm(user=request.user, data=request.POST)
-		username = request.POST.get('username', '')
-		password = request.POST.get('new_password1', '')
-		modified = False
 
-		if username and username != request.user.username:
-			request.user.username = username
-			request.user.save()
-			self.errors['other'] = 'Compte mis à jour'
-			modified = True
-		
 		if form.is_valid():
 			form.save()
-			self.errors['other'] = 'Compte mis à jour'
+			self.message = 'Mot de passe mis à jour'
+		elif not request.POST.get('new_password1', ''):
+			self.message = 'Le mot de passe est vide'
 		else:
-			if 'new_password1' in form.errors and 'Ce champ est obligatoire.' in form.errors['new_password1']:
-				if not modified:
-					self.errors['other'] = 'Tu dois d\'abord définir un nouveau pseudo ou un nouveau mot de passe'
-			elif 'new_password2' in form.errors:
-				if 'Ce champ est obligatoire.' in form.errors['new_password2']:
-					self.errors['other'] = 'Tu n\'a pas rempli la confirmation du mot de passe'
-				else:
-					self.errors['other'] = 'Le mot de passe entré et sa confirmation sont différents'
-			elif 'old_password':
-				if 'Ce champ est obligatoire.' in form.errors['old_password']:
-					self.errors['other'] = 'Tu n\'a pas donné ton ancien mot de passe'
-				else:
-					self.errors['other'] = 'Le nouveau mot de passe doit être différent de l\'ancien'
+			self.message = 'Oups, vérifie les données entrées'
 		return self.render(request)
 
 
@@ -615,8 +596,5 @@ class RegisterView(BaseView):
 
 			return redirect('gallery:gallery')
 		else:
-			self.errors.clear()
-			if '__all__' in form.errors:
-				form.errors['other'] = form.errors.pop('__all__')
-			self.errors.update(form.errors)
+			self.message = 'Oups, vérifie les informations entrées.'
 		return self.render(request, form)

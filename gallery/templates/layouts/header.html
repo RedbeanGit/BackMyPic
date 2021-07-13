@@ -1,0 +1,16 @@
+<header class="header{% if cls %} {{ cls }}{% endif %}">
+	{% include 'components/icon.html' %}
+	{% if navBar %}
+		<nav class="header__nav">
+			<a href="{% url 'gallery:album' %}" class="header__button{% if 'album' in navSelected %} header__button--selected{% endif %}">
+				<p>Album</p>
+			</a>
+			<a href="{% url 'gallery:library' %}" class="header__button{% if 'library' in navSelected %} header__button--selected{% endif %}">
+				<p>Bibliothèque</p>
+			</a>
+			<a href="{% url 'gallery:settings' %}" class="header__button{% if 'settings' in navSelected %} header__button--selected{% endif %}">
+				<p>Compte</p>
+			</a>
+		</nav>
+	{% endif %}
+</header>

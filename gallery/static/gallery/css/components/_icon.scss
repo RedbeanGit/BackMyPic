@@ -1,0 +1,20 @@
+.icon {
+	display: flex;
+	align-items: center;
+	text-decoration: none;
+
+	&__image {
+		width: 50px;
+		height: 50px;
+	}
+
+	&__text {
+		margin: 0 0 0 20px;
+		font-size: 2.6em;
+		color: $color-back;
+	}
+
+	&:hover {
+		cursor: pointer;
+	}
+}

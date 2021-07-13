@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <clipPath id="clip-Register">
+      <rect width="1920" height="1080"/>
+    </clipPath>
+  </defs>
+  <g id="Register" clip-path="url(#clip-Register)">
+    <rect width="1920" height="1080" fill="#fff"/>
+    <g id="Groupe_5" data-name="Groupe 5">
+      <rect id="Rectangle_8" data-name="Rectangle 8" width="1920" height="100" fill="#10b5f3"/>
+      <text id="BackMyPic" transform="translate(288 70)" fill="#fff" font-size="70" font-family="CreamCake, Cream Cake"><tspan x="-129.395" y="0">BackMyPic</tspan></text>
+      <g id="cloud" transform="translate(40.368 18.914)">
+        <rect id="Rectangle_5" data-name="Rectangle 5" width="93.313" height="31.104" rx="15.552" transform="translate(0 23.321)" fill="#fff"/>
+        <ellipse id="Ellipse_1" data-name="Ellipse 1" cx="23.275" cy="23.359" rx="23.275" ry="23.359" transform="translate(15.635 -0.003)" fill="#fff"/>
+        <ellipse id="Ellipse_2" data-name="Ellipse 2" cx="15.55" cy="15.55" rx="15.55" ry="15.55" transform="translate(46.656 7.773)" fill="#fff"/>
+        <circle id="Ellipse_3" data-name="Ellipse 3" cx="23.275" cy="23.275" r="23.275" transform="translate(15.635 15.626)" fill="#fff"/>
+        <circle id="Ellipse_4" data-name="Ellipse 4" cx="12.436" cy="12.436" r="12.436" transform="translate(49.749 34.279)" fill="#fff"/>
+      </g>
+    </g>
+    <text id="Créer_un_compte" data-name="Créer un compte" transform="translate(959 266)" fill="#707070" font-size="80" font-family="CreamCake, Cream Cake"><tspan x="-180.32" y="0">Créer un compte</tspan></text>
+    <g id="Groupe_19" data-name="Groupe 19" transform="translate(100)">
+      <text id="_2021_-_BackMyPic_Team" data-name="© 2021 - BackMyPic Team" transform="translate(678 1044)" fill="#707070" font-size="24" font-family="ArialMT, Arial"><tspan x="-141.34" y="0">© 2021 - BackMyPic Team</tspan></text>
+      <text id="v0.6.0" transform="translate(960 1044)" fill="#707070" font-size="24" font-family="ArialMT, Arial"><tspan x="-32.689" y="0">v0.6.0</tspan></text>
+      <text id="Contact" transform="translate(1142 1044)" fill="#707070" font-size="24" font-family="ArialMT, Arial"><tspan x="-41.355" y="0">Contact</tspan></text>
+    </g>
+    <line id="Ligne_2" data-name="Ligne 2" x2="739" transform="translate(0 243)" fill="none" stroke="#707070" stroke-width="1"/>
+    <line id="Ligne_4" data-name="Ligne 4" x2="739" transform="translate(1181 243)" fill="none" stroke="#707070" stroke-width="1"/>
+    <g id="Groupe_51" data-name="Groupe 51" transform="translate(538 416)">
+      <g id="Rectangle_9" data-name="Rectangle 9" fill="#fff" stroke="#707070" stroke-width="1">
+        <rect width="846" height="49" rx="24.5" stroke="none"/>
+        <rect x="0.5" y="0.5" width="845" height="48" rx="24" fill="none"/>
+      </g>
+      <text id="Nom_d_utilisateur" data-name="Nom d&apos;utilisateur" transform="translate(423 36)" fill="#707070" font-size="40" font-family="CreamCake, Cream Cake"><tspan x="-93.84" y="0">Nom d&apos;utilisateur</tspan></text>
+    </g>
+    <g id="Groupe_58" data-name="Groupe 58" transform="translate(537 525)">
+      <g id="Rectangle_9-2" data-name="Rectangle 9" fill="#fff" stroke="#707070" stroke-width="1">
+        <rect width="846" height="49" rx="24.5" stroke="none"/>
+        <rect x="0.5" y="0.5" width="845" height="48" rx="24" fill="none"/>
+      </g>
+      <text id="Mot_de_passe" data-name="Mot de passe" transform="translate(423 36)" fill="#707070" font-size="40" font-family="CreamCake, Cream Cake"><tspan x="-72.82" y="0">Mot de passe</tspan></text>
+    </g>
+    <g id="Groupe_52" data-name="Groupe 52" transform="translate(537 634)">
+      <g id="Rectangle_9-3" data-name="Rectangle 9" fill="#fff" stroke="#707070" stroke-width="1">
+        <rect width="846" height="49" rx="24.5" stroke="none"/>
+        <rect x="0.5" y="0.5" width="845" height="48" rx="24" fill="none"/>
+      </g>
+      <text id="Confirmez_le_mot_de_passe" data-name="Confirmez le mot de passe" transform="translate(423 36)" fill="#707070" font-size="40" font-family="CreamCake, Cream Cake"><tspan x="-141.12" y="0">Confirmez le mot de passe</tspan></text>
+    </g>
+    <text id="Crée_un_compte_pour_ouvrir_un_nouveau_nuage_de_souvenirs" data-name="Crée un compte pour ouvrir un nouveau nuage de souvenirs" transform="translate(960 314)" fill="#707070" font-size="40" font-family="CreamCake, Cream Cake" opacity="0.7"><tspan x="-321.14" y="0">Crée un compte pour ouvrir un nouveau nuage de souvenirs</tspan></text>
+    <g id="Groupe_30" data-name="Groupe 30" transform="translate(83.694 66)">
+      <g id="Groupe_4" data-name="Groupe 4" transform="translate(751 732)">
+        <path id="Tracé_2" data-name="Tracé 2" d="M25.221,0h201.17c13.929,0,25.221,18.8,25.221,42s-11.292,42-25.221,42H25.221C11.292,84,0,65.2,0,42S11.292,0,25.221,0Z" fill="#10b5f3"/>
+        <text id="Créer" transform="translate(125.306 56)" fill="#fff" font-size="50" font-family="CreamCake, Cream Cake"><tspan x="-39.325" y="0">Créer</tspan></text>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,34 +1,21 @@
-<!DOCTYPE html>
-<html>
-	{% load static %}{% load compress %}{% load sass_tags %}
-	<head>
-		<meta charset="utf-8">
-		<title>{{ title }}</title>
-		{% compress css %}
-			<link rel="stylesheet" type="text/css" href="{% sass_src 'gallery/css/infobase.scss' %}">
-			{% block style %}{% endblock %}
-		{% endcompress %}
-	</head>
-	<body>
-		<section>
-			{% include 'svg/cloud.html' with cls="image" %}
-			<div class="description">
-				<h2 class="description__title">{{ title }}</h2>
-				<p class="description__text">{{ description }}</p>
+{% extends 'gallery/base.html' %}
+{% load static %}
+{% block body %}
+	<div class="infobasepage">
+		<div class="infobasecontainer">
+			{% include 'components/cloud.html' with cls="infobasecontainer__image" %}
+			<div class="infobasecontainer__description">
+				<h2 class="infobasecontainer__title">{{ title }}</h2>
+				<p class="infobasecontainer__text">{{ description }}</p>
 				{% url 'gallery:gallery' as link %}
 				{% with 'window.location.href = "'|add:link|add:'";' as function %}
-					{% include 'mixins/button.html' with function=function text='Accueil' style='inverted' id="home-button" %}
+					{% include 'components/button.html' with function=function text='Accueil' style='inverted' id="home-button" %}
 				{% endwith %}
 			</div>
-		</section>
-		<footer>
-			<div class="footer">
-				<p class="footer__element">© 2021 - BackMyPic Team</p>
-				<p class="footer__element">v{{ version }}</p>
-				<a href="" class="footer__element">Contact</a>
-			</div>
-		</footer>
-		<script type="text/javascript" src="{% static 'gallery/js/base.js' %}"></script>
-		<script type="text/javascript" src="{% static 'gallery/js/infobase.js' %}"></script>
-	</body>
-</html>
+		</div>
+		{% include 'layouts/footer.html' with cls='footer--infobase' %}
+	</div>
+{% endblock %}
+{% block script %}
+	<script type="text/javascript" src="{% static 'gallery/js/pages/infobase.js' %}"></script>
+{% endblock %}

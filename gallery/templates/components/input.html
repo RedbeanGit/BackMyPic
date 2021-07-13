@@ -1,0 +1,1 @@
+<input type="{% if type %}{{ type }}{% else %}text{% endif %}" name="{{ name }}" class="input{% if cls %} {{ cls }}{% endif %}" placeholder="{{ placeholder }}" autocomplete="{% if autocomplete %}{{ autocomplete }}{% else %}off{% endif %}"{% if id %} id="{{ id }}"{% endif %}>

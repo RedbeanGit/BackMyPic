@@ -1,0 +1,14 @@
+{% load static %}
+<div class="contentnav">
+	<div class="contentnav__element contentnav__element--previous" onclick="contentnavPrevious();">
+		<img src="{% static 'gallery/img/previous.svg' %}" alt="<">
+		<p>{{ textPrevious }}</p>
+	</div>
+	{% if text %}
+	<p class="contentnav__text">{{ text }}</p>
+	{% endif %}
+	<div class="contentnav__element contentnav__element--next" onclick="contentnavNext();">
+		<p>{{ textNext }}</p>
+		<img src="{% static 'gallery/img/next.svg' %}" alt=">">
+	</div>
+</div>

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="752" height="392" viewBox="0 0 752 392">
+  <defs>
+    <filter id="Rectangle_63" x="-9" y="-6" width="770" height="410" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Tracé_2" x="86" y="263" width="259" height="102" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur-2"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur-2"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <clipPath id="clip-InfoDialog">
+      <rect width="752" height="392"/>
+    </clipPath>
+  </defs>
+  <g id="InfoDialog" clip-path="url(#clip-InfoDialog)">
+    <rect width="752" height="392" fill="rgba(255,255,255,0)"/>
+    <g id="Groupe_48" data-name="Groupe 48" transform="translate(-63)">
+      <g transform="matrix(1, 0, 0, 1, 63, 0)" filter="url(#Rectangle_63)">
+        <rect id="Rectangle_63-2" data-name="Rectangle 63" width="752" height="392" rx="30" fill="#fff"/>
+      </g>
+      <path id="Rectangle_64" data-name="Rectangle 64" d="M30,0H722a30,30,0,0,1,30,30v70a0,0,0,0,1,0,0H0a0,0,0,0,1,0,0V30A30,30,0,0,1,30,0Z" transform="translate(63)" fill="#10b5f3"/>
+      <text id="Se_déconnecter" data-name="Se déconnecter" transform="translate(438 65)" fill="#fff" font-size="52" font-family="CreamCake, Cream Cake"><tspan x="-105.144" y="0">Se déconnecter</tspan></text>
+      <g id="Groupe_4" data-name="Groupe 4" transform="translate(479 269)">
+        <path id="Tracé_2-2" data-name="Tracé 2" d="M24.158,0H216.842C230.184,0,241,18.8,241,42s-10.816,42-24.158,42H24.158C10.816,84,0,65.2,0,42S10.816,0,24.158,0Z" fill="#10b5f3"/>
+        <text id="Confirmer" transform="translate(120 56)" fill="#fff" font-size="50" font-family="CreamCake, Cream Cake"><tspan x="-71.1" y="0">Confirmer</tspan></text>
+      </g>
+      <g id="Groupe_4-2" data-name="Groupe 4" transform="translate(158 269)">
+        <g transform="matrix(1, 0, 0, 1, -95, -269)" filter="url(#Tracé_2)">
+          <path id="Tracé_2-3" data-name="Tracé 2" d="M24.158,0H216.842C230.184,0,241,18.8,241,42s-10.816,42-24.158,42H24.158C10.816,84,0,65.2,0,42S10.816,0,24.158,0Z" transform="translate(95 269)" fill="#e21a1a"/>
+        </g>
+        <text id="Annuler" transform="translate(119.971 56)" fill="#fff" font-size="50" font-family="CreamCake, Cream Cake"><tspan x="-59.25" y="0">Annuler</tspan></text>
+      </g>
+    </g>
+    <text id="Veux-tu_vraiment_te_déconnecter_" data-name="Veux-tu vraiment te déconnecter ?" transform="translate(374 195)" fill="#707070" font-size="52" font-family="CreamCake, Cream Cake"><tspan x="-241.462" y="0">Veux-tu vraiment te déconnecter ?</tspan></text>
+  </g>
+</svg>

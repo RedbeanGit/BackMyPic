@@ -1,0 +1,28 @@
+<div class="notebook">
+	<div class="notebook__sheet">
+		<div class="notebook__line">
+			<h2>Détails</h2>
+		</div>
+		<div class="notebook__line">
+			<p></p>
+		</div>
+		<div class="notebook__line">
+			<p>Nom: {{ picture.filename }}</p>
+		</div>
+		<div class="notebook__line">
+			<p>Date: {{ picture.date }}</p>
+		</div>
+		<div class="notebook__line">
+			<p>Taille: {{ picture.width }}x{{ picture.height }}</p>
+		</div>
+		<div class="notebook__line">
+			<p>Auteur: {{ picture.user.username }}</p>
+		</div>
+		{% for i in '00000'|make_list %}
+			<div class="notebook__line">
+				<p></p>
+			</div>
+		{% endfor %}
+	</div>
+	<div class="notebook__clip"></div>
+</div>

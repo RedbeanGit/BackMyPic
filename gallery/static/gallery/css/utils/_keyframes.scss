@@ -1,0 +1,11 @@
+@keyframes pour {
+	0% {transform: translateY(-200%) rotate(0deg);}
+	50% {transform: translateY(-100%) rotate(500deg);}
+	100% {transform: translateY(0) rotate(0deg);}
+}
+
+@keyframes empty {
+	0% {transform: translateY(200%) rotate(0deg);}
+	50% {transform: translateY(100%) rotate(-500deg);}
+	100% {transform: translateY(0) rotate(0deg);}
+}

@@ -1,0 +1,11 @@
+<div class="dialog{% if cls %} {{ cls }}{% endif %}" style="height: 0px; opacity: 0;"{% if id %} id="{{ id }}"{% endif %}>
+	<div class="dialog__header">
+		<p>Dialog</p>
+	</div>
+	<div class="dialog__body">
+		<div class="dialog__nav">
+			{% include 'components/button.html' with text='Annuler' style='negative' cls='dialog__button--cancel' id='' %}
+			{% include 'components/button.html' with text='Continuer' cls='dialog__button--accept' id='' %}
+		</div>
+	</div>
+</div>

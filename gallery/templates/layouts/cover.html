@@ -1,0 +1,8 @@
+<div class="cover{% if forloop.counter == 1 %} cover--current{% elif forloop.counter == 2 %} cover--next{% endif %}" onclick="actionActiveSelection(event, {{ album.id }}, '{% url 'gallery:album' album_id=album.id %}');" id="cover-{{ album.id }}">
+	<div class="cover__bgline"></div>
+	{% include 'components/cloud.html' with cls='cover__selectbox' %}
+	{% if album.cover %}
+		<img class="cover__image" src="{{ album.cover.image.url }}" alt="Photo de couverture">
+	{% endif %}
+	<p class="cover__title{% if not album.cover %} cover__title--alone{% endif %}">{{ album.name.capitalize }}</p>
+</div>
