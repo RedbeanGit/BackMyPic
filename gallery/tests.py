@@ -14,5 +14,29 @@
 #    along with BackMyPic.  If not, see <https://www.gnu.org/licenses/>.
 
 from django.test import TestCase
+from django.shortcuts import reverse
 
-# Create your tests here.
+
+class LibraryPageTestCase(TestCase):
+	def test_library_view_get(self):
+		response = self.client.get(reverse('gallery:library'))
+		self.assertEqual(response.status_code, 302)
+
+
+class AlbumPageTestCase(TestCase):
+	def test_album_view_get(self):
+		response = self.client.get(reverse('gallery:album'))
+		self.assertEqual(response.status_code, 302)
+
+
+class PicturePageTestCase(TestCase):
+	def test_picture_view_get(self):
+		picture_id = 1
+		response = self.client.get(reverse('gallery:picture', args=(picture_id,)))
+		self.assertEqual(response.status_code, 302)
+
+
+class SettingsPageTestCase(TestCase):
+	def test_settings_view_get(self):
+		response = self.client.get(reverse('gallery:settings'))
+		self.assertEqual(response.status_code, 302)
