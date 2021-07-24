@@ -4,7 +4,9 @@
 	{% include 'layouts/header.html' %}
 	{% include 'layouts/actionbar.html' %}
 	<div class="picturecontainer">
-		<img class="picture" src="{{ picture.image.url }}">
+		<div class="picturecontainer__frame">
+			<img class="picture" src="{{ picture.image.url }}">
+		</div>
 		{% include 'layouts/notebook.html' %}
 	</div>
 	{% include 'layouts/footer.html' %}
