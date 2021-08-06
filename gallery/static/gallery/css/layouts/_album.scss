@@ -236,6 +236,7 @@
 		overflow: visible;
 		filter: drop-shadow($shadow-primary);
 		opacity: 0;
+		pointer-events: none;
 		transform: translate(-25%, -35%);
 
 		transition-duration: 0.2s;
@@ -295,6 +296,7 @@
 
 			.album__selectbox {
 				opacity: 1;
+				pointer-events: initial;
 			}
 		}
 	}
