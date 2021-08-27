@@ -25,11 +25,10 @@ import re
 from django.core.exceptions import ImproperlyConfigured
 
 # Paths and URLs
-BASE_DIR = Path(__file__).resolve().parent.parent
+PROJECT_ROOT = Path(__file__).resolve().parent
+BASE_DIR = PROJECT_ROOT.parent
 MEDIA_ROOT = BASE_DIR / 'media'
 TMP_ROOT = BASE_DIR / 'tmp'
-
-PROJECT_ROOT = Path(__file__).resolve().parent
 STATIC_ROOT = PROJECT_ROOT / 'staticfiles'
 
 MEDIA_URL = '/media/'
@@ -38,32 +37,17 @@ LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login'
 
 
-# loading secret settings (secret key, db password)
-with open(BASE_DIR / 'secrets.json', 'r') as file:
-    secrets = json.load(file)
-
-def get_secret_setting(setting, secrets=secrets):
-    """ Get secret setting or fail with ImproperlyConfigured """
-    try:
-        return secrets[setting]
-    except KeyError:
-        raise ImproperlyConfigured("Set the {} setting".format(setting))
-
-
 # Secret key
-SECRET_KEY = get_secret_setting('SECRET_KEY')
-
+SECRET_KEY = os.environ.get('SECRET_KEY')
+ENVIRONMENT = os.environ.get('ENVIRONMENT')
 
 # Debug Mode
-if os.environ.get('ENV') == 'PRODUCTION':
+if ENVIRONMENT in ('PRODUCTION', 'STAGING'):
     DEBUG = False
+    ALLOWED_HOSTS = ['backmypick.herokuapp.com']
 else:
     DEBUG = True
-
-
-# HTTP
-ALLOWED_HOSTS = ['localhost', 'backmypic.herokuapp.com']
-IGNORABLE_404_URLS = [re.compile(r'favicon\.ico'), re.compile(r'robots\.txt')]
+    ALLOWED_HOSTS = ['localhost', '127.0.0.0']
 
 
 # Applications and middlewares
@@ -93,24 +77,20 @@ MIDDLEWARE = [
 
 WSGI_APPLICATION = 'backmypic.wsgi.application'
 ROOT_URLCONF = 'backmypic.urls'
-
+IGNORABLE_404_URLS = [re.compile(r'favicon\.ico'), re.compile(r'robots\.txt')]
 
 # Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'gallery',
-        'USER': 'postgres',
-        'PASSWORD': get_secret_setting('DB_PASSWORD'),
-        'HOST': '',
-        'PORT': '5432',
-    },
-    'old': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': os.environ.get('DB_PORT'),
     }
 }
-
+CONN_MAX_PAGE = 0
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -127,7 +107,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 LANGUAGE_CODE = 'fr-fr'
