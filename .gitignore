@@ -137,7 +137,7 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-# BackMyPic
+# picdo
 *.cmd
 *.sh
 media/*

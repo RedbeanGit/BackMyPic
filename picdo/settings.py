@@ -1,23 +1,22 @@
-#    This file is part of BackMyPic.
+#    This file is part of picdo.
 
-#    BackMyPic is free software: you can redistribute it and/or modify
+#    picdo is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
 
-#    BackMyPic is distributed in the hope that it will be useful,
+#    picdo is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 
 #    You should have received a copy of the GNU General Public License
-#    along with BackMyPic.  If not, see <https://www.gnu.org/licenses/>.
+#    along with picdo.  If not, see <https://www.gnu.org/licenses/>.
 
 """
-Django settings for backmypic project.
+Django settings for picdo project.
 """
 
-import json
 import os
 from pathlib import Path
 import re
@@ -44,7 +43,7 @@ ENVIRONMENT = os.environ.get('ENVIRONMENT')
 # Debug Mode
 if ENVIRONMENT in ('PRODUCTION', 'STAGING'):
     DEBUG = False
-    ALLOWED_HOSTS = ['backmypick.herokuapp.com']
+    ALLOWED_HOSTS = ['picdok.herokuapp.com']
 else:
     DEBUG = True
     ALLOWED_HOSTS = ['localhost', '127.0.0.0']
@@ -75,8 +74,8 @@ MIDDLEWARE = [
     'django.middleware.locale.LocaleMiddleware',
 ]
 
-WSGI_APPLICATION = 'backmypic.wsgi.application'
-ROOT_URLCONF = 'backmypic.urls'
+WSGI_APPLICATION = 'picdo.wsgi.application'
+ROOT_URLCONF = 'picdo.urls'
 IGNORABLE_404_URLS = [re.compile(r'favicon\.ico'), re.compile(r'robots\.txt')]
 
 # Database

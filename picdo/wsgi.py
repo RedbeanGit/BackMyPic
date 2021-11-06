@@ -1,20 +1,20 @@
-#    This file is part of BackMyPic.
+#    This file is part of picdo.
 
-#    BackMyPic is free software: you can redistribute it and/or modify
+#    picdo is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
 
-#    BackMyPic is distributed in the hope that it will be useful,
+#    picdo is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 
 #    You should have received a copy of the GNU General Public License
-#    along with BackMyPic.  If not, see <https://www.gnu.org/licenses/>.
+#    along with picdo.  If not, see <https://www.gnu.org/licenses/>.
 
 """
-WSGI config for backmypic project.
+WSGI config for picdo project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -26,6 +26,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backmypic.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'picdo.settings')
 
 application = get_wsgi_application()
