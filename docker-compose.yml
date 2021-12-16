@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  db:
+    environment:
+      - POSTGRES_USERNAME=${picdo_db_user}
+      - POSTGRES_PASSWORD=${picdo_db_password}
+      - POSTGRES_DATABASE=${picdo_db_name}
+    expose:
+      - "${picdo_db_port}"
+    image: postgres
+    ports:
+      - "${picdo_db_port}"
+    restart: always
+    volumes:
+      - ./scripts/docker:/docker-entrypoint-initdb.d
+  picdo:
+    command: >
+      bash -c 'sleep 5;
+      python /app/manage.py migrate;
+      python /app/manage.py runserver 0.0.0.0:8000;'
+    depends_on:
+      - db
+    environment:
+      - picdo_secret_key
+      - picdo_environment
+      - picdo_db_host
+      - picdo_db_port
+      - picdo_db_user
+      - picdo_db_password
+    image: redbeandock/picdo:${picdo_version}
+    ports:
+      - "8000:8000"
