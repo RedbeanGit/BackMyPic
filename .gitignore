@@ -138,9 +138,6 @@ dmypy.json
 cython_debug/
 
 # picdo
-*.cmd
-*.sh
 media/*
 tmp/*
 secrets.json
-TODO.md
