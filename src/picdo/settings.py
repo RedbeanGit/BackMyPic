@@ -17,14 +17,12 @@
 Django settings for picdo project.
 """
 
+import pathlib
 import os
-from pathlib import Path
 import re
 
-from django.core.exceptions import ImproperlyConfigured
-
 # Paths and URLs
-PROJECT_ROOT = Path(__file__).resolve().parent
+PROJECT_ROOT = pathlib.Path(__file__).resolve().parent
 BASE_DIR = PROJECT_ROOT.parent
 MEDIA_ROOT = BASE_DIR / 'media'
 TMP_ROOT = BASE_DIR / 'tmp'
@@ -37,16 +35,17 @@ LOGIN_URL = '/login'
 
 
 # Secret key
-SECRET_KEY = os.environ.get('SECRET_KEY')
-ENVIRONMENT = os.environ.get('ENVIRONMENT')
+SECRET_KEY = os.environ.get('picdo_secret_key')
+ENVIRONMENT = os.environ.get('picdo_environment')
 
 # Debug Mode
 if ENVIRONMENT in ('PRODUCTION', 'STAGING'):
     DEBUG = False
     ALLOWED_HOSTS = ['picdok.herokuapp.com']
+    STATICFILES_DIRS = [PROJECT_ROOT / 'static']
 else:
     DEBUG = True
-    ALLOWED_HOSTS = ['localhost', '127.0.0.0']
+    ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.0']
 
 
 # Applications and middlewares
@@ -81,15 +80,16 @@ IGNORABLE_404_URLS = [re.compile(r'favicon\.ico'), re.compile(r'robots\.txt')]
 # Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'gallery',
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST'),
-        'PORT': os.environ.get('DB_PORT'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('picdo_db_name'),
+        'USER': os.environ.get('picdo_db_user'),
+        'PASSWORD': os.environ.get('picdo_db_password'),
+        'HOST': os.environ.get('picdo_db_host'),
+        'PORT': os.environ.get('picdo_db_port'),
     }
 }
 CONN_MAX_PAGE = 0
+DEFAULT_AUTO_FIELD='django.db.models.BigAutoField'
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -123,11 +123,6 @@ STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder'
 ]
-
-if os.environ.get('ENV') == 'PRODUCTION':
-    STATICFILES_DIRS = [
-        PROJECT_ROOT / 'static'
-    ]
 
 COMPRESS_PRECOMPILERS = (
     ('text/x-scss', 'django_libsass.SassCompiler'),
