@@ -1,19 +1,14 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 if [ ${PWD##*/} == scripts ] ;
 then
     cd ..
 fi
 
-export picdo_version=$(cat VERSION)
-export picdo_secret_key=$(jq '."secret_key"' secrets.json)
-export picdo_environment='DEVELOPMENT'
-export picdo_db_name='picdo'
-export picdo_db_host='db'
-export picdo_db_port='5432'
-export picdo_db_user='postgres'
-export picdo_db_password=$(jq '."postgres_key"' secrets.json)
+set -a
+. .env
+set +a
 
-docker build -t redbeandock/picdo:$picdo_version .
-docker push redbeandock/picdo:$picdo_version
+docker build -t "redbeandock/picdo:${PICDO_VERSION}" .
+docker push "redbeandock/picdo:${PICDO_VERSION}"
 docker-compose up
