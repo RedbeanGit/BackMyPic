@@ -35,13 +35,13 @@ LOGIN_URL = '/login'
 
 
 # Secret key
-SECRET_KEY = os.environ.get('picdo_secret_key')
-ENVIRONMENT = os.environ.get('picdo_environment')
+SECRET_KEY = os.environ.get('PICDO_SECRET_KEY')
+ENVIRONMENT = os.environ.get('PICDO_ENVIRONMENT')
 
 # Debug Mode
 if ENVIRONMENT in ('PRODUCTION', 'STAGING'):
     DEBUG = False
-    ALLOWED_HOSTS = ['picdok.herokuapp.com']
+    ALLOWED_HOSTS = ['picdo.redbean.tk']
     STATICFILES_DIRS = [PROJECT_ROOT / 'static']
 else:
     DEBUG = True
@@ -81,11 +81,11 @@ IGNORABLE_404_URLS = [re.compile(r'favicon\.ico'), re.compile(r'robots\.txt')]
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('picdo_db_name'),
-        'USER': os.environ.get('picdo_db_user'),
-        'PASSWORD': os.environ.get('picdo_db_password'),
-        'HOST': os.environ.get('picdo_db_host'),
-        'PORT': os.environ.get('picdo_db_port'),
+        'NAME': os.environ.get('PICDO_DB_NAME'),
+        'USER': os.environ.get('PICDO_DB_USER'),
+        'PASSWORD': os.environ.get('PICDO_DB_PASSWORD'),
+        'HOST': os.environ.get('PICDO_DB_HOST'),
+        'PORT': os.environ.get('PICDO_DB_PORT'),
     }
 }
 CONN_MAX_PAGE = 0
