@@ -6,9 +6,7 @@ Django-based website dedicated to saving and sharing photos online.
 
 ## Installation
 
-First install Docker compose and it's dependencies from [here](https://docs.docker.com/get-docker/).
-
-Then clone this repo:
+First clone this repo:
 
 ```bash
 $ git clone git@github.com:RedbeanGit/picdo.git
@@ -19,9 +17,83 @@ Setup your local environment:
 ```bash
 $ ./scripts/install.sh
 ```
+
+#### Install to run with Docker (recommended)
+
+If you plan to run this project inside a docker container then you just need to
+install [Docker compose](https://docs.docker.com/get-docker/).
+
+#### Install to run with Python
+
+You can also launch Picdo directly with a Python interpreter.
+
+First, install [Python 3.8](https://www.python.org/downloads/).
+
+Navigate to the project root directory:
+
+```bash
+$ cd path/to/picdo
+```
+
+Create and run a virtual environment (optional):
+
+```bash
+$ python3 -m venv env
+$ . env/bin/activate
+```
+
+Setup Picdo dependencies:
+
+```bash
+$ python3 -m pip install -r requirements.txt
+```
+
+Picdo stores its data in a [Postgresql](https://www.postgresql.org/) database.
+So you need to install it.
+
+Export environment variables from `.env` file:
+
+```bash
+$ set +a
+$ . .env
+$ set -a
+```
+
+Then connect to Postgresql using psql.
+
+```bash
+$ psql -h PICDO_DB_HOST -p PICDO_DB_PORT
+```
+
+Create a database and a user for Picdo (replace `user`, `password` and `name` respectively by the value of `PICDO_DB_USER`, `PICDO_DB_PASSWORD` and `PICDO_DB_NAME`):
+
+```psql
+# CREATE USER user WITH PASSWORD 'password';
+# CREATE DATABASE name;
+```
+
+Install the unaccent extension:
+
+```psql
+# CREATE EXTENSION IF NOT EXISTS "unaccent";
+```
+
+Finally, exit psql and let Django creating some tables:
+
+```psql
+$ python3 /src/manage.py migrate;
+```
 ## Run Locally
 
-To run the project, you just need to run the following command:
+First navigate to the project root directory:
+
+```bash
+$ cd path/to/picdo
+```
+
+#### Run with docker
+
+You just need to run the following command:
 
 ```bash
 $ ./scripts/run.sh
@@ -31,6 +103,20 @@ To clean docker containers and images created by the project:
 
 ```bash
 $ ./scripts/clear-docker.sh
+```
+
+#### Run with Python
+
+If you have installed a virtual environment, activate it:
+
+```bash
+$ source env/bin/activate
+```
+
+And start the server:
+
+```bash
+$ python3 src/manage.py runserver 0.0.0.0:8000
 ```
 ## Tech Stack
 
