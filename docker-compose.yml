@@ -29,5 +29,6 @@ services:
       - PICDO_DB_USER
       - PICDO_DB_PASSWORD
     image: redbeandock/picdo:${PICDO_VERSION}
+    build: '.'
     ports:
       - "8000:8000"

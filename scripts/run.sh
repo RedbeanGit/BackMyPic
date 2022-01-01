@@ -9,6 +9,4 @@ set -a
 . .env
 set +a
 
-docker build -t "redbeandock/picdo:${PICDO_VERSION}" .
-docker push "redbeandock/picdo:${PICDO_VERSION}"
-docker-compose up
+docker-compose up --build
