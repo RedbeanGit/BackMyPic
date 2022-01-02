@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 
-echo 'Cleaning docker from Picdo containers and images...'
+if [ ${PWD##*/} == scripts ] ;
+then
+    cd ..
+fi
+
+. scripts/utils.sh
+
+echop 'Cleaning docker from Picdo containers and images...'
 
 # deleting picdo containers
-for name in picdo_picdo_1 picdo_db_1
+for name in picdo_picdo_1 picdo_db_1 picdo_db_2
 do
     running_container=$(docker ps -f "name=$name" | tail -n +2)
     if [ ! -z "$running_container" ]
@@ -25,4 +32,4 @@ then
     docker rmi "$image"
 fi 
 
-echo 'Done'
+echop 'Done'
