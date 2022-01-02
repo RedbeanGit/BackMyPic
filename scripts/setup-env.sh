@@ -5,19 +5,20 @@ then
     cd ..
 fi
 
-echo 'Welcome to Picdo setup.'
-echo 'This script will let you define variables for your local environment.'
-echo 'The proposals in brackets are the default values. Leave blank to use them.'
-echo ''
+. scripts/utils.sh
 
+echop 'Welcome to Picdo setup.'
+echop 'This script will let you define variables for your local environment.'
+echop 'The proposals in brackets are the default values. Leave blank to use them.'
+
+echo
 read -p 'Database name (picdo): ' db_name
 read -p 'Database host (db): ' db_host
 read -p 'Database port (5432): ' db_port
 read -p 'Database user (postgres): ' db_user
-read -sp 'Database password (auto generated): ' db_password
-echo ''
-read -sp 'Django secret key (auto generated):' secret_key
-echo ''
+read -sp 'Database password (auto generated): ' db_password && echo
+read -sp 'Django secret key (auto generated):' secret_key && echo
+echo
 
 if [ -z "$db_name" ]
 then
@@ -60,6 +61,4 @@ echo "PICDO_DB_PORT='$db_port'" >> .env
 echo "PICDO_DB_USER='$db_user'" >> .env
 echo "PICDO_DB_PASSWORD='$db_password'" >> .env
 
-echo 'Environment variables have been defined!'
-echo ''
-echo 'Run "./scripts/run.sh" to run Picdo in local environment.'
+echop 'Environment variables have been defined!'

@@ -12,20 +12,19 @@ First clone this repo:
 $ git clone git@github.com:RedbeanGit/picdo.git
 ```
 
-Setup your local environment:
+Setup environment variables:
 
 ```bash
-$ ./scripts/install.sh
+$ ./scripts/setup-env.sh
 ```
 
-#### Install to run with Docker (recommended)
+#### Install to run with Docker compose
 
-If you plan to run this project inside a docker container then you just need to
-install [Docker compose](https://docs.docker.com/get-docker/).
+If you plan to run Picdo inside a docker container then you just need to install [Docker compose](https://docs.docker.com/get-docker/).
 
 #### Install to run with Python
 
-You can also launch Picdo directly with a Python interpreter.
+You can also launch Picdo directly with your local Python interpreter.
 
 First, install [Python 3.8](https://www.python.org/downloads/).
 
@@ -45,44 +44,16 @@ $ . env/bin/activate
 Setup Picdo dependencies:
 
 ```bash
-$ python3 -m pip install -r requirements.txt
+$ ./scripts/setup-deps.sh
 ```
 
-Picdo stores its data in a [Postgresql](https://www.postgresql.org/) database.
-So you need to install it.
+#### Note for Windows users
 
-Export environment variables from `.env` file:
+Scripts call Python with the `python3` command. Unfortunately on Windows the correct command is simply `python`.
 
-```bash
-$ set +a
-$ . .env
-$ set -a
-```
+One way to solve this problem is to make a copy of `python.exe` named `python3.exe` in the same folder.
 
-Then connect to Postgresql using psql.
-
-```bash
-$ psql -h PICDO_DB_HOST -p PICDO_DB_PORT
-```
-
-Create a database and a user for Picdo (replace `user`, `password` and `name` respectively by the value of `PICDO_DB_USER`, `PICDO_DB_PASSWORD` and `PICDO_DB_NAME`):
-
-```psql
-# CREATE USER user WITH PASSWORD 'password';
-# CREATE DATABASE name;
-```
-
-Install the unaccent extension:
-
-```psql
-# CREATE EXTENSION IF NOT EXISTS "unaccent";
-```
-
-Finally, exit psql and let Django creating some tables:
-
-```psql
-$ python3 /src/manage.py migrate;
-```
+The default installation folder for Python 3.8 is `C:\Users\<youUsername>\AppData\Local\Programs\Python\Python38\`.
 ## Run Locally
 
 First navigate to the project root directory:
@@ -91,12 +62,12 @@ First navigate to the project root directory:
 $ cd path/to/picdo
 ```
 
-#### Run with docker
+#### Run with Docker compose
 
 You just need to run the following command:
 
 ```bash
-$ ./scripts/run.sh
+$ ./scripts/run-compose.sh
 ```
 
 To clean docker containers and images created by the project:
@@ -110,13 +81,13 @@ $ ./scripts/clear-docker.sh
 If you have installed a virtual environment, activate it:
 
 ```bash
-$ source env/bin/activate
+$ . env/bin/activate
 ```
 
-And start the server:
+And start the Picdo:
 
 ```bash
-$ python3 src/manage.py runserver 0.0.0.0:8000
+$ ./scripts/run-python.sh
 ```
 ## Tech Stack
 
